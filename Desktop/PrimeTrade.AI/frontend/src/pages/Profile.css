@@ -1,0 +1,41 @@
+/* Full page gradient background */
+.profile-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+  padding: 20px;
+}
+
+/* Card styling */
+.profile-card {
+  background-color: rgba(255, 255, 255, 0.9);
+  max-width: 400px;
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 30px 20px;
+}
+
+/* Heading */
+.profile-card h1 {
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Profile fields */
+.profile-field {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.field-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 5px;
+}
+
+.field-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+}

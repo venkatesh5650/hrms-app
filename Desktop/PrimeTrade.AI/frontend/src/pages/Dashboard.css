@@ -1,0 +1,78 @@
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #facc15);
+  padding: 30px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.header h2 {
+  color: #fff;
+  font-weight: 700;
+}
+
+.header p {
+  color: #f3f4f6;
+}
+
+.add-task-form {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  transition: all 0.3s;
+}
+
+.add-task-form:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.search-filter input,
+.search-filter select {
+  border-radius: 10px;
+}
+
+.task-list .task-item {
+  background-color: rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-list .task-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.18);
+}
+
+.task-title {
+  font-weight: 700;
+  color: #4b0082;
+}
+
+.task-desc {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.task-status {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-todo {
+  color: #ef4444;
+}
+
+.status-inprogress {
+  color: #f59e0b;
+}
+
+.status-done {
+  color: #10b981;
+}
+
+.btn-outline-primary, .btn-outline-warning, .btn-outline-success {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+}
+
+.user-info span {
+  font-weight: 700;
+  color: #fbbf24;
+}

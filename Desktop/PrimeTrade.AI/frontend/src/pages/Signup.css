@@ -1,0 +1,32 @@
+/* Full page background gradient */
+.signup-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4ade80, #14b8a6, #3b82f6);
+  padding: 20px;
+}
+
+/* Form background with slight transparency */
+.signup-form {
+  background-color: rgba(255, 255, 255, 0.9);
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Add smooth shadow and rounded corners */
+.signup-form {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+}
+
+/* Center the h2 text */
+.signup-form h2 {
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Button hover effect */
+.signup-form .btn-primary:hover {
+  background-color: #0d6efdcc;
+  transform: scale(1.02);
+  transition: all 0.3s ease;
+}
