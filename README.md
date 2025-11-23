@@ -42,29 +42,31 @@ Clean, modern UI with React
 | Fully Deployed             | Frontend + Backend hosted live                                |
 
 
-🏛️ Architecture
-```
+### 🏛️ Architecture
+
 Frontend:  React.js (Axios, Context API)  
 Backend:   Node.js + Express.js  
 Database:  MySQL + Sequelize ORM  
 Auth:      JWT + bcrypt  
 Hosting:   Vercel (Frontend), Render/MySQL Local (Backend)
-```
-🔐 Tech Stack Diagram
+
+
+### 🔐 Tech Stack Diagram
 ```
 [ React UI ]  ←→  [ Express REST API ]  ←→  [ MySQL Database ]
          JWT Authentication + CORS Security
 ```
-🌍 Live Demo Links
-```
+
+### 🌍 Live Demo Links
+
 | Service     | Link                                                                                        |
 | ----------- | ------------------------------------------------------------------------------------------- |
 | Frontend    | 🔗 [https://your-vercel-url.vercel.app](https://your-vercel-url.vercel.app)                 |
 | Backend API | 🔗 [https://hrms-backend-dw0e.onrender.com/api](https://hrms-backend-dw0e.onrender.com/api) |
 | Demo Login  | 📧 [demo@gmail.com](mailto:demo@gmail.com) / 🔑 demo@5650                                   |
-```
 
-🧑‍💼 Demo Flow (Suggested for Judges/Interviewers)
+
+### 🧑‍💼 Demo Flow (Suggested for Judges/Interviewers)
 
 1️⃣ Login using demo credentials
 2️⃣ Add employees → check logs
@@ -75,7 +77,7 @@ Hosting:   Vercel (Frontend), Render/MySQL Local (Backend)
 ✔ Shows M2M relationship, CRUD, security, and audit logs in one flow
 
 
-📸 UI Screenshots
+### 📸 UI Screenshots
 
 You can upload 4–6 images under /screenshots then reference them here:
 
@@ -85,18 +87,18 @@ You can upload 4–6 images under /screenshots then reference them here:
 ![Teams](screenshots/teams.png)
 ![Logs](screenshots/logs.png)
 ```
-🧩 Installation Guide (Local Development)
-1️⃣ Clone the repository
+## 🧩 Installation Guide (Local Development)
+### 1️⃣ Clone the repository
 ```
 git clone https://github.com/venkatesh5650/hrms-app.git
 cd hrms-app
 ```
-2️⃣ Backend Setup
+### 2️⃣ Backend Setup
 ```
 cd hrms-backend
 npm install
 ```
-Create .env:
+### Create .env:
 ```
 PORT=5000
 DB_HOST=localhost
@@ -107,35 +109,35 @@ DB_NAME=hrms_db
 JWT_SECRET=SOME_LONG_SECRET_KEY
 ```
 
-Run database setup:
+### Run database setup:
 ```
 npm run seed
 npm run dev
 ```
-Backend runs at:
+### Backend runs at:
 ```
 http://localhost:5000
 ```
-3️⃣ Frontend Setup
+### 3️⃣ Frontend Setup
 ```
 cd ../frontend
 npm install
 ```
-Create .env:
+### Create .env:
 ```
 REACT_APP_API_BASE_URL=http://localhost:5000/api
 ```
-Run app
+### Run app
 ```
 npm start
 ```
-Frontend runs at:
+### Frontend runs at:
 ```
 http://localhost:3000
 ```
 
-📌 Database Schema (Core Tables)
-```
+### 📌 Database Schema (Core Tables)
+
 | Table          | Purpose                  |
 | -------------- | ------------------------ |
 | organisations  | Company-level separation |
@@ -144,6 +146,6 @@ http://localhost:3000
 | teams          | Organizational teams     |
 | employee_teams | Many-to-many join table  |
 | logs           | Audit tracking           |
-```
+
 
 
