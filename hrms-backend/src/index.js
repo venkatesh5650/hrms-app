@@ -25,15 +25,15 @@ const app = express();
 // ⭐ Enable CORS for frontend origin(s)
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://hrms-app-five.vercel.app", // 👉 Update after frontend deploy
-    ],
+    origin: ["http://localhost:3000", "https://hrms-app-five.vercel.app"],
     credentials: true,
   })
 );
 
-app.use(express.json()); // JSON parser
+// ⭐ Handle Preflight Requests
+app.options("*", cors());
+
+app.use(express.json());
 
 // Health check
 app.get("/", (req, res) => {
