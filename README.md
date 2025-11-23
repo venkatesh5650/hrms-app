@@ -81,12 +81,14 @@ Hosting:   Vercel (Frontend), Render/MySQL Local (Backend)
 
 You can upload 4–6 images under /screenshots then reference them here:
 
-```
+
+![Dashboard](screenshots/login.png)
+![CreateOrg](screenshots/createOrg.png)
 ![Dashboard](screenshots/dashboard.png)
-![Employees](screenshots/employees.png)
 ![Teams](screenshots/teams.png)
 ![Logs](screenshots/logs.png)
-```
+![employeesPage](screenshots/employeesPage.png)
+
 ## 🧩 Installation Guide (Local Development)
 ### 1️⃣ Clone the repository
 ```
