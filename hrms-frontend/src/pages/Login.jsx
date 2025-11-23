@@ -7,9 +7,10 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    email: "",
-    password: "",
+    email: "demo@gmail.com", // ⭐ Default email
+    password: "demo@5650", // ⭐ Default password
   });
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -18,10 +19,19 @@ const Login = () => {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
+  const handleDemoCredentials = () => {
+    setForm({
+      email: "demo@gmail.com",
+      password: "demo@5650",
+    });
+    setError("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       await login(form);
       navigate("/dashboard");
@@ -65,10 +75,19 @@ const Login = () => {
               required
             />
           </div>
+
           <button className="btn btn-full" type="submit" disabled={loading}>
             {loading ? "Signing in..." : "Login"}
           </button>
         </form>
+
+        <button
+          className="btn btn-small mt-md"
+          style={{ width: "100%", background: "#374151" }}
+          onClick={handleDemoCredentials}
+        >
+          Use Demo Credentials
+        </button>
 
         <p className="auth-footer">
           New organisation?{" "}
