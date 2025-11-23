@@ -27,7 +27,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://hrms-frontend.vercel.app", // 👉 Update after frontend deploy
+      "https://hrms-app-five.vercel.app", // 👉 Update after frontend deploy
     ],
     credentials: true,
   })
