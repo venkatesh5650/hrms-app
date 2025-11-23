@@ -2,9 +2,11 @@ const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config();
 
+const cors = require("cors"); // ⭐ New
+
 const sequelize = require("./db");
 
-// Register models (ensures associations are loaded before sync)
+// Register models
 require("./models/organisation");
 require("./models/user");
 require("./models/employee");
@@ -19,20 +21,32 @@ const logRoutes = require("./routes/logs");
 const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
-app.use(express.json()); // JSON request parsing
 
-// Health check / root endpoint
+// ⭐ Enable CORS for frontend origin(s)
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://hrms-frontend.vercel.app", // 👉 Update after frontend deploy
+    ],
+    credentials: true,
+  })
+);
+
+app.use(express.json()); // JSON parser
+
+// Health check
 app.get("/", (req, res) => {
   res.json({ message: "HRMS Backend running" });
 });
 
-// API routing (tenant rules enforced via middleware inside route files)
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/logs", logRoutes);
 
-// Centralized error handler for clean API responses
+// Error handler
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
@@ -40,16 +54,12 @@ const PORT = process.env.PORT || 5000;
 // Server startup
 async function start() {
   try {
-    await sequelize.authenticate(); // DB reachability test
-    console.log("Database connected");
+    await sequelize.authenticate();
+    console.log("DB connected");
 
-    // ⚠ Dev only: auto-create tables
-    // Production: use migrations for schema control
-    await sequelize.sync();
+    await sequelize.sync(); // Dev only
 
-    app.listen(PORT, () =>
-      console.log(`Server started on port ${PORT}`)
-    );
+    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
   } catch (err) {
     console.error("Failed to start server", err);
   }
