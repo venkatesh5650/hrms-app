@@ -61,7 +61,7 @@ Hosting:   Vercel (Frontend), Render/MySQL Local (Backend)
 
 | Service     | Link                                                                                        |
 | ----------- | ------------------------------------------------------------------------------------------- |
-| Frontend    | 🔗 [https://your-vercel-url.vercel.app](https://your-vercel-url.vercel.app)                 |
+| Frontend    | 🔗 [https://hrms-app-five.vercel.app](https://hrms-app-five.vercel.app)                 |
 | Backend API | 🔗 [https://hrms-backend-dw0e.onrender.com/api](https://hrms-backend-dw0e.onrender.com/api) |
 | Demo Login  | 📧 [demo@gmail.com](mailto:demo@gmail.com) / 🔑 demo@5650                                   |
 
