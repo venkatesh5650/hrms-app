@@ -1,0 +1,114 @@
+.love-section {
+  background: #facc15;
+  padding: 80px 24px;
+}
+
+.love-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.love-caption {
+  font-size: 14px;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 6px;
+}
+
+.love-header h2 {
+  font-size: 26px;
+  color: #111827;
+}
+
+.love-arrows {
+  display: flex;
+  gap: 12px;
+}
+
+.circle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid #fbbf24;
+  background: #fef9c3;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #92400e;
+}
+
+.circle-btn.active {
+  background: #111827;
+  color: #fef9c3;
+  border-color: #111827;
+}
+
+.love-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.love-card {
+  background: #fefce8;
+  border-radius: 24px;
+  padding: 18px 18px 20px;
+}
+
+.love-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #111827;
+}
+
+.love-brand h4 {
+  font-size: 14px;
+}
+
+.love-brand p {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.love-text {
+  font-size: 13px;
+  color: #374151;
+}
+
+@media (max-width: 960px) {
+  .love-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .love-section {
+    padding: 64px 16px;
+  }
+
+  .love-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .love-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
