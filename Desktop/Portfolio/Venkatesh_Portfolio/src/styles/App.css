@@ -1,0 +1,353 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #f5f7fb;
+}
+
+.app-root {
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar-brand {
+  font-size: 1.25rem;
+}
+
+.brand-subtitle {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-left: 4px;
+  color: #6c757d;
+}
+
+.nav-link {
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #0d6efd;
+}
+
+/* Hero */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #f5f7fb;
+}
+
+.app-root {
+  min-height: 100vh;
+}
+
+/* ============================
+   NAVBAR
+============================ */
+.navbar-brand {
+  font-size: 1.25rem;
+}
+
+.brand-subtitle {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-left: 4px;
+  color: #6c757d;
+}
+
+.nav-link {
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #0d6efd;
+}
+
+/* ============================
+   HERO SECTION (UPDATED)
+============================ */
+.hero-section {
+  background: linear-gradient(135deg, #0d6efd, #6610f2, #20c997);
+  background-size: 200% 200%;
+  animation: heroGradient 8s ease infinite;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes heroGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.hero-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.hero-subtitle {
+  font-size: 1.35rem;
+  color: #e0e7ff;
+  font-weight: 500;
+}
+
+.hero-intro {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.9rem;
+  color: #dbeafe;
+}
+
+.hero-text {
+  max-width: 650px;
+  color: #f1f5f9;
+  line-height: 1.7;
+}
+
+/* Hero Buttons */
+.hero-btn,
+.hero-btn-outline {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-btn:hover,
+.hero-btn-outline:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(13, 110, 253, 0.45);
+}
+
+/* ============================
+   HERO INFO CARD (FIXED & BEAUTIFUL)
+============================ */
+.hero-card {
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  padding: 1.8rem;
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  transform: translateY(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hero-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.hero-card h5 {
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.hero-card .label {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  color: #c7d2fe;
+  text-transform: uppercase;
+}
+
+.hero-highlight {
+  color: #22d3ee;
+  font-weight: 700;
+}
+
+/* ============================
+   SECTIONS
+============================ */
+.section {
+  padding: 4rem 0;
+}
+
+.section-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+}
+
+.section-subtitle {
+  color: #6c757d;
+}
+
+/* ============================
+   SKILLS
+============================ */
+.skill-badge {
+  background: linear-gradient(135deg, #e3f2fd, #dbeafe);
+  color: #0d47a1;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid #bbdefb;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.skill-badge:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(13, 71, 161, 0.25);
+}
+
+/* ============================
+   PROJECTS
+============================ */
+.project-card {
+  border-radius: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+.project-tech {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* ============================
+   EXPERIENCE & EDUCATION
+============================ */
+.experience-card,
+.education-card {
+  border-radius: 1rem;
+}
+
+/* ============================
+   CONTACT
+============================ */
+.contact-link {
+  text-decoration: none;
+  color: #0d6efd;
+  font-weight: 500;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+}
+
+/* ============================
+   FOOTER
+============================ */
+.footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* ============================
+   MOBILE FIXES
+============================ */
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 2.1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .hero-card {
+    margin-top: 1.5rem;
+  }
+}
+
+
+/* Sections */
+.section {
+  padding: 4rem 0;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.section-subtitle {
+  color: #6c757d;
+}
+
+/* Skills */
+.skill-badge {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+  font-weight: 500;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid #bbdefb;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.skill-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+}
+
+/* Projects */
+.project-card {
+  border-radius: 0.9rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.project-tech {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Experience & Education */
+.experience-card,
+.education-card {
+  border-radius: 0.9rem;
+}
+
+/* Contact */
+.contact-link {
+  text-decoration: none;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Small screen tweaks */
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+}
