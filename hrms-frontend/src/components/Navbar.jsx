@@ -43,9 +43,14 @@ const Navbar = () => {
           {user && (
             <div className="navbar-user">
               <span className="navbar-user-name">{user.name || "Admin"}</span>
-              <button className="btn btn-outline" onClick={handleLogout}>
-                Logout
-              </button>
+             <button
+  className="btn btn-outline"
+  style={{ backgroundColor: "blue" }}
+  onClick={handleLogout}
+>
+  Logout
+</button>
+
             </div>
           )}
         </div>
