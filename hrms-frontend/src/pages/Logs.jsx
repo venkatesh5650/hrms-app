@@ -7,19 +7,20 @@ const Logs = () => {
   const [loading, setLoading] = useState(true);
   const [filterAction, setFilterAction] = useState("");
 
-  const loadLogs = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get("/logs", {
-        params: filterAction ? { action: filterAction } : {},
-      });
-      setLogs(res.data.logs || []);
-    } catch (err) {
-      console.error("Failed to load logs:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+ const loadLogs = async (action = filterAction) => {
+  try {
+    setLoading(true);
+    const res = await api.get("/logs", {
+      params: action ? { action } : {},
+    });
+    setLogs(res.data.logs || []);
+  } catch (err) {
+    console.error("Failed to load logs:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // 🔹 Only load once on mount, not on every filter change
   useEffect(() => {
@@ -48,9 +49,16 @@ const Logs = () => {
               }
             }}
           />
-          <button className="btn btn-small" onClick={loadLogs}>
-            Refresh
-          </button>
+          <button
+  className="btn btn-small"
+  onClick={() => {
+    setFilterAction("");   // clear input
+    loadLogs("");          // load all logs (no filter)
+  }}
+>
+  Refresh
+</button>
+
         </div>
       </div>
 
