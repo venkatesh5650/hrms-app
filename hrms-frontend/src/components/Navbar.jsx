@@ -18,7 +18,7 @@ const Navbar = () => {
     <>
       <header className="navbar">
         <div className="navbar-left">
-          <span className="navbar-logo">Evallo HRMS</span>
+          <span className="navbar-logo">HRMS</span>
         </div>
 
         {/* Desktop Links */}
