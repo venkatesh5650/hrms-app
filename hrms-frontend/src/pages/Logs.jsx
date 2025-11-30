@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import Loader from "../components/Loader";
 
@@ -7,7 +7,7 @@ const Logs = () => {
   const [loading, setLoading] = useState(true);
   const [filterAction, setFilterAction] = useState("");
 
-  const loadLogs = useCallback(async () => {
+  const loadLogs = async () => {
     try {
       setLoading(true);
       const res = await api.get("/logs", {
@@ -19,11 +19,12 @@ const Logs = () => {
     } finally {
       setLoading(false);
     }
-  }, [filterAction]);
+  };
 
+  // 🔹 Only load once on mount, not on every filter change
   useEffect(() => {
     loadLogs();
-  }, [loadLogs]);
+  }, []);
 
   if (loading) return <Loader />;
 
@@ -41,6 +42,11 @@ const Logs = () => {
             placeholder="Filter by action (e.g. employee_created)"
             value={filterAction}
             onChange={(e) => setFilterAction(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                loadLogs(); // 🔹 Only fetch when Enter is pressed
+              }
+            }}
           />
           <button className="btn btn-small" onClick={loadLogs}>
             Refresh
