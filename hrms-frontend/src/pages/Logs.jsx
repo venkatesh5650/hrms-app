@@ -52,30 +52,32 @@ const Logs = () => {
         {logs.length === 0 ? (
           <p className="muted">No logs yet.</p>
         ) : (
-          <table className="table table-logs">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Action</th>
-                <th>User ID</th>
-                <th>Meta</th>
-              </tr>
-            </thead>
-            <tbody>
-              {logs.map((log) => (
-                <tr key={log.id}>
-                  <td>{new Date(log.timestamp).toLocaleString()}</td>
-                  <td>{log.action}</td>
-                  <td>{log.user_id || "-"}</td>
-                  <td>
-                    <code className="code-small">
-                      {JSON.stringify(log.meta || {})}
-                    </code>
-                  </td>
+          <div className="table-responsive">
+            <table className="table table-logs">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Action</th>
+                  <th>User ID</th>
+                  <th>Meta</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {logs.map((log) => (
+                  <tr key={log.id}>
+                    <td>{new Date(log.timestamp).toLocaleString()}</td>
+                    <td>{log.action}</td>
+                    <td>{log.user_id || "-"}</td>
+                    <td>
+                      <code className="code-small">
+                        {JSON.stringify(log.meta || {})}
+                      </code>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

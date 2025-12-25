@@ -96,45 +96,47 @@ const Employees = () => {
         {employees.length === 0 ? (
           <p className="muted">No employees yet. Add your first one.</p>
         ) : (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Teams</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {employees.map((emp) => (
-                <tr key={emp.id}>
-                  <td>
-                    {emp.first_name} {emp.last_name}
-                  </td>
-                  <td>{emp.email || "-"}</td>
-                  <td>
-                    {emp.Teams?.length
-                      ? emp.Teams.map((t) => t.name).join(", ")
-                      : "—"}
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-small"
-                      onClick={() => handleEdit(emp)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="btn btn-small btn-danger"
-                      onClick={() => handleDelete(emp.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Teams</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {employees.map((emp) => (
+                  <tr key={emp.id}>
+                    <td>
+                      {emp.first_name} {emp.last_name}
+                    </td>
+                    <td>{emp.email || "-"}</td>
+                    <td>
+                      {emp.Teams?.length
+                        ? emp.Teams.map((t) => t.name).join(", ")
+                        : "—"}
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-small"
+                        onClick={() => handleEdit(emp)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-small btn-danger"
+                        onClick={() => handleDelete(emp.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

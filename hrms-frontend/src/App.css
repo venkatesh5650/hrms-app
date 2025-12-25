@@ -450,3 +450,39 @@
     display: block;
   }
 }
+
+/* Make tables scrollable on small screens */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Form buttons go vertical on mobile */
+@media (max-width: 500px) {
+  .form-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .form-actions .btn {
+    width: 100%;
+  }
+}
+
+/* Table action buttons wrap instead of overflowing */
+@media (max-width: 650px) {
+  .table td:last-child {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .btn-small {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Prevent table columns from squeezing too much */
+.table th,
+.table td {
+  white-space: nowrap;
+}
