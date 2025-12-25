@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "./login.css";
 
 const Login = () => {
   const { login } = useAuth();
@@ -45,56 +46,62 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-card card">
-        <h2>Welcome back 👋</h2>
-        <p className="auth-subtitle">Sign in to manage your organisation</p>
+    <div className="login-root">
+      <div className="login-left">
+        <img
+          src="https://res.cloudinary.com/dpiu7mohv/image/upload/v1766676863/portrait-professional-business-people-working-together_oe5u7s.jpg"
+          alt="Professional team"
+        />
+        <div className="login-overlay" />
+        <div className="login-left-text">
+          <h2>Future-ready HR Platform</h2>
+          <p>Manage people. Build teams. Scale securely.</p>
+        </div>
+      </div>
 
-        {error && <div className="alert alert-error">{error}</div>}
+      <div className="login-right">
+        <div className="login-card">
+          <div className="brand">
+            <div className="brand-logo">HR</div>
+            <span>HRMS</span>
+          </div>
 
-        <form onSubmit={handleSubmit} className="form">
-          <div className="form-row">
+          <h2 className="title">Access Portal</h2>
+          <p className="subtitle">Secure login to continue</p>
+
+          {error && <div className="error">{error}</div>}
+
+          <form onSubmit={handleSubmit}>
             <label>Email</label>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="you@company.com"
-              required
             />
-          </div>
-          <div className="form-row">
+
             <label>Password</label>
             <input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
-              placeholder="••••••••"
-              required
             />
-          </div>
 
-          <button className="btn btn-full" type="submit" disabled={loading}>
-            {loading ? "Signing in..." : "Login"}
+            <button type="submit">
+              {loading ? "Authenticating..." : "Enter System"}
+            </button>
+          </form>
+
+          <button className="demo-btn" onClick={handleDemoCredentials}>
+            Use Demo Account
           </button>
-        </form>
 
-        <button
-          className="btn btn-small mt-md"
-          style={{ width: "100%", background: "#374151" }}
-          onClick={handleDemoCredentials}
-        >
-          Use Demo Credentials
-        </button>
-
-        <p className="auth-footer">
-          New organisation?{" "}
-          <Link to="/register" className="link">
-            Create organisation account
-          </Link>
-        </p>
+          <div className="footer">
+            <span>New organisation?</span>
+            <Link to="/register">Create access</Link>
+          </div>
+        </div>
       </div>
     </div>
   );
