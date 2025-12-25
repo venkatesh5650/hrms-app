@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import Loader from "../components/Loader";
 
@@ -7,23 +7,25 @@ const Logs = () => {
   const [loading, setLoading] = useState(true);
   const [filterAction, setFilterAction] = useState("");
 
-  const loadLogs = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await api.get("/logs", {
-        params: filterAction ? { action: filterAction } : {},
-      });
-      setLogs(res.data.logs || []);
-    } catch (err) {
-      console.error("Failed to load logs:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [filterAction]);
+ const loadLogs = async (action = filterAction) => {
+  try {
+    setLoading(true);
+    const res = await api.get("/logs", {
+      params: action ? { action } : {},
+    });
+    setLogs(res.data.logs || []);
+  } catch (err) {
+    console.error("Failed to load logs:", err);
+  } finally {
+    setLoading(false);
+  }
+};
 
+
+  // 🔹 Only load once on mount, not on every filter change
   useEffect(() => {
     loadLogs();
-  }, [loadLogs]);
+  }, []);
 
   if (loading) return <Loader />;
 
@@ -41,10 +43,22 @@ const Logs = () => {
             placeholder="Filter by action (e.g. employee_created)"
             value={filterAction}
             onChange={(e) => setFilterAction(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                loadLogs(); // 🔹 Only fetch when Enter is pressed
+              }
+            }}
           />
-          <button className="btn btn-small" onClick={loadLogs}>
-            Refresh
-          </button>
+          <button
+  className="btn btn-small"
+  onClick={() => {
+    setFilterAction("");   // clear input
+    loadLogs("");          // load all logs (no filter)
+  }}
+>
+  Refresh
+</button>
+
         </div>
       </div>
 

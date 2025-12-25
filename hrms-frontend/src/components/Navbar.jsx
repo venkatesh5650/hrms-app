@@ -18,7 +18,7 @@ const Navbar = () => {
     <>
       <header className="navbar">
         <div className="navbar-left">
-          <span className="navbar-logo">Evallo HRMS</span>
+          <span className="navbar-logo">HRMS</span>
         </div>
 
         {/* Desktop Links */}
@@ -43,9 +43,14 @@ const Navbar = () => {
           {user && (
             <div className="navbar-user">
               <span className="navbar-user-name">{user.name || "Admin"}</span>
-              <button className="btn btn-outline" onClick={handleLogout}>
-                Logout
-              </button>
+             <button
+  className="btn btn-outline"
+  style={{ backgroundColor: "blue" }}
+  onClick={handleLogout}
+>
+  Logout
+</button>
+
             </div>
           )}
         </div>

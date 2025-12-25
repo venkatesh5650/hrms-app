@@ -1,4 +1,4 @@
-# 🌟 Evallo HRMS – Human Resource Management System (Full Stack)
+# 🌟  HRMS – Human Resource Management System (Full Stack)
 ## 🚀 Full Stack Automation for Employee & Team Management
 
 📌 Built using React.js | Node.js | Express | MySQL | JWT Authentication
@@ -7,7 +7,7 @@
 
 ### 📌 Project Overview
 
-Evallo HRMS is a secure Human Resource Management System built to help small and mid-sized organisations:
+ HRMS is a secure Human Resource Management System built to help small and mid-sized organisations:
 
 - ✔ Manage employees
 - ✔ Organise teams
