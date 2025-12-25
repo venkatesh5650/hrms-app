@@ -1,0 +1,83 @@
+### Base URL
+@baseURL = http://localhost:5000/api
+@token = {{token}}
+@employeeId = {{employeeId}}
+@teamId = {{teamId}}
+
+### Health Check
+GET http://localhost:5000/
+
+### Register (New Org + Admin User)
+POST {{baseURL}}/auth/register
+Content-Type: application/json
+
+{
+  "orgName": "Test Company",
+  "adminName": "Karthan",
+  "email": "admin@test.com",
+  "password": "Password123!"
+}
+
+### Login (Get JWT Token)
+POST {{baseURL}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "password": "Password123!"
+}
+
+### Paste token below after login:
+# @token = eyJhbGciOiJIUzI1...
+
+### Get Employees (Empty list initially)
+GET {{baseURL}}/employees
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+
+### Create Employee
+POST {{baseURL}}/employees
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+Content-Type: application/json
+
+{
+  "first_name": "Alice",
+  "last_name": "Smith",
+  "email": "alice@company.com"
+}
+
+### Update @employeeId after previous result
+### Get Employees Again
+GET {{baseURL}}/employees
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+
+### Create Team
+POST {{baseURL}}/teams
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+Content-Type: application/json
+
+{
+  "name": "Engineering",
+  "description": "Development Team"
+}
+
+### Get Teams
+GET {{baseURL}}/teams
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+
+### Assign Employee to Team
+# update @employeeId and @teamId accordingly
+POST {{baseURL}}/teams/{{teamId}}/assign
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+Content-Type: application/json
+
+{
+  "employeeId": 3
+}
+
+### View Logs
+GET {{baseURL}}/logs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODkwNTMsImV4cCI6MTc2MzgxNzg1M30.KzzYlz7kQyGEd_O08QVCWZybFFVq4Bpm-XCn96Pj4EE
+
+### Logout
+POST {{baseURL}}/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODkwNTMsImV4cCI6MTc2MzgxNzg1M30.KzzYlz7kQyGEd_O08QVCWZybFFVq4Bpm-XCn96Pj4EE
