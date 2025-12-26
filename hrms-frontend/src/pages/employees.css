@@ -19,12 +19,12 @@
 
 /* Card */
 .card {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
   padding: 24px;
-  box-shadow: 0 0 40px rgba(99,102,241,0.2);
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.2);
   width: 100%;
 }
 
@@ -43,13 +43,13 @@
 .table th,
 .table td {
   padding: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   text-align: left;
   vertical-align: top;
 }
 
 .table thead {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .actions-head {
@@ -90,27 +90,27 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg,#6366f1,#22d3ee);
+  background: linear-gradient(135deg, #6366f1, #22d3ee);
   border: none;
   color: #020617;
 }
 
 .btn-secondary {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ddd;
 }
 
 .btn-danger {
-  background: rgba(239,68,68,0.15);
-  border: 1px solid rgba(239,68,68,0.4);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
   color: #f87171;
 }
 
 .alert-error {
   margin-top: 12px;
-  background: rgba(255,0,0,0.12);
-  border: 1px solid rgba(255,0,0,0.35);
+  background: rgba(255, 0, 0, 0.12);
+  border: 1px solid rgba(255, 0, 0, 0.35);
   padding: 10px 14px;
   border-radius: 10px;
   color: #f87171;
@@ -128,7 +128,7 @@
 
   .table-row {
     display: block;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 12px 0;
   }
 
@@ -151,5 +151,58 @@
 
   .truncate {
     max-width: 100%;
+  }
+}
+
+/* ===== Mobile Responsive Table ===== */
+@media (max-width: 640px) {
+  .table-wrapper {
+    overflow-x: hidden;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-row {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 6px 0;
+    border: none;
+    gap: 12px;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-size: 0.65rem;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .col-time,
+  .col-action,
+  .col-meta {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .code-small {
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: none;
   }
 }

@@ -49,7 +49,8 @@ const Dashboard = () => {
             <header className="page-header">
               <h1>Dashboard</h1>
               <p className="page-subtitle">
-                Welcome, {user?.name || "Admin"} — quick overview of your HR space.
+                Welcome, {user?.name || "Admin"} — quick overview of your HR
+                space.
               </p>
             </header>
 
@@ -85,12 +86,14 @@ const Dashboard = () => {
                     </thead>
                     <tbody>
                       {stats.recentLogs.map((log) => (
-                        <tr key={log.id}>
-                          <td className="col-time">
+                        <tr key={log.id} className="table-row">
+                          <td className="col-time" data-label="Time">
                             {new Date(log.timestamp).toLocaleString()}
                           </td>
-                          <td className="col-action">{log.action}</td>
-                          <td className="col-meta">
+                          <td className="col-action" data-label="Action">
+                            {log.action}
+                          </td>
+                          <td className="col-meta" data-label="Meta">
                             <span className="code-small">
                               {JSON.stringify(log.meta || {})}
                             </span>
