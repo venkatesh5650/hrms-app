@@ -56,11 +56,11 @@
 .logs-card {
   margin-top: 32px;
 }
+
 .logs-title {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 12px;
-  letter-spacing: 0.02em;
 }
 
 /* Wrapper */
@@ -70,7 +70,7 @@
   border-radius: 12px;
 }
 
-/* Table base */
+/* Table */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -78,47 +78,28 @@
   table-layout: fixed;
 }
 
-/* Head */
-.table thead {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.table th {
-  text-align: left;
-  padding: 12px;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  opacity: 0.65;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-/* Body cells */
+.table th,
 .table td {
   padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   vertical-align: top;
-}
-
-/* Row hover */
-.table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.05);
 }
 
 /* Column sizing */
 .col-time {
-  width: 170px;
+  min-width: 150px;
   font-size: 0.75rem;
   opacity: 0.85;
 }
 
 .col-action {
-  width: 160px;
+  min-width: 140px;
   font-weight: 500;
 }
 
 .col-meta {
-  width: auto;
+  min-width: 240px;
 }
 
 /* Meta styling */
@@ -133,24 +114,22 @@
   background: rgba(0, 0, 0, 0.35);
   padding: 4px 6px;
   border-radius: 6px;
-  cursor: default;
 }
 
-/* Expand meta on hover */
 .code-small:hover {
   white-space: pre-wrap;
   overflow: auto;
   max-height: 120px;
 }
 
-/* Mobile adjustments */
+/* Mobile */
 @media (max-width: 640px) {
-  .col-time {
-    width: 130px;
+  .dashboard-root {
+    padding: 16px;
   }
 
-  .col-action {
-    width: 120px;
+  .table {
+    font-size: 0.75rem;
   }
 
   .code-small {

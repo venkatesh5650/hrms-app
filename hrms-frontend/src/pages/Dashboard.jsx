@@ -63,40 +63,39 @@ const Dashboard = () => {
       </section>
 
       <section className="card logs-card">
-  <h3 className="logs-title">Recent Activity</h3>
+        <h3 className="logs-title">Recent Activity</h3>
 
-  {stats.recentLogs.length === 0 ? (
-    <p className="muted">No recent logs yet.</p>
-  ) : (
-    <div className="table-wrapper">
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Action</th>
-            <th>Meta</th>
-          </tr>
-        </thead>
-        <tbody>
-          {stats.recentLogs.map((log) => (
-            <tr key={log.id}>
-              <td className="col-time">
-                {new Date(log.timestamp).toLocaleString()}
-              </td>
-              <td className="col-action">{log.action}</td>
-              <td className="col-meta">
-                <span className="code-small">
-                  {JSON.stringify(log.meta || {})}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )}
-</section>
-
+        {stats.recentLogs.length === 0 ? (
+          <p className="muted">No recent logs yet.</p>
+        ) : (
+          <div className="table-wrapper">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Action</th>
+                  <th>Meta</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.recentLogs.map((log) => (
+                  <tr key={log.id}>
+                    <td className="col-time">
+                      {new Date(log.timestamp).toLocaleString()}
+                    </td>
+                    <td className="col-action">{log.action}</td>
+                    <td className="col-meta">
+                      <span className="code-small">
+                        {JSON.stringify(log.meta || {})}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
     </main>
   );
 };
