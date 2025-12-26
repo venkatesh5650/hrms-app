@@ -1,10 +1,13 @@
-import React from "react";
+import "./loader.css";
 
-const Loader = () => (
-  <div className="loader-wrapper">
-    <div className="loader-spinner" />
-    <p>Loading...</p>
-  </div>
-);
+const Loader = () => {
+  return (
+    <div className="inline-loader">
+      <div className="loader-spinner" />
+      <p className="loader-text">Preparing your workspace…</p>
+
+    </div>
+  );
+};
 
 export default Loader;

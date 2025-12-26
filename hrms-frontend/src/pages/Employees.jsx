@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 import Loader from "../components/Loader";
 import EmployeeForm from "../components/EmployeeForm";
+import "./employees.css";
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
@@ -15,7 +16,7 @@ const Employees = () => {
       setLoading(true);
       const res = await api.get("/employees");
       setEmployees(res.data.employees || []);
-    } catch (err) {
+    } catch {
       setError("Failed to load employees");
     } finally {
       setLoading(false);
@@ -41,8 +42,7 @@ const Employees = () => {
     try {
       await api.delete(`/employees/${id}`);
       await loadEmployees();
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("Failed to delete employee");
     }
   };
@@ -57,29 +57,28 @@ const Employees = () => {
       setShowForm(false);
       setEditingEmployee(null);
       await loadEmployees();
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("Failed to save employee");
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <Loader inline />;
 
   return (
-    <div className="page">
-      <div className="page-header">
+    <main className="employees-root">
+      <header className="page-header">
         <div>
           <h1>Employees</h1>
           <p className="page-subtitle">
-            Manage employee records and see their team memberships.
+            Manage employee records and team memberships.
           </p>
         </div>
-        <button className="btn" onClick={handleCreate}>
+        <button className="btn btn-primary btn-md" onClick={handleCreate}>
           + Add Employee
         </button>
-      </div>
+      </header>
 
-      {error && <div className="alert alert-error">{error}</div>}
+      {error && <div className="alert-error">{error}</div>}
 
       {showForm && (
         <EmployeeForm
@@ -92,45 +91,31 @@ const Employees = () => {
         />
       )}
 
-      <div className="card mt-md">
+      <section className="card employees-card">
         {employees.length === 0 ? (
-          <p className="muted">No employees yet. Add your first one.</p>
+          <p className="muted">No employees yet.</p>
         ) : (
-          <div className="table-responsive">
+          <div className="table-wrapper">
             <table className="table">
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Teams</th>
-                  <th>Actions</th>
+                  <th className="actions-head">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {employees.map((emp) => (
-                  <tr key={emp.id}>
-                    <td>
-                      {emp.first_name} {emp.last_name}
+                  <tr key={emp.id} className="table-row">
+                    <td data-label="Name">{emp.first_name} {emp.last_name}</td>
+                    <td data-label="Email" className="truncate">{emp.email || "—"}</td>
+                    <td data-label="Teams" className="truncate">
+                      {emp.Teams?.length ? emp.Teams.map(t => t.name).join(", ") : "—"}
                     </td>
-                    <td>{emp.email || "-"}</td>
-                    <td>
-                      {emp.Teams?.length
-                        ? emp.Teams.map((t) => t.name).join(", ")
-                        : "—"}
-                    </td>
-                    <td>
-                      <button
-                        className="btn btn-small"
-                        onClick={() => handleEdit(emp)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-small btn-danger"
-                        onClick={() => handleDelete(emp.id)}
-                      >
-                        Delete
-                      </button>
+                    <td data-label="Actions" className="actions-cell">
+                      <button className="btn btn-secondary btn-sm" onClick={() => handleEdit(emp)}>Edit</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDelete(emp.id)}>Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -138,8 +123,8 @@ const Employees = () => {
             </table>
           </div>
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

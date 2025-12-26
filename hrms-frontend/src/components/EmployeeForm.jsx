@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./employeeForm.css";
 
 const initialState = {
   first_name: "",
@@ -34,44 +35,51 @@ const EmployeeForm = ({ onSubmit, onCancel, initialData }) => {
   };
 
   return (
-    <form className="card form" onSubmit={handleSubmit}>
-      <h3>{initialData ? "Edit Employee" : "Add Employee"}</h3>
-      <div className="form-row">
-        <label>First Name</label>
-        <input
-          name="first_name"
-          value={form.first_name}
-          onChange={handleChange}
-          required
-        />
+    <form className="employee-form-card" onSubmit={handleSubmit}>
+      <div className="form-header">
+        <h3>{initialData ? "Edit Employee" : "Add Employee"}</h3>
+        <p className="form-subtitle">
+          {initialData ? "Update employee details" : "Create a new employee record"}
+        </p>
       </div>
-      <div className="form-row">
-        <label>Last Name</label>
-        <input
-          name="last_name"
-          value={form.last_name}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="form-row">
-        <label>Email</label>
-        <input
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="form-row">
-        <label>Phone</label>
-        <input name="phone" value={form.phone} onChange={handleChange} />
+
+      <div className="form-grid">
+        <div className="form-field">
+          <label>First Name</label>
+          <input
+            name="first_name"
+            value={form.first_name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-field">
+          <label>Last Name</label>
+          <input name="last_name" value={form.last_name} onChange={handleChange} />
+        </div>
+
+        <div className="form-field">
+          <label>Email</label>
+          <input
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-field">
+          <label>Phone</label>
+          <input name="phone" value={form.phone} onChange={handleChange} />
+        </div>
       </div>
 
       <div className="form-actions">
-        <button type="submit" className="btn">
+        <button type="submit" className="btn btn-primary btn-md">
           {initialData ? "Update" : "Create"}
         </button>
-        <button type="button" className="btn btn-ghost" onClick={onCancel}>
+        <button type="button" className="btn btn-secondary btn-md" onClick={onCancel}>
           Cancel
         </button>
       </div>
