@@ -4,22 +4,31 @@ import { useAuth } from "../context/AuthContext";
 import "./login.css";
 
 const Login = () => {
+  // Auth function from context to handle login API call & token storage
   const { login } = useAuth();
+
+  // React Router hook to navigate after successful login
   const navigate = useNavigate();
 
+  // Controlled form state for login credentials
   const [form, setForm] = useState({
-    email: "demo@gmail.com", // ⭐ Default email
-    password: "demo@5650", // ⭐ Default password
+    email: "demo@gmail.com",
+    password: "demo@5650",
   });
 
+  // Error message state for UI feedback
   const [error, setError] = useState("");
+
+  // Loading state to prevent duplicate submissions and show progress
   const [loading, setLoading] = useState(false);
 
+  // Updates form state on input change (generic handler for all fields)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
   };
 
+  // Pre-fills demo credentials for quick testing
   const handleDemoCredentials = () => {
     setForm({
       email: "demo@gmail.com",
@@ -28,19 +37,25 @@ const Login = () => {
     setError("");
   };
 
+  // Handles form submission and authentication flow
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
+      // Calls login function and waits for authentication to complete
       await login(form);
+
+      // Redirects user to dashboard on success
       navigate("/dashboard");
     } catch (err) {
+      // Displays API error message or fallback message
       setError(
         err.response?.data?.message || "Login failed. Please check credentials."
       );
     } finally {
+      // Resets loading state regardless of outcome
       setLoading(false);
     }
   };
@@ -54,7 +69,7 @@ const Login = () => {
         />
         <div className="login-overlay" />
         <div className="login-left-text">
-          <h2>Future-ready HR Platform</h2>
+          <h2>Your Central Hub for HR Operations</h2>
           <p>Manage people. Build teams. Scale securely.</p>
         </div>
       </div>
@@ -69,6 +84,7 @@ const Login = () => {
           <h2 className="title">Access Portal</h2>
           <p className="subtitle">Secure login to continue</p>
 
+          {/* Shows authentication errors */}
           {error && <div className="error">{error}</div>}
 
           <form onSubmit={handleSubmit}>
@@ -88,12 +104,12 @@ const Login = () => {
               onChange={handleChange}
             />
 
-            <button type="submit">
+            <button type="submit" className="btn btn-primary">
               {loading ? "Authenticating..." : "Enter System"}
             </button>
           </form>
 
-          <button className="demo-btn" onClick={handleDemoCredentials}>
+          <button className="btn btn-secondary" onClick={handleDemoCredentials}>
             Use Demo Account
           </button>
 

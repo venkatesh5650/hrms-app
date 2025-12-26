@@ -1,3 +1,4 @@
+/* Fullscreen root layout with split left (visual) and right (form) sections */
 .login-root {
   position: fixed;
   inset: 0;
@@ -13,18 +14,21 @@
   display: none;
 }
 
+/* Hides decorative left panel on small screens to prioritize form usability */
 @media (min-width: 768px) {
   .login-left {
     display: block;
   }
 }
 
-.login-image {
+.login-left img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+
 }
 
+/* Soft radial overlay to improve text contrast over background image */
 .login-overlay {
   position: absolute;
   inset: 0;
@@ -45,12 +49,16 @@
 .login-left-text h2 {
   font-size: 2.5rem;
   font-weight: bold;
+  margin: 0;              /* remove default margin */
 }
 
 .login-left-text p {
   font-size: 0.9rem;
   opacity: 0.8;
+  margin-top: 8px;       /* controlled spacing */
+  margin-bottom: 0;
 }
+
 
 .login-right {
   flex: 1;
@@ -59,10 +67,10 @@
   justify-content: center;
 }
 
+/* Glassmorphism card effect using transparency and backdrop blur layering */
 .login-card {
   position: relative;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
   border-radius: 20px;
@@ -94,6 +102,7 @@
 .title {
   font-size: 1.6rem;
   font-weight: 600;
+  
 }
 
 .subtitle {
@@ -102,6 +111,7 @@
   margin-bottom: 20px;
 }
 
+/* Subtle error styling that remains visible without overpowering the UI */
 .error {
   background: rgba(255, 0, 0, 0.1);
   border: 1px solid rgba(255, 0, 0, 0.3);
@@ -132,20 +142,57 @@ input {
   color: white;
 }
 
+/* Focus state highlights active input for accessibility and usability */
 input:focus {
   outline: none;
   border-color: #6366f1;
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
 }
 
-button {
+.btn {
+  width: 100%;
   margin-top: 16px;
   padding: 12px;
   border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #6366f1, #22d3ee);
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #6366f1, #22d3ee);
+  border: none;
+  color: #020617;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+}
+
+/* Hover/active states simulate physical button interaction */
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 35px rgba(99, 102, 241, 0.6);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ddd;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
 }
 
 .demo-btn {
@@ -163,15 +210,16 @@ button {
 .demo-btn:hover {
   background: rgba(255, 255, 255, 0.1);
 }
+
 .footer {
   margin-top: 20px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: center;
   gap: 6px;
   font-size: 0.8rem;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .footer a {

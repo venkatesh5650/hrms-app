@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 import Loader from "../components/Loader";
 import { useAuth } from "../context/AuthContext";
+import "./dashboard.css";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -38,17 +39,15 @@ const Dashboard = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="page">
-      <div className="page-header">
-        <div>
-          <h1>Dashboard</h1>
-          <p className="page-subtitle">
-            Welcome, {user?.name || "Admin"} — quick overview of your HR space.
-          </p>
-        </div>
-      </div>
+    <main className="dashboard-root">
+      <header className="page-header">
+        <h1>Dashboard</h1>
+        <p className="page-subtitle">
+          Welcome, {user?.name || "Admin"} — quick overview of your HR space.
+        </p>
+      </header>
 
-      <div className="grid grid-3">
+      <section className="stats-grid">
         <div className="card stat-card">
           <h3>Total Employees</h3>
           <p className="stat-value">{stats.employees}</p>
@@ -59,42 +58,46 @@ const Dashboard = () => {
         </div>
         <div className="card stat-card">
           <h3>Recent Events</h3>
-          <p className="stat-value">
-            {stats.recentLogs.length ? stats.recentLogs.length : 0}
-          </p>
+          <p className="stat-value">{stats.recentLogs.length}</p>
         </div>
-      </div>
+      </section>
 
-      <div className="card mt-lg">
-        <h3>Recent Activity</h3>
-        {stats.recentLogs.length === 0 ? (
-          <p className="muted">No recent logs yet.</p>
-        ) : (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Action</th>
-                <th>Meta</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stats.recentLogs.map((log) => (
-                <tr key={log.id}>
-                  <td>{new Date(log.timestamp).toLocaleString()}</td>
-                  <td>{log.action}</td>
-                  <td>
-                    <code className="code-small">
-                      {JSON.stringify(log.meta || {})}
-                    </code>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+      <section className="card logs-card">
+  <h3 className="logs-title">Recent Activity</h3>
+
+  {stats.recentLogs.length === 0 ? (
+    <p className="muted">No recent logs yet.</p>
+  ) : (
+    <div className="table-wrapper">
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Action</th>
+            <th>Meta</th>
+          </tr>
+        </thead>
+        <tbody>
+          {stats.recentLogs.map((log) => (
+            <tr key={log.id}>
+              <td className="col-time">
+                {new Date(log.timestamp).toLocaleString()}
+              </td>
+              <td className="col-action">{log.action}</td>
+              <td className="col-meta">
+                <span className="code-small">
+                  {JSON.stringify(log.meta || {})}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
+  )}
+</section>
+
+    </main>
   );
 };
 
