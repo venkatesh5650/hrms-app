@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../db");
+const sequelize = require("../config/db");
 
 // Represents a tenant/company in the HRMS platform
 const Organisation = sequelize.define(
@@ -17,3 +17,5 @@ const Organisation = sequelize.define(
 );
 
 module.exports = Organisation;
+
+

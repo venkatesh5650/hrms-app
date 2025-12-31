@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../db");
+const sequelize = require("../config/db");
 
 // Audit log table for accountability & compliance tracking
 const Log = sequelize.define(
@@ -10,7 +10,10 @@ const Log = sequelize.define(
     user_id: { type: DataTypes.INTEGER }, // Who performed the action
     action: { type: DataTypes.STRING(255) }, // Event type (login, update, delete)
     meta: { type: DataTypes.JSON }, // Flexible details per event
-    timestamp: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }, // When event happened
+    timestamp: {
+      type: DataTypes.DATE,
+      defaultValue: () => new Date(), // 👈 Local server time
+    },
   },
   {
     tableName: "logs",
@@ -19,3 +22,6 @@ const Log = sequelize.define(
 );
 
 module.exports = Log;
+
+
+

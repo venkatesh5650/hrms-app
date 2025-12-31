@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../db");
-const Organisation = require("./organisation");
+const sequelize = require("../config/db");
 
 // Represents teams inside an organisation (multi-tenant structure)
 const Team = sequelize.define(
@@ -10,6 +9,14 @@ const Team = sequelize.define(
     organisation_id: { type: DataTypes.INTEGER, allowNull: false }, // Ensures team belongs to a tenant
     name: { type: DataTypes.STRING(255), allowNull: false }, // Team visible name
     description: { type: DataTypes.TEXT }, // Flexible details (role, purpose, etc.)
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    deleted_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     tableName: "teams",
@@ -18,8 +25,5 @@ const Team = sequelize.define(
     updatedAt: "updated_at",
   }
 );
-
-// M:1 Team → Organisation
-Team.belongsTo(Organisation, { foreignKey: "organisation_id" });
 
 module.exports = Team;

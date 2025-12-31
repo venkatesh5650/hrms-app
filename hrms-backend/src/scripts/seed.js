@@ -1,10 +1,10 @@
-const sequelize = require("./db");
-const Organisation = require("./models/organisation");
-const User = require("./models/user");
-const Employee = require("./models/employee");
-const Team = require("./models/team");
-const EmployeeTeam = require("./models/employeeTeam");
-const Log = require("./models/log");
+const sequelize = require("../config/db");
+const Organisation = require("../models/organisation");
+const User = require("../models/user");
+const Employee = require("../models/employee");
+const Team = require("../models/team");
+const EmployeeTeam = require("../models/employeeTeam");
+const Log = require("../models/log");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 dotenv.config();

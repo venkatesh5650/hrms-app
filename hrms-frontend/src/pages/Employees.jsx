@@ -5,12 +5,22 @@ import EmployeeForm from "../components/EmployeeForm";
 import "./employees.css";
 
 const Employees = () => {
+  // Stores employee list fetched from API
   const [employees, setEmployees] = useState([]);
+
+  // Controls loading state for async fetch
   const [loading, setLoading] = useState(true);
+
+  // Controls visibility of create/edit form
   const [showForm, setShowForm] = useState(false);
+
+  // Holds employee being edited (null = create mode)
   const [editingEmployee, setEditingEmployee] = useState(null);
+
+  // Holds user-facing error messages
   const [error, setError] = useState("");
 
+  // Fetch employees from backend
   const loadEmployees = async () => {
     try {
       setLoading(true);
@@ -23,20 +33,24 @@ const Employees = () => {
     }
   };
 
+  // Load employees once on component mount
   useEffect(() => {
     loadEmployees();
   }, []);
 
+  // Open form in create mode
   const handleCreate = () => {
     setEditingEmployee(null);
     setShowForm(true);
   };
 
+  // Open form in edit mode
   const handleEdit = (emp) => {
     setEditingEmployee(emp);
     setShowForm(true);
   };
 
+  // Deletes employee after confirmation
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this employee?")) return;
     try {
@@ -47,6 +61,7 @@ const Employees = () => {
     }
   };
 
+  // Handles create/update submit
   const handleFormSubmit = async (data) => {
     try {
       if (editingEmployee) {
@@ -62,6 +77,7 @@ const Employees = () => {
     }
   };
 
+  // Show inline loader while data is loading
   if (loading) return <Loader inline />;
 
   return (
@@ -108,14 +124,30 @@ const Employees = () => {
               <tbody>
                 {employees.map((emp) => (
                   <tr key={emp.id} className="table-row">
-                    <td data-label="Name">{emp.first_name} {emp.last_name}</td>
-                    <td data-label="Email" className="truncate">{emp.email || "—"}</td>
+                    <td data-label="Name">
+                      {emp.first_name} {emp.last_name}
+                    </td>
+                    <td data-label="Email" className="truncate">
+                      {emp.email || "—"}
+                    </td>
                     <td data-label="Teams" className="truncate">
-                      {emp.Teams?.length ? emp.Teams.map(t => t.name).join(", ") : "—"}
+                      {emp.Teams?.length
+                        ? emp.Teams.map((t) => t.name).join(", ")
+                        : "—"}
                     </td>
                     <td data-label="Actions" className="actions-cell">
-                      <button className="btn btn-secondary btn-sm" onClick={() => handleEdit(emp)}>Edit</button>
-                      <button className="btn btn-danger btn-sm" onClick={() => handleDelete(emp.id)}>Delete</button>
+                      <button
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => handleEdit(emp)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDelete(emp.id)}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}

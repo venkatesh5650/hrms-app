@@ -1,33 +1,49 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../db");
-const Organisation = require("./organisation");
+const sequelize = require("../config/db");
 
 // Auth user for an organisation (tenant-scoped access control)
 const User = sequelize.define(
   "User",
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    organisation_id: { type: DataTypes.INTEGER, allowNull: false }, // Tenant isolation
-    name: { type: DataTypes.STRING(255) },
+
+    organisation_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }, // Tenant isolation
+
+    name: {
+      type: DataTypes.STRING(255),
+    },
+
+    // Role-based access control
+    role: {
+      type: DataTypes.ENUM("ADMIN", "HR", "MANAGER", "EMPLOYEE"),
+      allowNull: false,
+      defaultValue: "EMPLOYEE",
+    },
 
     // Login credential fields
     email: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      unique: true, // Prevent duplicate login accounts
+      unique: true,
       validate: { isEmail: true },
     },
-    password_hash: { type: DataTypes.STRING(255), allowNull: false }, // Stored as bcrypt hash
+
+    password_hash: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    }, // Stored as bcrypt hash
   },
   {
     tableName: "users",
-    timestamps: true, // Track onboarding time
+    timestamps: true,
     createdAt: "created_at",
-    updatedAt: false, // Password changes handled explicitly, not auto-updated
+    updatedAt: false,
   }
 );
 
-// M:1 — Users belong to one organisation
-User.belongsTo(Organisation, { foreignKey: "organisation_id" });
-
 module.exports = User;
+
+

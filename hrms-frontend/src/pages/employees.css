@@ -1,23 +1,23 @@
 .employees-root {
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - 64px); /* fills viewport minus navbar height */
   padding: 32px;
   background: linear-gradient(135deg, #0f172a, #020617, #000);
   color: white;
   font-family: system-ui, sans-serif;
-  box-sizing: border-box;
+  box-sizing: border-box; /* prevents padding from increasing layout width */
 }
 
-/* Header */
+/* Header layout: title on left, action on right */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* allows wrapping on small screens */
   gap: 16px;
   margin-bottom: 24px;
 }
 
-/* Card */
+/* Glass-style content container */
 .card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
@@ -28,15 +28,16 @@
   width: 100%;
 }
 
-/* Table */
+/* Enables horizontal scroll if table overflows */
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
 }
 
+/* Base table styling */
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* merges borders for cleaner look */
   font-size: 0.85rem;
 }
 
@@ -45,25 +46,27 @@
   padding: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   text-align: left;
-  vertical-align: top;
+  vertical-align: top; /* aligns multi-line content at top */
 }
 
 .table thead {
   background: rgba(255, 255, 255, 0.03);
 }
 
+/* Aligns Actions header to the right */
 .actions-head {
   text-align: right;
 }
 
+/* Groups action buttons neatly */
 .actions-cell {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* allows wrapping on narrow widths */
 }
 
-/* Text handling */
+/* Truncates long text with ellipsis */
 .truncate {
   max-width: 180px;
   white-space: nowrap;
@@ -71,42 +74,48 @@
   text-overflow: ellipsis;
 }
 
-/* Buttons */
+/* Button base style */
 .btn {
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease; /* subtle hover feedback */
 }
 
+/* Medium-sized buttons for primary actions */
 .btn-md {
   padding: 10px 20px;
   font-size: 0.8rem;
 }
 
+/* Small buttons for row-level actions */
 .btn-sm {
   padding: 6px 12px;
   font-size: 0.7rem;
 }
 
+/* Primary call-to-action styling */
 .btn-primary {
   background: linear-gradient(135deg, #6366f1, #22d3ee);
   border: none;
   color: #020617;
 }
 
+/* Neutral secondary action styling */
 .btn-secondary {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ddd;
 }
 
+/* Destructive action styling */
 .btn-danger {
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid rgba(239, 68, 68, 0.4);
   color: #f87171;
 }
 
+/* Error feedback styling */
 .alert-error {
   margin-top: 12px;
   background: rgba(255, 0, 0, 0.12);
@@ -119,11 +128,11 @@
 /* ===== Mobile stacked layout ===== */
 @media (max-width: 640px) {
   .employees-root {
-    padding: 16px;
+    padding: 16px; /* reduces spacing on small screens */
   }
 
   .table thead {
-    display: none;
+    display: none; /* hides header row for stacked layout */
   }
 
   .table-row {
@@ -140,24 +149,24 @@
   }
 
   .table td::before {
-    content: attr(data-label);
+    content: attr(data-label); /* shows column name before value */
     opacity: 0.6;
     font-size: 0.7rem;
   }
 
   .actions-cell {
-    justify-content: flex-start;
+    justify-content: flex-start; /* aligns buttons naturally on mobile */
   }
 
   .truncate {
-    max-width: 100%;
+    max-width: 100%; /* allows full width text on mobile */
   }
 }
 
 /* ===== Mobile Responsive Table ===== */
 @media (max-width: 640px) {
   .table-wrapper {
-    overflow-x: hidden;
+    overflow-x: hidden; /* avoids horizontal scroll on mobile */
   }
 
   .table thead {
@@ -190,7 +199,7 @@
     content: attr(data-label);
     font-size: 0.65rem;
     opacity: 0.6;
-    flex-shrink: 0;
+    flex-shrink: 0; /* prevents label from shrinking */
   }
 
   .col-time,
@@ -201,8 +210,8 @@
   }
 
   .code-small {
-    white-space: pre-wrap;
-    word-break: break-word;
+    white-space: pre-wrap; /* allows JSON to wrap */
+    word-break: break-word; /* prevents overflow */
     max-height: none;
   }
 }

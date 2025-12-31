@@ -1,27 +1,45 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../db");
-const Organisation = require("./organisation");
+const sequelize = require("../config/db");
 
-// Employee entity belongs to an organisation (multi-tenant design)
+// Employee entity — supports multi-tenancy and optional 1:1 User mapping
 const Employee = sequelize.define(
   "Employee",
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    organisation_id: { type: DataTypes.INTEGER, allowNull: false }, // Tenant isolation key
-    first_name: { type: DataTypes.STRING(100) },
-    last_name: { type: DataTypes.STRING(100) },
-    email: { type: DataTypes.STRING(255) }, // Can enforce unique if needed
-    phone: { type: DataTypes.STRING(50) },
+
+    // Multi-tenant isolation: every employee belongs to exactly one organisation
+    organisation_id: { type: DataTypes.INTEGER, allowNull: false },
+
+    // 1:1 link to a User account (not every employee must have login access)
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      unique: true,
+    },
+
+    first_name: DataTypes.STRING,
+    last_name: DataTypes.STRING,
+    email: DataTypes.STRING,
+    phone: DataTypes.STRING,
+
+    // Soft state & deletion instead of hard delete (audit & data safety)
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    deleted_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     tableName: "employees",
-    timestamps: true, // Track HR creation/update history
+
+    // Custom timestamp mapping for DB standardization
+    timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
   }
 );
-
-// Association: Employee → Organisation (Many-to-One)
-Employee.belongsTo(Organisation, { foreignKey: "organisation_id" });
 
 module.exports = Employee;

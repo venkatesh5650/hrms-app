@@ -2,15 +2,23 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/authMiddleware");
 const ctrl = require("../controllers/employeeController");
+const requireRole = require("../middlewares/requireRole");
 
-// All employee operations require authentication (tenant-scoped)
+// All employee operations require authentication
 router.use(auth);
 
-// Employee REST endpoints
-router.get("/", ctrl.listEmployees); // Fetch all employees of the org
-router.get("/:id", ctrl.getEmployee); // Get single employee
-router.post("/", ctrl.createEmployee); // Create employee
-router.put("/:id", ctrl.updateEmployee); // Update employee
-router.delete("/:id", ctrl.deleteEmployee); // Delete employee
+// Read access — Admin, HR, Manager
+router.get("/", requireRole("ADMIN", "HR", "MANAGER"), ctrl.listEmployees);
+router.get("/:id", requireRole("ADMIN", "HR", "MANAGER"), ctrl.getEmployee);
+
+// Restore — Only Admin
+router.put("/:id/restore", requireRole("ADMIN"), ctrl.restoreEmployee);
+
+// Write — Only HR
+router.post("/", requireRole("HR"), ctrl.createEmployee);
+router.put("/:id", requireRole("HR"), ctrl.updateEmployee);
+
+// Delete — Only HR (soft delete)
+router.delete("/:id", requireRole("HR"), ctrl.deleteEmployee);
 
 module.exports = router;

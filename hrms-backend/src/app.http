@@ -7,77 +7,422 @@
 ### Health Check
 GET http://localhost:5000/
 
-### Register (New Org + Admin User)
-POST {{baseURL}}/auth/register
+
+### Register organisation + Admin 1
+POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-  "orgName": "Test Company",
-  "adminName": "Karthan",
-  "email": "admin@test.com",
-  "password": "Password123!"
+  "orgName": "NxtGen Solutions",
+  "adminName": "Venkatesh Admin",
+  "email": "admin@nxtGen.com",
+  "password": "Venkatesh@5650"
 }
 
-### Login (Get JWT Token)
-POST {{baseURL}}/auth/login
+### Register organisation + Admin 2
+POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "admin@test.com",
-  "password": "Password123!"
+  "orgName": "Rapid Solutions",
+  "adminName": "SaiPrasad Admin",
+  "email": "admin@rapid.com",
+  "password": "Sai@5650"
 }
 
-### Paste token below after login:
-# @token = eyJhbGciOiJIUzI1...
-
-### Get Employees (Empty list initially)
-GET {{baseURL}}/employees
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
-
-### Create Employee
-POST {{baseURL}}/employees
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+### Login as Admin 1
+POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-  "first_name": "Alice",
-  "last_name": "Smith",
-  "email": "alice@company.com"
+  "email": "admin@nxtGen.com",
+  "password": "Venkatesh@5650"
 }
 
-### Update @employeeId after previous result
-### Get Employees Again
-GET {{baseURL}}/employees
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+### Login as Admin 2
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
 
-### Create Team
-POST {{baseURL}}/teams
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+{
+  "email": "admin@rapid.com",
+  "password": "Sai@5650"
+}
+
+### Logout as Admin 1
+POST http://localhost:5000/api/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxODQ3NjQsImV4cCI6MTc2NzIxMzU2NH0.2Xav7nfYkNJlqveF_0Y2LvK-8RteN0QEE4zJXvrPlfA
+
+
+
+
+### Get all users (Admin only)
+GET http://localhost:5000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxODQ3NjQsImV4cCI6MTc2NzIxMzU2NH0.2Xav7nfYkNJlqveF_0Y2LvK-8RteN0QEE4zJXvrPlfA
+### View audit logs by admin
+GET http://localhost:5000/api/logs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsIm9yZ0lkIjoyLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxNTUyOTAsImV4cCI6MTc2NzE4NDA5MH0.CUtQqLWBTNIvcwbn4JDnFTlM_qLFUxCHtGpPa520mwY
+
+### Create Hr 1 by ADMIN
+POST http://localhost:5000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+Content-Type: application/json
+
+{
+  "name": "Rahul HR",
+  "email": "hr@nxtGen.com",
+  "password": "Rahul@5650",
+  "role": "HR"
+}
+
+### Create Hr 2 by ADMIN 
+POST http://localhost:5000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+Content-Type: application/json
+
+{
+  "name": "Ranveer HR",
+  "email": "ranveer@nxtGen.com",
+  "password": "ranveer@5650",
+  "role": "HR"
+}
+
+
+
+
+### Creating a manager by admin
+POST http://localhost:5000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+Content-Type: application/json
+
+{
+  "name": "Mike Manager",
+  "email": "mike@nxtGen.com",
+  "password": "Mike@5650",
+  "role": "MANAGER"
+}
+
+
+### Login as HR
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "hr@nxtGen.com",
+  "password": "Rahul@5650"
+}
+
+### View audit logs by admin
+GET http://localhost:5000/api/logs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+
+
+### Login as Manager
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "mike@nxtGen.com",
+  "password": "Mike@5650"
+}
+
+
+### HR tries to modify ADMIN (should fail)
+
+PUT http://localhost:5000/api/users/1/role
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoxLCJyb2xlIjoiSFIiLCJpYXQiOjE3NjcxMDUxODMsImV4cCI6MTc2NzEzMzk4M30.-Q-DOW5FNrXKxGXBdGavVYpHrZWqMPBj0nUGkpRN7Wg
+Content-Type: application/json
+
+{
+  "role": "EMPLOYEE"
+}
+
+### Manger tries to modify ADMIN (should fail)
+
+PUT http://localhost:5000/api/users/1/role
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsIm9yZ0lkIjoxLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTc2NzEwNTA5MiwiZXhwIjoxNzY3MTMzODkyfQ.gh50pGmHPAiuz0UcBk4WD770qqSvV8KfyJqHCJh9Mw8
+Content-Type: application/json
+
+{
+  "role": "EMPLOYEE"
+}
+
+
+### Creating a Employee by admin(forbidden directly)
+POST http://localhost:5000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+Content-Type: application/json
+
+{
+  "name": "suresh",
+  "email": "suresh@nxtGen.com",
+  "password": "Suresh@5650",
+  "role": "EMPLOYEE"
+}
+
+
+
+
+### Promote employee to manager
+
+PUT http://localhost:5000/api/users/8/role
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsIm9yZ0lkIjo2LCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY4MDk5NDAsImV4cCI6MTc2NjgzODc0MH0.FiwXec4TLASdbpw0t1X0o0JxO3U4eG1r3tMK0uD-Emo
+Content-Type: application/json
+
+{
+  "role": "MANAGER"
+}
+
+
+### Login as Manager promoted from employee
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "shreya@nxtGen.com",
+  "password": "Shreya@5650"
+}
+
+
+
+
+### HR trying to delete employee (HR only):
+DELETE http://localhost:5000/api/employees/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsIm9yZ0lkIjo2LCJyb2xlIjoiSFIiLCJpYXQiOjE3NjY4MTEyNTIsImV4cCI6MTc2Njg0MDA1Mn0.myTpNwug-YNWQDWvuOe5n0y-AS7q8Req8deHBZBmfPc
+
+### Login as HR
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "hr@nxtGen.com",
+  "password": "Rahul@5650"
+}
+
+### View audit logs by admin
+GET http://localhost:5000/api/logs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+
+
+### Login as Manager
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "mike@nxtGen.com",
+  "password": "Mike@5650"
+}
+
+
+### HR creates employee approval
+POST http://localhost:5000/api/approvals
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoxLCJyb2xlIjoiSFIiLCJpYXQiOjE3NjcxMTI5OTMsImV4cCI6MTc2NzE0MTc5M30.k-uPGuKDVBCJ-AagBEjDV9hahfWJChvZzLC8x7wtRQI
+Content-Type: application/json
+
+{
+  "type": "CREATE",
+  "payload": {
+    "first_name": "David",
+    "last_name": "Smith",
+    "email": "david@nxtGen.com",
+    "phone": "9999999999"
+  }
+}
+
+### Manager views pending
+GET http://localhost:5000/api/approvals/pending
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsIm9yZ0lkIjoxLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTc2NzExMzA1MSwiZXhwIjoxNzY3MTQxODUxfQ.l76w3LbHTNHQqlgQh_fG__9Ru6qWgwiYmWybg3apZ6U
+
+
+### View Audit logs by admin
+GET http://localhost:5000/api/logs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+
+
+
+
+### List employees
+GET http://localhost:5000/api/employees
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxNjg0MjksImV4cCI6MTc2NzE5NzIyOX0.R_rbubTg_utkwCj-Ars3uf6I-zvuqISxlXBcBw18anA
+
+
+### Soft delete that employee
+DELETE http://localhost:5000/api/employees/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsIm9yZ0lkIjo2LCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcwMTY1MzIsImV4cCI6MTc2NzA0NTMzMn0.XDalfOYFpJ6V6yXi_8sPTF3zoxG7zjnpIszuLnSbLa4
+
+### Approval requests check by admin
+GET http://localhost:5000/api/approvals/history
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+
+
+### Analytics by Admin
+GET http://localhost:5000/api/analytics
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+
+### dynamic time windows by admin
+GET http://localhost:5000/api/analytics?window=7d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+
+
+### Export analytics CSV
+GET http://localhost:5000/api/export/analytics
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
+
+### Creating a team by admin(forbidden only hr can)
+POST http://localhost:5000/api/teams
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMDI2NjcsImV4cCI6MTc2NzEzMTQ2N30.tAZwAFksc1UdNyrZUweJsV0zneKHavMrB8VTF11GFJQ
 Content-Type: application/json
 
 {
   "name": "Engineering",
-  "description": "Development Team"
+  "description": "Product engineering team"
 }
 
-### Get Teams
-GET {{baseURL}}/teams
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
 
-### Assign Employee to Team
-# update @employeeId and @teamId accordingly
-POST {{baseURL}}/teams/{{teamId}}/assign
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODg3NTIsImV4cCI6MTc2MzgxNzU1Mn0.ehhkRhGeCSU9hp2p09xrp3zEixmBrxZvhiUX2Astk-c
+### Creating a team by hr
+POST http://localhost:5000/api/teams
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoxLCJyb2xlIjoiSFIiLCJpYXQiOjE3NjcxMDk4OTIsImV4cCI6MTc2NzEzODY5Mn0.CMV034OrOf4Ybhf85aaaj12Gm61VAPx7mDNVzvUXPdg
 Content-Type: application/json
 
 {
-  "employeeId": 3
+  "name": "Engineering",
+  "description": "Product engineering team"
 }
 
-### View Logs
-GET {{baseURL}}/logs
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODkwNTMsImV4cCI6MTc2MzgxNzg1M30.KzzYlz7kQyGEd_O08QVCWZybFFVq4Bpm-XCn96Pj4EE
+### List Teams
+GET http://localhost:5000/api/teams
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoxLCJyb2xlIjoiSFIiLCJpYXQiOjE3NjcxMDk4OTIsImV4cCI6MTc2NzEzODY5Mn0.CMV034OrOf4Ybhf85aaaj12Gm61VAPx7mDNVzvUXPdg
 
-### Logout
-POST {{baseURL}}/auth/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoyLCJpYXQiOjE3NjM3ODkwNTMsImV4cCI6MTc2MzgxNzg1M30.KzzYlz7kQyGEd_O08QVCWZybFFVq4Bpm-XCn96Pj4EE
+
+### List employees
+GET http://localhost:5000/api/employees
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoxLCJyb2xlIjoiSFIiLCJpYXQiOjE3NjcxMDk4OTIsImV4cCI6MTc2NzEzODY5Mn0.CMV034OrOf4Ybhf85aaaj12Gm61VAPx7mDNVzvUXPdg
+
+
+
+### Login as Admin
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@nxtGen.com",
+  "password": "Venkatesh@5650"
+}
+
+###
+
+### Get role stats (counts per role)
+GET http://localhost:5000/api/org/roles
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoxLCJyb2xlIjoiSFIiLCJpYXQiOjE3NjcxMDk4OTIsImV4cCI6MTc2NzEzODY5Mn0.CMV034OrOf4Ybhf85aaaj12Gm61VAPx7mDNVzvUXPdg
+
+###
+
+### List all managers(only ADMIN)
+GET http://localhost:5000/api/org/managers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMTI3NzAsImV4cCI6MTc2NzE0MTU3MH0.BSUkLbW3D7wAmsDXMPotIwQQ8JfonliKPWxFK9tgqMM
+
+### List all HRs (only ADMIN)
+GET http://localhost:5000/api/org/hrs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMTI3NzAsImV4cCI6MTc2NzE0MTU3MH0.BSUkLbW3D7wAmsDXMPotIwQQ8JfonliKPWxFK9tgqMM
+
+
+
+
+
+### HR requests employee creation
+POST http://localhost:5000/api/approvals
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoxLCJyb2xlIjoiSFIiLCJpYXQiOjE3NjcxMDk4OTIsImV4cCI6MTc2NzEzODY5Mn0.CMV034OrOf4Ybhf85aaaj12Gm61VAPx7mDNVzvUXPdg
+Content-Type: application/json
+
+{
+  "type": "CREATE",
+  "payload": {
+    "first_name": "Preetham",
+    "last_name": "Raj",
+    "email": "preetham@company.com",
+    "phone": "8888888888"
+  }
+}
+
+
+
+### Manager views pending approvals
+GET http://localhost:5000/api/approvals/pending
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsIm9yZ0lkIjoxLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTc2NzExMzc3MCwiZXhwIjoxNzY3MTQyNTcwfQ.bipH_fWJNVlOXR7sHicT-GAFf8xYsWHEONpy6deKwIE
+
+
+### Manager approves employee creation
+POST http://localhost:5000/api/approvals/4/approve-create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsIm9yZ0lkIjoxLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTc2NzExMzc3MCwiZXhwIjoxNzY3MTQyNTcwfQ.bipH_fWJNVlOXR7sHicT-GAFf8xYsWHEONpy6deKwIE
+
+
+### Manager rejects employee creation
+POST http://localhost:5000/api/approvals/1/reject-create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsIm9yZ0lkIjoxLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTc2NzExMzc3MCwiZXhwIjoxNzY3MTQyNTcwfQ.bipH_fWJNVlOXR7sHicT-GAFf8xYsWHEONpy6deKwIE
+Content-Type: application/json
+
+{
+  "reason":"employee is not fit for our system"
+}
+
+### Admin views pending approvals
+GET http://localhost:5000/api/approvals/pending
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMTI3NzAsImV4cCI6MTc2NzE0MTU3MH0.BSUkLbW3D7wAmsDXMPotIwQQ8JfonliKPWxFK9tgqMM
+
+
+### approve login accept request by admin
+POST http://localhost:5000/api/approvals/5/approve-login
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMTI3NzAsImV4cCI6MTc2NzE0MTU3MH0.BSUkLbW3D7wAmsDXMPotIwQQ8JfonliKPWxFK9tgqMM
+
+
+### Reject login access by admin
+POST http://localhost:5000/api/approvals/3/reject-login
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm9yZ0lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcxMTI3NzAsImV4cCI6MTc2NzE0MTU3MH0.BSUkLbW3D7wAmsDXMPotIwQQ8JfonliKPWxFK9tgqMM
+Content-Type: application/json
+
+{
+  "reason": "Employee is not safe for system access"
+}
+
+### List Teams
+GET http://localhost:5000/api/teams
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoxLCJyb2xlIjoiSFIiLCJpYXQiOjE3NjcxMDk4OTIsImV4cCI6MTc2NzEzODY5Mn0.CMV034OrOf4Ybhf85aaaj12Gm61VAPx7mDNVzvUXPdg
+
+
+### List employees
+GET http://localhost:5000/api/employees
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm9yZ0lkIjoxLCJyb2xlIjoiSFIiLCJpYXQiOjE3NjcxMDk4OTIsImV4cCI6MTc2NzEzODY5Mn0.CMV034OrOf4Ybhf85aaaj12Gm61VAPx7mDNVzvUXPdg
+
+
+
+### Assign employee to team
+POST http://localhost:5000/api/teams/1/assign
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsIm9yZ0lkIjoxLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTc2NzExMzc3MCwiZXhwIjoxNzY3MTQyNTcwfQ.bipH_fWJNVlOXR7sHicT-GAFf8xYsWHEONpy6deKwIE
+Content-Type: application/json
+
+{
+  "employeeId": 2
+}
+
+### unassign the employee from team
+POST http://localhost:5000/api/teams/1/unassign
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsIm9yZ0lkIjoxLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTc2NzExMzc3MCwiZXhwIjoxNzY3MTQyNTcwfQ.bipH_fWJNVlOXR7sHicT-GAFf8xYsWHEONpy6deKwIE
+Content-Type: application/json
+
+{
+  "employeeId": 2
+}
+
+
+### Employee login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "preetham@company.com",
+  "password": "g37fa25g"
+}
+
+
+### Employee views profile
+GET http://localhost:5000/api/profile/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsIm9yZ0lkIjoxLCJyb2xlIjoiRU1QTE9ZRUUiLCJpYXQiOjE3NjcxMTQxMzksImV4cCI6MTc2NzE0MjkzOX0.Q4dkhO1MdsEIwaJBeFXWWbRqMv69nRR7PSBnygSiVJ4

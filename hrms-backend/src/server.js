@@ -2,9 +2,9 @@ const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const cors = require("cors"); // ⭐ New
+const cors = require("cors");
 
-const sequelize = require("./db");
+const sequelize = require("./config/db");
 
 // Register models
 require("./models/organisation");
@@ -13,16 +13,25 @@ require("./models/employee");
 require("./models/team");
 require("./models/employeeTeam");
 require("./models/log");
+require("./models/approval");
+require("./models/associations");
+
+const app = express();
+app.use(express.json());
 
 const authRoutes = require("./routes/auth");
 const employeeRoutes = require("./routes/employees");
 const teamRoutes = require("./routes/teams");
-const logRoutes = require("./routes/logs");
+const approvalRoutes = require("./routes/approvals");
+const logsRoutes = require("./routes/logs");
+const usersRoutes = require("./routes/users");
+const exportRoutes = require("./routes/export");
+const orgStats = require("./routes/orgStats");
+const profile = require("./routes/profile");
+
 const errorHandler = require("./middlewares/errorHandler");
 
-const app = express();
-
-// ⭐ Enable CORS for frontend origin(s)
+// Enable CORS
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://hrms-app-five.vercel.app"],
@@ -30,21 +39,24 @@ app.use(
   })
 );
 
-// ⭐ Handle Preflight Requests
 app.options("*", cors());
-
-app.use(express.json());
-
-// Health check
-app.get("/", (req, res) => {
-  res.json({ message: "HRMS Backend running" });
-});
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/users", usersRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/teams", teamRoutes);
-app.use("/api/logs", logRoutes);
+app.use("/api/approvals", approvalRoutes);
+app.use("/api/logs", logsRoutes);
+app.use("/api/analytics", require("./routes/analytics"));
+app.use("/api/export", exportRoutes);
+app.use("/api/org", orgStats);
+app.use("/api/profile", profile);
+
+// Health check
+app.get("/", (res) => {
+  res.json({ message: "HRMS Backend running" });
+});
 
 // Error handler
 app.use(errorHandler);
@@ -56,8 +68,6 @@ async function start() {
   try {
     await sequelize.authenticate();
     console.log("DB connected");
-
-    await sequelize.sync(); // Dev only
 
     app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
   } catch (err) {

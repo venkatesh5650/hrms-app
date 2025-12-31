@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../db");
+const sequelize = require("../config/db");
 const Employee = require("./employee");
 const Team = require("./team");
 
@@ -18,16 +18,6 @@ const EmployeeTeam = sequelize.define(
   }
 );
 
-// M:N Association Configuration
-Employee.belongsToMany(Team, {
-  through: EmployeeTeam,
-  foreignKey: "employee_id",
-  otherKey: "team_id",
-});
-Team.belongsToMany(Employee, {
-  through: EmployeeTeam,
-  foreignKey: "team_id",
-  otherKey: "employee_id",
-});
+
 
 module.exports = EmployeeTeam;
