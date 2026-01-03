@@ -20,8 +20,7 @@ export function AuthProvider({ children }) {
       try {
         setToken(storedToken);
         setUser(JSON.parse(storedUserRaw));
-      } catch (e) {
-        console.warn("Failed to parse stored user, clearing storage");
+      } catch {
         localStorage.removeItem("hrms_user");
         localStorage.removeItem("hrms_token");
       }
@@ -31,6 +30,11 @@ export function AuthProvider({ children }) {
   }, []);
 
   const handleAuthSuccess = (data) => {
+    if (!data || !data.token || !data.user) {
+      console.error("Invalid auth response:", data);
+      return;
+    }
+
     const { token, user } = data;
     setToken(token);
     setUser(user);
@@ -38,13 +42,14 @@ export function AuthProvider({ children }) {
     localStorage.setItem("hrms_user", JSON.stringify(user));
   };
 
-  const registerOrg = async (payload) => {
-    const res = await axios.post(`${RAW_BASE_URL}/auth/register`, payload);
+  const login = async (payload) => {
+    const res = await axios.post(`${RAW_BASE_URL}/auth/login`, payload);
+    console.log("LOGIN RESPONSE:", res.data);
     handleAuthSuccess(res.data);
   };
 
-  const login = async (payload) => {
-    const res = await axios.post(`${RAW_BASE_URL}/auth/login`, payload);
+  const registerOrg = async (payload) => {
+    const res = await axios.post(`${RAW_BASE_URL}/auth/register`, payload);
     handleAuthSuccess(res.data);
   };
 
@@ -57,9 +62,7 @@ export function AuthProvider({ children }) {
           { headers: { Authorization: `Bearer ${token}` } }
         );
       }
-    } catch (e) {
-      // ignore API error on logout
-    }
+    } catch {}
     setToken(null);
     setUser(null);
     localStorage.removeItem("hrms_token");
@@ -71,8 +74,8 @@ export function AuthProvider({ children }) {
     token,
     loading,
     isAuthenticated: !!token,
-    registerOrg,
     login,
+    registerOrg,
     logout,
   };
 
