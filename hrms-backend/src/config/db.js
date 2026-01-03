@@ -13,7 +13,6 @@ const sequelize = new Sequelize(
     dialect: "mysql",
 
     logging: false, // Avoid leaking SQL queries in logs
-    
 
     dialectOptions: {
       ssl: {
@@ -43,5 +42,17 @@ async function connectWithRetry() {
 }
 
 connectWithRetry(); // Start DB connection on app boot
+
+// 🔍 Add this block here
+sequelize
+  .query("SELECT DATABASE()")
+  .then(([rows]) => {
+    console.log("Connected DB:", rows[0]["DATABASE()"]);
+  })
+  .catch((err) => {
+    console.error("Failed to fetch DB name:", err);
+  });
+
+module.exports = sequelize;
 
 module.exports = sequelize; // Single shared DB connection across the app
