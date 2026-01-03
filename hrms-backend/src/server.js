@@ -53,9 +53,13 @@ app.use("/api/export", exportRoutes);
 app.use("/api/org", orgStats);
 app.use("/api/profile", profile);
 
-// Health check
+// Health checks
 app.get("/", (req, res) => {
   res.json({ message: "HRMS Backend running" });
+});
+
+app.get("/healthz", (req, res) => {
+  res.status(200).send("ok");
 });
 
 // Error handler
@@ -66,12 +70,14 @@ const PORT = process.env.PORT || 5000;
 // Server startup
 async function start() {
   try {
+    console.log("Starting HRMS backend...");
     await sequelize.authenticate();
     console.log("DB connected");
 
     app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
   } catch (err) {
     console.error("Failed to start server", err);
+    process.exit(1);
   }
 }
 
