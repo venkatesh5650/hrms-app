@@ -68,7 +68,7 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 // Server startup
-async function start() {
+async function start(retries = 5) {
   try {
     console.log("Starting HRMS backend...");
     await sequelize.authenticate();
@@ -76,9 +76,19 @@ async function start() {
 
     app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
   } catch (err) {
-    console.error("Failed to start server", err);
-    process.exit(1);
+    console.error(
+      "DB connection failed. Retrying in 5 seconds...",
+      err.message
+    );
+
+    if (retries === 0) {
+      console.error("All retries exhausted. Exiting.");
+      process.exit(1);
+    }
+
+    setTimeout(() => start(retries - 1), 5000);
   }
 }
 
 start();
+
