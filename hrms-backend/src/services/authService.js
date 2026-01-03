@@ -72,49 +72,28 @@ async function register(data) {
 async function login(data) {
   const { email, password } = data;
 
-  if (!isNonEmptyString(email) || !isNonEmptyString(password)) {
-    throw new Error("email and password required");
+  try {
+    console.log("Login attempt for:", email);
+
+    const user = await User.findOne({ where: { email } });
+    console.log("User found:", user?.id);
+
+    if (!user) throw new Error("Invalid email or password");
+
+    const match = await bcrypt.compare(password, user.password_hash);
+    if (!match) throw new Error("Invalid email or password");
+
+    return user;
+  } catch (err) {
+    console.error("LOGIN ERROR:");
+    console.error("name:", err.name);
+    console.error("message:", err.message);
+    console.error("parent:", err.parent);
+    console.error("original:", err.original);
+    throw err;
   }
-
-  const user = await User.findOne({ where: { email } });
-  if (!user) {
-    throw new Error("Invalid email or password");
-  }
-
-  const match = await bcrypt.compare(password, user.password_hash);
-  if (!match) {
-    throw new Error("Invalid email or password");
-  }
-
-  const token = jwt.sign(
-    {
-      userId: user.id,
-      orgId: user.organisation_id,
-      role: user.role,
-    },
-    JWT_SECRET,
-    { expiresIn: "8h" }
-  );
-
-  await Log.create({
-    organisation_id: user.organisation_id,
-    user_id: user.id,
-    action: "user_logged_in",
-    meta: { userId: user.id, role: user.role },
-    timestamp: new Date(),
-  });
-
-  return {
-    token,
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      organisation_id: user.organisation_id,
-      role: user.role,
-    },
-  };
 }
+
 
 // Logout (audit only, JWT remains stateless)
 
