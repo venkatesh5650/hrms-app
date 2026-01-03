@@ -14,11 +14,19 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("hrms_token");
-    const storedUser = localStorage.getItem("hrms_user");
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+    const storedUserRaw = localStorage.getItem("hrms_user");
+
+    if (storedToken && storedUserRaw && storedUserRaw !== "undefined") {
+      try {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUserRaw));
+      } catch (e) {
+        console.warn("Failed to parse stored user, clearing storage");
+        localStorage.removeItem("hrms_user");
+        localStorage.removeItem("hrms_token");
+      }
     }
+
     setLoading(false);
   }, []);
 
