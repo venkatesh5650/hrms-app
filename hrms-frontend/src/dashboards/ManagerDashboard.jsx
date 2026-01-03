@@ -11,6 +11,7 @@ import ActivityFeed from "../components/dashboard/ActivityFeed";
 import ApprovalAging from "../components/dashboard/ApprovalAging";
 import ApprovalReasonAnalysis from "../components/dashboard/ApprovalReasonAnalysis";
 
+import "../styles/dashboardLoader.css";
 
 export default function ManagerDashboard() {
   const [pending, setPending] = useState([]);
@@ -89,7 +90,17 @@ export default function ManagerDashboard() {
   const approved = reviewed.filter(a => a.status === "APPROVED").length;
   const rejected = reviewed.filter(a => a.status === "REJECTED").length;
 
-  if (loading) return <p>Loading manager dashboard…</p>;
+   if (loading) {
+    return (
+      <div className="dashboard-loader">
+        <div className="loader-card">
+          <div className="pulse-ring"></div>
+          <h2>HRMS</h2>
+          <p>Preparing your Manager dashboard…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard">

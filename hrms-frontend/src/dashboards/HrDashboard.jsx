@@ -7,6 +7,7 @@ import WorkforceTrends from "../components/dashboard/WorkforceTrends";
 import TeamDistribution from "../components/dashboard/TeamDistribution";
 import OrphanEmployees from "../components/dashboard/OrphanEmployees";
 import ApprovalAging from "../components/dashboard/ApprovalAging";
+import "../styles/dashboardLoader.css";
 
 const API = process.env.REACT_APP_API_BASE_URL;
 
@@ -115,7 +116,17 @@ export default function HrDashboard() {
       .slice(0, 1);
   }, [logs]);
 
-  if (loading) return <p>Loading HR dashboard…</p>;
+   if (loading) {
+    return (
+      <div className="dashboard-loader">
+        <div className="loader-card">
+          <div className="pulse-ring"></div>
+          <h2>HRMS</h2>
+          <p>Preparing your HR dashboard…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard">

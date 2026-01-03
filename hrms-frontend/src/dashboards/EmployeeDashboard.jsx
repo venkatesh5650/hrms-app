@@ -8,6 +8,7 @@ import AccountStatusCard from "../components/profile/AccountStatusCard";
 import SupportCard from "../components/profile/SupportCard";
 
 import "../styles/dashboard/employeeDashboard.css";
+import "../styles/dashboardLoader.css";
 
 const API = process.env.REACT_APP_API_BASE_URL;
 
@@ -34,7 +35,17 @@ export default function EmployeeDashboard() {
     load();
   }, [token]);
 
-  if (loading) return <p className="loading">Loading your dashboard…</p>;
+   if (loading) {
+    return (
+      <div className="dashboard-loader">
+        <div className="loader-card">
+          <div className="pulse-ring"></div>
+          <h2>HRMS</h2>
+          <p>Preparing your Employee dashboard…</p>
+        </div>
+      </div>
+    );
+  }
   if (!profile) return <p className="error">Unable to load profile</p>;
 
   return (

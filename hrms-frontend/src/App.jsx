@@ -14,9 +14,19 @@ import Users from "./pages/users/Users";
 import Exports from "./pages/exports/Exports";
 import MyProfile from "./pages/profile/MyProfile";
 
+// 🟢 ADD THESE:
+import { useGlobalLoader } from "./context/GlobalLoaderContext";
+import GlobalLoader from "./components/GlobalLoader";
+import RouteLoader from "./components/RouteLoader";
+
 function App() {
+  const { loading } = useGlobalLoader();
+
   return (
     <div className="app-root">
+      {loading && <GlobalLoader />}
+      <RouteLoader />
+
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/login" element={<Login />} />

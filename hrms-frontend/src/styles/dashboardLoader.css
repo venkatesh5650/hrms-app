@@ -3,8 +3,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-top: 60px; /* pushes loader slightly down */
   background: radial-gradient(circle at top, #f8fafc, #eef2ff);
 }
+
 
 .loader-card {
   background: #ffffff;
