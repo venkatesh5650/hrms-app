@@ -69,6 +69,7 @@ async function register(data) {
 }
 
 // Login existing user
+
 async function login(data) {
   const { email, password } = data;
 
@@ -83,7 +84,28 @@ async function login(data) {
     const match = await bcrypt.compare(password, user.password_hash);
     if (!match) throw new Error("Invalid email or password");
 
-    return user;
+    // 🔐 Create JWT token
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        orgId: user.organisation_id,
+        role: user.role,
+      },
+      JWT_SECRET,
+      { expiresIn: "8h" }
+    );
+
+    // ✅ Return exactly what frontend expects
+    return {
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        organisation_id: user.organisation_id,
+        role: user.role,
+      },
+    };
   } catch (err) {
     console.error("LOGIN ERROR:");
     console.error("name:", err.name);
@@ -93,7 +115,6 @@ async function login(data) {
     throw err;
   }
 }
-
 
 // Logout (audit only, JWT remains stateless)
 
