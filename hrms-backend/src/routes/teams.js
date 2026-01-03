@@ -27,4 +27,11 @@ router.post(
   ctrl.unassignEmployee
 );
 
+router.post(
+  "/:teamId/assign-manager",
+  requireRole("HR"),
+  ctrl.assignManager
+);
+
+
 module.exports = router;

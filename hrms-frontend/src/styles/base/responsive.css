@@ -1,0 +1,12 @@
+@media (max-width: 900px) {
+  .dashboard-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    margin-left: 0;
+    padding: 14px;
+  }
+}

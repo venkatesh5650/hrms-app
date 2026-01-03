@@ -1,17 +1,24 @@
 const teamService = require("../services/teamService");
 
-async function listTeams(req, res) {
+async function listTeams(req, res, next) {
   try {
-    const teams = await teamService.listTeams(req.user.orgId);
+    // 🔽 PASS req.user
+    const teams = await teamService.listTeams(req.user.orgId, req.user);
     res.json({ teams });
   } catch (err) {
     next(err);
   }
 }
 
-async function getTeam(req, res) {
+async function getTeam(req, res, next) {
   try {
-    const team = await teamService.getTeam(req.params.id, req.user.orgId);
+    // 🔽 PASS req.user
+    const team = await teamService.getTeam(
+      req.params.id,
+      req.user.orgId,
+      req.user
+    );
+
     if (!team) return res.status(404).json({ message: "Team not found" });
     res.json({ team });
   } catch (err) {
@@ -19,7 +26,7 @@ async function getTeam(req, res) {
   }
 }
 
-async function createTeam(req, res) {
+async function createTeam(req, res, next) {
   try {
     if (!req.body.name)
       return res.status(400).json({ message: "name required" });
@@ -31,7 +38,7 @@ async function createTeam(req, res) {
   }
 }
 
-async function updateTeam(req, res) {
+async function updateTeam(req, res, next) {
   try {
     const team = await teamService.updateTeam(
       req.params.id,
@@ -45,7 +52,7 @@ async function updateTeam(req, res) {
   }
 }
 
-async function deleteTeam(req, res) {
+async function deleteTeam(req, res, next) {
   try {
     const success = await teamService.deleteTeam(req.params.id, req.user);
     if (!success) return res.status(404).json({ message: "Team not found" });
@@ -55,7 +62,26 @@ async function deleteTeam(req, res) {
   }
 }
 
-async function assignEmployee(req, res) {
+async function assignManager(req, res, next) {
+  try {
+    if (!req.body.employeeId)
+      return res.status(400).json({ message: "employeeId required" });
+
+    const result = await teamService.assignManager(
+      parseInt(req.params.teamId, 10),
+      req.body.employeeId,
+      req.user
+    );
+
+    if (result?.error) return res.status(400).json({ message: result.error });
+
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function assignEmployee(req, res, next) {
   try {
     if (!req.body.employeeId)
       return res.status(400).json({ message: "employeeId required" });
@@ -74,7 +100,7 @@ async function assignEmployee(req, res) {
   }
 }
 
-async function unassignEmployee(req, res) {
+async function unassignEmployee(req, res, next) {
   try {
     if (!req.body.employeeId)
       return res.status(400).json({ message: "employeeId required" });
@@ -93,7 +119,6 @@ async function unassignEmployee(req, res) {
     next(err);
   }
 }
-
 module.exports = {
   listTeams,
   getTeam,
@@ -101,5 +126,6 @@ module.exports = {
   updateTeam,
   deleteTeam,
   assignEmployee,
+  assignManager,
   unassignEmployee,
 };

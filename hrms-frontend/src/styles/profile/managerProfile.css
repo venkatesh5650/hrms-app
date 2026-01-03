@@ -1,0 +1,12 @@
+.manager .card {
+  border-left: 4px solid #f59e0b;
+}
+
+.manager .profile-card .avatar {
+  background: linear-gradient(135deg, #0ea5e9, #22c55e);
+}
+
+.manager .team-tag {
+  background: #e0f2fe;
+  color: #0369a1;
+}

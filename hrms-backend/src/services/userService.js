@@ -19,7 +19,6 @@ async function createUser(data, user) {
     throw err;
   }
 
-  // 🚫 Admin cannot directly create EMPLOYEE users
   if (user.role === "ADMIN" && role === "EMPLOYEE") {
     await Log.create({
       organisation_id: user.orgId,
@@ -33,12 +32,10 @@ async function createUser(data, user) {
     );
   }
 
-  // 🚫 HR cannot create ADMIN users
   if (user.role === "HR" && role === "ADMIN") {
     throw new Error("HR cannot create ADMIN users");
   }
 
-  // 🚫 Only ADMIN can create HR or MANAGER
   if (["HR", "MANAGER"].includes(role) && user.role !== "ADMIN") {
     throw new Error("Only ADMIN can create HR or MANAGER users");
   }
@@ -59,7 +56,6 @@ async function createUser(data, user) {
   let logAction = "user_created";
   let logMeta = { createdUserId: newUser.id, role: newUser.role };
 
-  // 🔒 Employee linking only allowed for ADMIN via approval flow
   if (newUser.role === "EMPLOYEE") {
     if (!employeeId) {
       throw new Error("Employee ID required for employee login creation");
@@ -83,6 +79,20 @@ async function createUser(data, user) {
     logMeta = { employeeId, userId: newUser.id };
   }
 
+  if (newUser.role === "MANAGER") {
+    const employee = await Employee.create({
+      organisation_id: user.orgId,
+      user_id: newUser.id,
+      email: newUser.email,
+      first_name: newUser.name?.split(" ")[0] || null,
+      last_name: newUser.name?.split(" ").slice(1).join(" ") || null,
+      is_active: true,
+    });
+
+    logAction = "manager_created_and_linked";
+    logMeta = { userId: newUser.id, employeeId: employee.id };
+  }
+
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
@@ -99,11 +109,63 @@ async function createUser(data, user) {
   };
 }
 
+/* ========================= */
+/* ✅ ADDED: updateUser */
+/* ========================= */
+async function updateUser(id, data, user) {
+  const targetUser = await User.findOne({
+    where: { id, organisation_id: user.orgId },
+  });
+
+  if (!targetUser) return null;
+
+  // Permission checks
+  if (user.role === "HR" && targetUser.role !== "EMPLOYEE") {
+    throw new Error("HR can only update EMPLOYEE users");
+  }
+
+  if (user.role === "MANAGER") {
+    throw new Error("MANAGER cannot update users");
+  }
+
+  if (user.role === "EMPLOYEE") {
+    throw new Error("EMPLOYEE cannot update users");
+  }
+
+  if (user.role === "ADMIN" && targetUser.role === "ADMIN") {
+    throw new Error("ADMIN cannot update another ADMIN");
+  }
+
+  const updates = {};
+
+  if (isNonEmptyString(data.name)) updates.name = data.name;
+  if (isNonEmptyString(data.email)) updates.email = data.email;
+
+  if (isNonEmptyString(data.password)) {
+    updates.password_hash = await bcrypt.hash(data.password, SALT_ROUNDS);
+  }
+
+  await targetUser.update(updates);
+
+  await Log.create({
+    organisation_id: user.orgId,
+    user_id: user.id,
+    action: "user_updated",
+    meta: { targetUserId: id, updatedFields: Object.keys(updates) },
+    timestamp: new Date(),
+  });
+
+  return {
+    id: targetUser.id,
+    name: targetUser.name,
+    email: targetUser.email,
+    role: targetUser.role,
+  };
+}
+
 async function updateUserRole(id, role, user) {
   const allowedRoles = ["ADMIN", "HR", "MANAGER", "EMPLOYEE"];
-  if (!allowedRoles.includes(role)) {
-    throw new Error("Invalid role");
-  }
+  if (!allowedRoles.includes(role)) throw new Error("Invalid role");
 
   const targetUser = await User.findOne({
     where: { id, organisation_id: user.orgId },
@@ -111,27 +173,23 @@ async function updateUserRole(id, role, user) {
 
   if (!targetUser) return null;
 
-  // HR cannot change ADMIN or HR
-  if (user.role === "HR" && ["ADMIN", "HR"].includes(targetUser.role)) {
-    throw new Error("HR cannot modify this role");
+  // Managers & employees cannot modify roles
+  if (["MANAGER", "EMPLOYEE"].includes(user.role)) {
+    throw new Error(`${user.role} cannot modify any roles`);
   }
 
-  // HR can only modify EMPLOYEE
-  if (user.role === "HR" && targetUser.role !== "EMPLOYEE") {
-    throw new Error("HR can only modify EMPLOYEE roles");
+  // HR rules
+  if (user.role === "HR") {
+    if (targetUser.role !== "EMPLOYEE") {
+      throw new Error("HR can only modify EMPLOYEE users");
+    }
+
+    if (!["MANAGER", "HR"].includes(role)) {
+      throw new Error("HR can only promote EMPLOYEE to MANAGER or HR");
+    }
   }
 
-  // MANAGER cannot modify anyone
-  if (user.role === "MANAGER") {
-    throw new Error("MANAGER cannot modify any roles");
-  }
-
-  // EMPLOYEE cannot modify anyone
-  if (user.role === "EMPLOYEE") {
-    throw new Error("EMPLOYEE cannot modify any roles");
-  }
-
-  // ADMIN cannot modify other ADMINs
+  // Admin rules
   if (user.role === "ADMIN" && targetUser.role === "ADMIN") {
     throw new Error("ADMIN cannot modify another ADMIN");
   }
@@ -150,4 +208,4 @@ async function updateUserRole(id, role, user) {
   return { id: targetUser.id, role: targetUser.role };
 }
 
-module.exports = { createUser, updateUserRole };
+module.exports = { createUser, updateUserRole, updateUser };

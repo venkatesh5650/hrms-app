@@ -1,0 +1,48 @@
+.profile-layout {
+  display: grid;
+  grid-template-areas:
+    "profile stats"
+    "capabilities stats"
+    "teams stats";
+  grid-template-columns: 2fr 1fr;
+  gap: 1.75rem;
+  padding: 2rem;
+  align-items: start;
+}
+
+/* Assign grid areas */
+.profile-layout .profile-card {
+  grid-area: profile;
+}
+
+.profile-layout .capabilities-card {
+  grid-area: capabilities;
+}
+
+.profile-layout .admin-stats {
+  grid-area: stats;
+}
+
+.profile-layout .team-card {
+  grid-area: teams;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .profile-layout {
+    grid-template-areas:
+      "profile"
+      "capabilities"
+      "stats"
+      "teams";
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .profile-layout {
+    padding: 1rem;
+    gap: 1.25rem;
+  }
+}

@@ -1,5 +1,10 @@
-// Minimal logger utility (replace with Winston/Pino in production)
+const level = process.env.LOG_LEVEL || "info"; // info | error | silent
+
 module.exports = {
-  info: (...args) => console.log("[INFO]", ...args), // Standard logs
-  error: (...args) => console.error("[ERROR]", ...args), // Error logs
+  info: (...args) => {
+    if (level === "info") console.log("[INFO]", ...args);
+  },
+  error: (...args) => {
+    if (level !== "silent") console.error("[ERROR]", ...args);
+  },
 };

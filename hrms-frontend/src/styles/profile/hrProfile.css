@@ -1,0 +1,55 @@
+.hr .hr-insights {
+  background: linear-gradient(180deg, #f8fafc, #ecfeff);
+  border-left: 5px solid #06b6d4;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.hr-insights h3 {
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #0891b2;
+  margin-bottom: 12px;
+}
+
+.hr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 14px;
+}
+
+.hr-stat {
+  background: white;
+  padding: 14px 10px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hr-stat strong {
+  font-size: 1.4rem;
+  color: #0f172a;
+}
+
+.hr-stat span {
+  font-size: 0.7rem;
+  color: #64748b;
+  letter-spacing: 0.04em;
+}
+
+.hr-stat.warn {
+  border: 2px solid #f59e0b;
+  background: #fffbeb;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .hr-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

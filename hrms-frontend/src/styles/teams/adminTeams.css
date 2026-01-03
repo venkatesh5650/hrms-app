@@ -1,0 +1,199 @@
+.admin-teams {
+  padding: 36px;
+  background: linear-gradient(180deg, #f9fafb, #f1f5f9);
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+}
+
+.admin-teams .teams-header {
+  margin-bottom: 28px;
+}
+
+.admin-teams .teams-header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #0f172a;
+}
+
+.admin-teams .subtitle {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* Grid */
+
+.admin-teams .team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* Card */
+
+.admin-teams .team-card {
+  background: linear-gradient(180deg, #ffffff, #fafafa);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  position: relative;
+}
+
+
+
+.admin-teams .team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.12);
+}
+
+/* Header */
+
+.admin-teams .team-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Title */
+
+.admin-teams .team-card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  color: #0f172a;
+}
+
+/* Count */
+
+.admin-teams .team-count {
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Description */
+
+.admin-teams .team-desc {
+  font-size: 0.82rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Manager */
+
+.admin-teams .team-manager {
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-teams .label {
+  color: #6b7280;
+}
+
+/* Manager Pill */
+
+.admin-teams .manager-pill {
+  background: #dcfce7;
+  color: #166534;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(22, 101, 52, 0.2);
+}
+
+.admin-teams .not-assigned {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(185, 28, 28, 0.25);
+}
+
+/* Members */
+
+.admin-teams .team-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.admin-teams .member-chip {
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: #374151;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.admin-teams .member-chip:hover {
+  background: #e0e7ff;
+  transform: translateY(-1px);
+}
+
+.admin-teams .muted {
+  color: #9ca3af;
+  font-size: 0.75rem;
+}
+
+/* Tablet */
+
+@media (max-width: 1024px) {
+  .admin-teams {
+    padding: 28px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .admin-teams {
+    padding: 20px;
+  }
+
+  .admin-teams .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-teams .team-card {
+    padding: 18px;
+  }
+
+  .admin-teams .team-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+/* Manager badge */
+
+.admin-teams .manager-member {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+  position: relative;
+}
+
+.admin-teams .manager-badge {
+  background: #22c55e;
+  color: white;
+  font-size: 0.55rem;
+  padding: 2px 6px;
+  border-radius: 999px;
+  margin-left: 6px;
+}

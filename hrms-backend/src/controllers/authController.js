@@ -1,6 +1,6 @@
 const authService = require("../services/authService");
 
-async function register(req, res) {
+async function register(req, res,next) {
   try {
     const { orgName, email, password } = req.body;
     if (!orgName || !email || !password) {
@@ -16,7 +16,7 @@ async function register(req, res) {
   }
 }
 
-async function login(req, res) {
+async function login(req, res,next) {
   try {
     const { email, password } = req.body;
     if (!email || !password)
@@ -32,7 +32,7 @@ async function login(req, res) {
   }
 }
 
-async function logout(req, res) {
+async function logout(req, res,next) {
   try {
     const auth = req.headers.authorization || "";
     const token = auth.split(" ")[1];

@@ -1,0 +1,91 @@
+.dashboard {
+  padding: 24px;
+  background: var(--color-bg);
+  min-height: 100vh;
+  font-family: var(--font-base);
+  margin-left: 20px;
+}
+
+.dashboard-header {
+  margin-bottom: 24px;
+}
+
+.dashboard-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.dashboard-header p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.kpi-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.kpi-card {
+  flex: 1 1 160px;
+  background: var(--color-card);
+  padding: 20px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+
+.kpi-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.kpi-value {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.kpi-sub {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.dashboard-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.card {
+  background: var(--color-card);
+  padding: 20px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+
+.empty {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+
+.manager-main {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.manager-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .manager-main {
+    grid-template-columns: 1fr;
+  }
+}

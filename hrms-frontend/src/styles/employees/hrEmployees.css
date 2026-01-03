@@ -1,0 +1,84 @@
+.hr-employees {
+  padding: 32px;
+  background: #f9fafb;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.hr-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Header */
+
+.hr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.hr-header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.hr-header p {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* Table wrapper */
+
+.hr-table-wrapper {
+  overflow-x: auto;
+}
+
+/* Action buttons */
+
+.btn {
+  padding: 6px 12px;
+  font-size: 0.7rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-right: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-edit {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.btn-edit:hover {
+  background: #c7d2fe;
+}
+
+.btn-toggle {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.btn-toggle:hover {
+  background: #fecaca;
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .hr-employees {
+    padding: 16px;
+  }
+
+  .hr-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

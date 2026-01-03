@@ -1,0 +1,55 @@
+.exports-page {
+  padding: 32px;
+  background: linear-gradient(135deg, #eef2ff, #f9fafb);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.exports-card {
+  max-width: 1100px;
+  width: 100%;
+  background: white;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+.exports-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.exports-header .subtitle {
+  margin-top: 4px;
+  color: #6b7280;
+}
+
+.exports-description {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.exports-grid {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .exports-page {
+    padding: 16px;
+  }
+
+  .exports-card {
+    padding: 20px;
+  }
+
+  .exports-header h1 {
+    font-size: 1.4rem;
+  }
+}

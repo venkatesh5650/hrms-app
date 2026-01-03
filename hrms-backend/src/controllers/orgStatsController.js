@@ -1,6 +1,6 @@
 const orgStatsService = require("../services/orgStatsService");
 
-async function getRoleStats(req, res) {
+async function getRoleStats(req, res,next) {
   try {
     const data = await orgStatsService.getRoleStats(req.user.orgId);
     res.json({ stats: data });
@@ -9,7 +9,7 @@ async function getRoleStats(req, res) {
   }
 }
 
-async function listManagers(req, res) {
+async function listManagers(req, res,next) {
   try {
     const managers = await orgStatsService.listUsersByRole(
       req.user.orgId,
@@ -21,7 +21,7 @@ async function listManagers(req, res) {
   }
 }
 
-async function listHRs(req, res) {
+async function listHRs(req, res,next) {
   try {
     const hrs = await orgStatsService.listUsersByRole(req.user.orgId, "HR");
     res.json({ hrs });

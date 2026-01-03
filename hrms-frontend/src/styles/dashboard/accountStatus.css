@@ -1,0 +1,77 @@
+.status-card {
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff, #f9fafb);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+}
+
+.status-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+}
+
+.status-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.status-card h3 {
+  font-size: 1rem;
+  margin: 0;
+  color: #111827;
+}
+
+/* Badge */
+.status-badge {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* Rows */
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  padding: 6px 0;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.status-row:last-child {
+  border-bottom: none;
+}
+
+/* Status colors */
+.active {
+  color: #16a34a;
+  background-color: rgba(22, 163, 74, 0.1);
+}
+
+.inactive {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+strong.active,
+strong.inactive {
+  background: none;
+  padding: 0;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .status-card {
+    padding: 16px;
+  }
+
+  .status-row {
+    font-size: 0.8rem;
+  }
+}

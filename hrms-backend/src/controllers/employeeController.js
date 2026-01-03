@@ -1,6 +1,6 @@
 const employeeService = require("../services/employeeService");
 
-async function listEmployees(req, res) {
+async function listEmployees(req, res,next) {
   try {
     const employees = await employeeService.listEmployees(req.user.orgId);
     res.json({ employees });
@@ -9,7 +9,7 @@ async function listEmployees(req, res) {
   }
 }
 
-async function getEmployee(req, res) {
+async function getEmployee(req, res,next) {
   try {
     const employee = await employeeService.getEmployee(
       req.params.id,
@@ -25,7 +25,7 @@ async function getEmployee(req, res) {
   }
 }
 
-async function createEmployee(req, res) {
+async function createEmployee(req, res,next) {
   try {
     if (!req.body.first_name)
       return res.status(400).json({ message: "first_name required" });
@@ -37,7 +37,7 @@ async function createEmployee(req, res) {
   }
 }
 
-async function updateEmployee(req, res) {
+async function updateEmployee(req, res,next) {
   try {
     const employee = await employeeService.updateEmployee(
       req.params.id,
@@ -54,7 +54,7 @@ async function updateEmployee(req, res) {
   }
 }
 
-async function deleteEmployee(req, res) {
+async function deleteEmployee(req, res,next) {
   try {
     const success = await employeeService.deleteEmployee(
       req.params.id,
@@ -70,7 +70,7 @@ async function deleteEmployee(req, res) {
   }
 }
 
-async function restoreEmployee(req, res) {
+async function restoreEmployee(req, res,next) {
   try {
     const success = await employeeService.restoreEmployee(
       req.params.id,

@@ -1,6 +1,6 @@
 const profileService = require("../services/profileService");
 
-async function getMyProfile(req, res) {
+async function getMyProfile(req, res,next) {
   try {
     const profile = await profileService.getMyProfile(req.user.id);
 

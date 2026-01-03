@@ -1,0 +1,84 @@
+.capabilities-card {
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff, #f9fafb);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+}
+
+.capabilities-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+}
+
+.capabilities-card .card-header {
+  margin-bottom: 14px;
+}
+
+.capabilities-card h3 {
+  font-size: 1rem;
+  margin: 0;
+  color: #111827;
+}
+
+.subtitle {
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+
+/* List */
+.capabilities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Row */
+.capability-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  padding: 6px 0;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.capability-row:last-child {
+  border-bottom: none;
+}
+
+.capability-name {
+  color: #111827;
+}
+
+/* Badge */
+.capability-badge {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* States */
+.allowed {
+  color: #16a34a;
+  background-color: rgba(22, 163, 74, 0.1);
+}
+
+.denied {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .capabilities-card {
+    padding: 16px;
+  }
+
+  .capability-row {
+    font-size: 0.8rem;
+  }
+}

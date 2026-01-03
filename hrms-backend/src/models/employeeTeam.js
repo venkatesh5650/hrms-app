@@ -8,15 +8,20 @@ const EmployeeTeam = sequelize.define(
   "EmployeeTeam",
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    employee_id: { type: DataTypes.INTEGER, allowNull: false }, // FK: Employee
-    team_id: { type: DataTypes.INTEGER, allowNull: false }, // FK: Team
-    assigned_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }, // Track assignment history
+    employee_id: { type: DataTypes.INTEGER, allowNull: false },
+    team_id: { type: DataTypes.INTEGER, allowNull: false },
+    role: {
+      type: DataTypes.ENUM("MEMBER", "MANAGER"),
+      defaultValue: "MEMBER",
+    },
+    assigned_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   },
   {
     tableName: "employee_teams",
-    timestamps: false, // No update history required for mapping table
+    timestamps: false,
   }
 );
+
 
 
 

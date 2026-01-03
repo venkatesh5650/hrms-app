@@ -1,0 +1,93 @@
+.support-card {
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f0f9ff, #ecfeff);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+}
+
+.support-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+}
+
+/* Header */
+.support-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.support-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e, #06b6d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: white;
+}
+
+.support-header h3 {
+  font-size: 1rem;
+  margin: 0;
+  color: #0f172a;
+}
+
+/* Sub text */
+.support-sub {
+  font-size: 0.75rem;
+  color: #475569;
+  margin: 6px 0 10px;
+}
+
+/* List */
+.support-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.support-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 4px;
+  color: #334155;
+}
+
+.support-list li::before {
+  content: "✔";
+  color: #22c55e;
+  font-size: 0.75rem;
+}
+
+/* Footer */
+.support-footer {
+  margin-top: 10px;
+  font-size: 0.7rem;
+  color: #64748b;
+  text-align: right;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .support-card {
+    padding: 16px;
+  }
+
+  .support-sub {
+    font-size: 0.7rem;
+  }
+
+  .support-list {
+    font-size: 0.75rem;
+  }
+}

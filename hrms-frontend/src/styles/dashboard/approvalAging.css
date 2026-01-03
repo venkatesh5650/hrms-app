@@ -1,0 +1,63 @@
+.aging-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom:20px;
+  margin-top:20px;
+}
+
+.card-header h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Grid */
+.aging-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.aging-tile {
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.aging-label {
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+
+.aging-value {
+  font-size: 1.2rem;
+  color: #111827;
+}
+
+.aging-tile.danger .aging-value {
+  color: #dc2626;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .aging-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 420px) {
+  .aging-grid {
+    grid-template-columns: 1fr;
+  }
+}

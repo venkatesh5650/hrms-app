@@ -1,0 +1,114 @@
+/* ============================= */
+/*        Activity Feed         */
+/* ============================= */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.activity-table th,
+.activity-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.activity-row {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.activity-row:hover {
+  background: #f9fafb;
+}
+
+.expand-row td {
+  background: #f3f4f6;
+  padding: 12px;
+}
+
+.expand-content {
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.action-cell {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================= */
+/*       Mobile Responsive      */
+/* ============================= */
+
+@media (max-width: 600px) {
+  .table-wrapper {
+    overflow-x: hidden;
+  }
+
+  .activity-table,
+  .activity-table thead,
+  .activity-table tbody,
+  .activity-table th,
+  .activity-table td,
+  .activity-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .activity-table thead {
+    display: none;
+  }
+
+  .activity-row {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .activity-row td {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 6px 0;
+    border: none;
+    font-size: 0.8rem;
+    gap: 8px;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .activity-row td::before {
+    content: attr(data-label);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+
+  .expand-row td {
+    border-radius: 0 0 12px 12px;
+    padding: 10px;
+  }
+
+  .expand-content {
+    font-size: 0.75rem;
+  }
+
+  .action-cell {
+    max-width: 100%;
+    white-space: normal;
+  }
+}

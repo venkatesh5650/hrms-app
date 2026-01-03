@@ -1,0 +1,73 @@
+.orphan-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-header h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.success {
+  font-size: 0.8rem;
+  color: #16a34a;
+}
+
+/* Count banner */
+.orphan-count {
+  font-size: 0.8rem;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 6px 10px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+/* List */
+.orphan-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.orphan-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  padding: 8px 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.orphan-name {
+  font-weight: 500;
+  color: #111827;
+}
+
+.orphan-tag {
+  font-size: 0.65rem;
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .orphan-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

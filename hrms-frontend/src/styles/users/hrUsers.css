@@ -1,0 +1,31 @@
+.users-page.hr {
+  padding: 24px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.users-page.hr .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.users-page.hr .header h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.users-page.hr .header button {
+  background: #059669;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.users-page.hr .header button:hover {
+  background: #047857;
+}

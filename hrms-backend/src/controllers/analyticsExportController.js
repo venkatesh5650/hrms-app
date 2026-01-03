@@ -1,8 +1,8 @@
 const analyticsExportService = require("../services/analyticsExportService");
 
-async function exportAnalyticsCSV(req, res) {
+async function exportAnalyticsCSV(req, res, next) {
   try {
-    const csv = await analyticsExportService.generateAnalyticsCSV(
+    const csv = await analyticsExportService.generateAnalyticsCSVs(
       req.user.orgId
     );
 

@@ -1,0 +1,102 @@
+.workforce-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.card-header h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.empty {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Container */
+.trend-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Each row becomes a card */
+.trend-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #f9fafb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.trend-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trend-cell span {
+  font-size: 0.65rem;
+  color: #6b7280;
+}
+
+.trend-cell strong {
+  font-size: 0.85rem;
+  color: #111827;
+}
+
+.trend-cell.month strong {
+  font-size: 0.9rem;
+}
+
+.net.positive strong {
+  color: #16a34a;
+}
+
+.net.negative strong {
+  color: #dc2626;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .trend-row {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 10px;
+  }
+
+  .trend-cell.month {
+    grid-column: span 2;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .trend-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .trend-cell {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .trend-cell span {
+    font-size: 0.7rem;
+  }
+
+  .trend-cell strong {
+    font-size: 0.8rem;
+  }
+}

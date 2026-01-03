@@ -1,0 +1,306 @@
+.approvals-page {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (min-width: 560px) {
+  .approvals-page {
+    margin-left: 20px;
+  }
+}
+
+/* Header */
+
+.approvals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.approvals-header h1 {
+  font-size: 1.4rem;
+}
+
+/* Tabs */
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.15s ease;
+}
+
+.tabs button:hover {
+  background: #eef2ff;
+}
+
+.tabs .active {
+  background: #6366f1;
+  color: white;
+  border-color: #6366f1;
+}
+
+/* List */
+
+.approval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Card */
+
+.approval-card {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Meta */
+
+.approval-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-size: 0.75rem;
+  color: #6b7280;
+  justify-content: space-between;
+}
+
+.status.pending {
+  color: #ca8a04;
+}
+.status.approved {
+  color: #16a34a;
+}
+.status.rejected {
+  color: #dc2626;
+}
+
+/* Payload */
+
+.payload {
+  background: #f3f4f6;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Actions */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.actions input {
+  flex: 1 1 160px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 0.8rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.actions input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.actions button {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.actions .approve {
+  background: #22c55e;
+  color: white;
+}
+
+.actions .reject {
+  background: #ef4444;
+  color: white;
+}
+
+/* Reason */
+
+.reason {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: #dc2626;
+}
+
+/* Empty */
+
+.empty-state {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 40px;
+  font-size: 0.9rem;
+}
+
+/* HR Create Card */
+
+.create-approval-card {
+  background: linear-gradient(135deg, #eef2ff, #fdf4ff);
+  border: 1px solid #e0e7ff;
+  padding: 22px;
+  border-radius: 18px;
+  margin-bottom: 26px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  max-width: 520px;
+}
+
+.create-approval-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.helper-text {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.form-grid .full {
+  grid-column: span 2;
+}
+
+.form-grid label {
+  font-size: 0.7rem;
+  color: #4b5563;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.form-grid input {
+  width: 100%;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid #c7d2fe;
+  font-size: 0.8rem;
+  background: white;
+  color:black;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-grid input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.primary-btn {
+  background: #6366f1;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.primary-btn:hover {
+  background: #4f46e5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.error {
+  margin-top: 8px;
+  color: #dc2626;
+  font-size: 0.75rem;
+}
+
+.success {
+  margin-top: 8px;
+  color: #16a34a;
+  font-size: 0.75rem;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .approvals-page {
+    padding: 14px;
+  }
+
+  .approvals-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .approval-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .payload {
+    font-size: 0.65rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+
+  .create-approval-card {
+    max-width: 100%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid .full {
+    grid-column: span 1;
+  }
+}
+
+.reject-error {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 4px;
+}

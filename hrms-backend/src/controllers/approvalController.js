@@ -1,6 +1,6 @@
 const approvalService = require("../services/approvalService");
 
-async function createApproval(req, res) {
+async function createApproval(req, res,next) {
   try {
     const approval = await approvalService.createApproval(req.body, req.user);
     res.status(201).json({ approval });
@@ -9,7 +9,7 @@ async function createApproval(req, res) {
   }
 }
 
-async function listPending(req, res) {
+async function listPending(req, res,next) {
   try {
     const approvals = await approvalService.listPending(
       req.user.orgId,
@@ -21,7 +21,7 @@ async function listPending(req, res) {
   }
 }
 
-async function approveCreate(req, res) {
+async function approveCreate(req, res,next) {
   try {
     const success = await approvalService.approveApproval(
       req.params.id,
@@ -38,7 +38,7 @@ async function approveCreate(req, res) {
   }
 }
 
-async function approveLogin(req, res) {
+async function approveLogin(req, res,next) {
   try {
     const result = await approvalService.approveApproval(
       req.params.id,
@@ -57,7 +57,7 @@ async function approveLogin(req, res) {
   }
 }
 
-async function rejectCreate(req, res) {
+async function rejectCreate(req, res,next) {
   try {
     if (!req.body.reason)
       return res.status(400).json({ message: "Rejection reason required" });
@@ -78,7 +78,7 @@ async function rejectCreate(req, res) {
   }
 }
 
-async function rejectLogin(req, res) {
+async function rejectLogin(req, res,next) {
   try {
     if (!req.body.reason)
       return res.status(400).json({ message: "Rejection reason required" });
@@ -99,7 +99,7 @@ async function rejectLogin(req, res) {
   }
 }
 
-async function listHistory(req, res) {
+async function listHistory(req, res,next) {
   try {
     const approvals = await approvalService.listHistory(req.user.orgId);
     res.json({ approvals });

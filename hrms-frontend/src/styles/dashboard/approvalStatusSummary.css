@@ -1,0 +1,99 @@
+.status-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Header */
+.status-card .card-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.status-card h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.status-card .subtitle {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Grid */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+/* Item */
+.status-item {
+  padding: 14px 10px;
+  border-radius: 14px;
+  text-align: center;
+  background: #f9fafb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.status-item .label {
+  font-size: 0.7rem;
+  color: #6b7280;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.status-item strong {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Color accents */
+.status-item.pending {
+  border-left: 4px solid #facc15;
+}
+
+.status-item.approved {
+  border-left: 4px solid #22c55e;
+}
+
+.status-item.rejected {
+  border-left: 4px solid #ef4444;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+  }
+
+  .status-item strong {
+    font-size: 1.2rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 420px) {
+  .status-item {
+    padding: 10px 12px;
+  }
+
+  .status-item .label {
+    font-size: 0.65rem;
+  }
+
+  .status-item strong {
+    font-size: 1.1rem;
+  }
+}

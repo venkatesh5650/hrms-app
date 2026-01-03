@@ -1,0 +1,205 @@
+/* ============================= */
+/*       Approval Workflow      */
+/* ============================= */
+
+.approval-card {
+  padding: 20px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Summary counters */
+.workflow-summary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.workflow-item {
+  flex: 1 1 140px;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 0;
+}
+
+.workflow-item span {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.workflow-item strong {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.workflow-item.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.workflow-item.approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.workflow-item.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Progress bars */
+.workflow-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 80px 1fr 42px;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #374151;
+  min-width: 0;
+}
+
+.bar span {
+  white-space: nowrap;
+}
+
+.bar span:last-child {
+  text-align: right;
+  font-weight: 500;
+}
+
+.bar-track {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.bar-fill.reviewed {
+  background: #6366f1;
+}
+
+.bar-fill.approved {
+  background: #22c55e;
+}
+
+.bar-fill.rejected {
+  background: #ef4444;
+}
+
+/* Footer insight */
+.workflow-footer {
+  margin-top: 14px;
+  font-size: 0.8rem;
+  color: #6b7280;
+  text-align: right;
+  word-break: break-word;
+}
+
+/* Pie chart section */
+.workflow-pie {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #eef0f4;
+  text-align: center;
+}
+
+.workflow-pie h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #374151;
+}
+
+.workflow-caption {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 8px;
+}
+
+/* ============================= */
+/*        Responsive Rules      */
+/* ============================= */
+
+@media (max-width: 600px) {
+  .workflow-summary {
+    flex-direction: column;
+  }
+
+  .workflow-item {
+    width: 90%;
+  }
+
+  .workflow-item strong {
+    font-size: 1.3rem;
+  }
+
+  .workflow-bars {
+    width: 90%;
+  }
+
+  .bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .bar span {
+    font-size: 0.75rem;
+  }
+
+  .bar span:last-child {
+    align-self: flex-end;
+  }
+
+  .bar-track {
+    height: 8px;
+  }
+
+  .workflow-footer {
+    text-align: left;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .workflow-item {
+    padding: 10px;
+  }
+
+  .workflow-item span {
+    font-size: 0.7rem;
+  }
+
+  .workflow-item strong {
+    font-size: 1.1rem;
+  }
+
+  .workflow-pie h4 {
+    font-size: 0.85rem;
+  }
+
+  .workflow-caption {
+    font-size: 0.7rem;
+  }
+}

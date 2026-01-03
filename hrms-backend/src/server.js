@@ -54,7 +54,7 @@ app.use("/api/org", orgStats);
 app.use("/api/profile", profile);
 
 // Health check
-app.get("/", (res) => {
+app.get("/", (req, res) => {
   res.json({ message: "HRMS Backend running" });
 });
 

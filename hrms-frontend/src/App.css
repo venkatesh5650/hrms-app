@@ -1,0 +1,38 @@
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f6f8fb;
+}
+
+.app-content {
+  flex: 1;
+  min-height: 100vh;
+  background: #f6f8fb;
+}
+
+/* Desktop (sidebar present) */
+@media (min-width: 1024px) {
+  .app-content {
+    margin-left: 240px; /* width of sidebar */
+    padding-top: 0;
+  }
+}
+
+/* Mobile / Tablet (navbar present) */
+@media (max-width: 1023px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .app-content {
+    margin-left: 0;
+    padding-top: 64px; /* height of navbar */
+  }
+}
