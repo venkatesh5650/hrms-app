@@ -1,6 +1,6 @@
 const authService = require("../services/authService");
 
-async function register(req, res,next) {
+async function register(req, res, next) {
   try {
     const { orgName, email, password } = req.body;
     if (!orgName || !email || !password) {
@@ -16,13 +16,15 @@ async function register(req, res,next) {
   }
 }
 
-async function login(req, res,next) {
+async function login(req, res, next) {
   try {
     const { email, password } = req.body;
+    console.log(req.body);
     if (!email || !password)
       return res.status(400).json({ message: "email and password required" });
 
     const result = await authService.login(req.body);
+    
     if (!result)
       return res.status(401).json({ message: "Invalid credentials" });
 
@@ -32,7 +34,7 @@ async function login(req, res,next) {
   }
 }
 
-async function logout(req, res,next) {
+async function logout(req, res, next) {
   try {
     const auth = req.headers.authorization || "";
     const token = auth.split(" ")[1];

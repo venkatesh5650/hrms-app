@@ -32,12 +32,14 @@ const profile = require("./routes/profile");
 const errorHandler = require("./middlewares/errorHandler");
 
 // Enable CORS
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "https://hrms-app-five.vercel.app"],
-    credentials: true,
-  })
-);
+// app.use(
+//   // cors({
+//   //   // origin: ["http://localhost:3000", "https://hrms-app-five.vercel.app"],
+//   //   // credentials: true,
+//   // })
+// );
+
+app.use(cors())
 
 app.options("*", cors());
 
