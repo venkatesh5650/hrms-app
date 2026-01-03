@@ -1,32 +1,22 @@
 const { Sequelize } = require("sequelize");
 const dotenv = require("dotenv");
 
-dotenv.config(); // Load environment variables (no secrets in code)
+dotenv.config();
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
-  {
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    dialect: "mysql",
-
-    logging: false, // Avoid leaking SQL queries in logs
-
-    dialectOptions: {
-      ssl: {
-        require: true, // Enforce encrypted DB connection
-        rejectUnauthorized: false, // Allow cloud/self-signed certificates
-      },
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "mysql",
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
     },
-
-    pool: {
-      max: 5, // Limit concurrent DB usage to protect database
-      idle: 10000, // Free unused connections automatically
-    },
-  }
-);
+  },
+  pool: {
+    max: 5,
+    idle: 10000,
+  },
+});
 
 async function connectWithRetry() {
   try {
@@ -41,11 +31,6 @@ async function connectWithRetry() {
   }
 }
 
-
-connectWithRetry(); // Start DB connection on app boot
-
-// 🔍 Add this block here
+connectWithRetry();
 
 module.exports = sequelize;
-
-module.exports = sequelize; // Single shared DB connection across the app
