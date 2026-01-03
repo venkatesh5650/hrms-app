@@ -9,6 +9,9 @@ import KpiGrid from "../components/dashboard/KpiGrid";
 import ApprovalPipelineChart from "../components/dashboard/ApprovalPipelineChart";
 import ActivityFeed from "../components/dashboard/ActivityFeed";
 
+import "../styles/dashboardLoader.css";
+
+
 export default function AdminDashboard() {
   const [pending, setPending] = useState([]);
   const [history, setHistory] = useState([]);
@@ -43,7 +46,8 @@ export default function AdminDashboard() {
   // ---- Derived metrics ----
 
   const reviewed = useMemo(
-    () => history.filter((a) => a.status === "APPROVED" || a.status === "REJECTED"),
+    () =>
+      history.filter((a) => a.status === "APPROVED" || a.status === "REJECTED"),
     [history]
   );
 
@@ -80,7 +84,17 @@ export default function AdminDashboard() {
       .slice(0, 1);
   }, [logs]);
 
-  if (loading) return <p>Loading admin dashboard…</p>;
+  if (loading) {
+    return (
+      <div className="dashboard-loader">
+        <div className="loader-card">
+          <div className="pulse-ring"></div>
+          <h2>HRMS</h2>
+          <p>Preparing your admin dashboard…</p>
+        </div>
+      </div>
+    );
+  }
 
   const approved = reviewed.filter((a) => a.status === "APPROVED").length;
   const rejected = reviewed.filter((a) => a.status === "REJECTED").length;
