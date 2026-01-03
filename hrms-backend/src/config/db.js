@@ -30,28 +30,21 @@ const sequelize = new Sequelize(
 
 async function connectWithRetry() {
   try {
-    await sequelize.authenticate(); // Health-check DB connection at startup
+    await sequelize.authenticate();
     console.log("MySQL connection successful!");
+
+    const [rows] = await sequelize.query("SELECT DATABASE()");
+    console.log("Connected DB:", rows[0]["DATABASE()"]);
   } catch (err) {
-    console.error(
-      "DB connection failed. Retrying in 5 seconds...",
-      err.message
-    );
-    setTimeout(connectWithRetry, 5000); // Self-healing retry for production resilience
+    console.error("DB connection failed. Retrying...", err.message);
+    setTimeout(connectWithRetry, 5000);
   }
 }
+
 
 connectWithRetry(); // Start DB connection on app boot
 
 // 🔍 Add this block here
-sequelize
-  .query("SELECT DATABASE()")
-  .then(([rows]) => {
-    console.log("Connected DB:", rows[0]["DATABASE()"]);
-  })
-  .catch((err) => {
-    console.error("Failed to fetch DB name:", err);
-  });
 
 module.exports = sequelize;
 
