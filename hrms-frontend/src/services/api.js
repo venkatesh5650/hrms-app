@@ -18,4 +18,24 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Global response handler for demo + errors
+api.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    const data = error?.response?.data;
+
+    if (data?.code === "DEMO_READ_ONLY") {
+      alert(
+        "🔒 Demo Mode\n\nThis account is read-only.\nSign up or contact admin for full access."
+      );
+    } else if (data?.message) {
+      alert(data.message);
+    } else {
+      alert("Something went wrong. Please try again.");
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default api;
