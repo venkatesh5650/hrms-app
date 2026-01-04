@@ -35,6 +35,10 @@ const User = sequelize.define(
       type: DataTypes.STRING(255),
       allowNull: false,
     }, // Stored as bcrypt hash
+    is_demo: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     tableName: "users",
@@ -45,5 +49,3 @@ const User = sequelize.define(
 );
 
 module.exports = User;
-
-

@@ -28,23 +28,38 @@ const usersRoutes = require("./routes/users");
 const exportRoutes = require("./routes/export");
 const orgStats = require("./routes/orgStats");
 const profile = require("./routes/profile");
+const authMiddleware = require("./middlewares/authMiddleware");
+const blockDemoWrites = require("./middlewares/blockDemoWrites");
+
 
 const errorHandler = require("./middlewares/errorHandler");
 
-// Enable CORS
-// app.use(
-//   // cors({
-//   //   // origin: ["http://localhost:3000", "https://hrms-app-five.vercel.app"],
-//   //   // credentials: true,
-//   // })
-// );
 
-app.use(cors())
+
+
+
+// Enable CORS
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://hrms-app-five.vercel.app"],
+    credentials: true,
+  })
+);
+
+
 
 app.options("*", cors());
 
 // Routes
+
+
+// Public routes
 app.use("/api/auth", authRoutes);
+
+// Protected middleware chain
+app.use(authMiddleware);
+app.use(blockDemoWrites);
+
 app.use("/api/users", usersRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/teams", teamRoutes);
@@ -93,4 +108,3 @@ async function start(retries = 5) {
 }
 
 start();
-

@@ -27,6 +27,11 @@ const Employee = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
+    is_demo: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
     deleted_at: {
       type: DataTypes.DATE,
       allowNull: true,
