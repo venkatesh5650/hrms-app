@@ -27,7 +27,8 @@ module.exports = async function authMiddleware(req, res, next) {
     req.user = {
       id: user.id,
       orgId: user.organisation_id,
-      role: user.role, // ← added
+      role: user.role,
+      is_demo: user.is_demo, // 👈 ADD THIS
     };
 
     next();
