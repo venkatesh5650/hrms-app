@@ -75,3 +75,17 @@
     transform: translateY(0);
   }
 }
+
+
+/* Default: full width (mobile & small screens) */
+.dashboard-loader {
+  width: 100%;
+}
+
+/* Large screens: account for sidebar */
+@media (min-width: 1024px) {
+  .dashboard-loader {
+    margin-left: 20%;
+    width: 80%;
+  }
+}

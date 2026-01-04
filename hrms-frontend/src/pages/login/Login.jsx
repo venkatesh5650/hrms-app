@@ -1,7 +1,14 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/pages/login.css";
+
+const DEMO_USERS = {
+  ADMIN: { email: "demo.admin@hrms.com", password: "Demo@123" },
+  HR: { email: "demo.hr@hrms.com", password: "Demo@123" },
+  MANAGER: { email: "demo.manager@hrms.com", password: "Demo@123" },
+  EMPLOYEE: { email: "demo.employee@hrms.com", password: "Demo@123" },
+};
 
 const Login = () => {
   const { login } = useAuth();
@@ -34,6 +41,24 @@ const Login = () => {
     }
   };
 
+  const handleDemoLogin = async (role) => {
+    const creds = DEMO_USERS[role];
+    if (!creds) return;
+
+    setForm(creds);
+    setError("");
+    setLoading(true);
+
+    try {
+      await login(creds);
+      navigate("/dashboard");
+    } catch {
+      setError("Demo login failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="login-root">
       <div className="login-left">
@@ -58,7 +83,7 @@ const Login = () => {
           <h2 className="title">Access Portal</h2>
           <p className="subtitle">Secure sign-in for authorised users</p>
 
-          {error && <div className="error">{error}</div>}
+          {error && <div className="error info">{error}</div>}
 
           <form onSubmit={handleSubmit}>
             <label>Email</label>
@@ -100,10 +125,37 @@ const Login = () => {
               {loading ? "Authenticating..." : "Enter System"}
             </button>
           </form>
+          <div className="demo-section">
+            <p className="demo-title">Try Demo Access</p>
+            <div className="demo-buttons">
+              <button type="button" onClick={() => handleDemoLogin("ADMIN")}>
+                Admin
+              </button>
+              <button type="button" onClick={() => handleDemoLogin("HR")}>
+                HR
+              </button>
+              <button type="button" onClick={() => handleDemoLogin("MANAGER")}>
+                Manager
+              </button>
+              <button type="button" onClick={() => handleDemoLogin("EMPLOYEE")}>
+                Employee
+              </button>
+            </div>
+          </div>
 
           <div className="footer">
             <span>New organisation?</span>
-            <Link to="/register">Request access</Link>
+            <button
+              type="button"
+              className="request-access-link"
+              onClick={() =>
+                setError(
+                  "Public sign-ups are currently disabled. Please use a demo account above or contact the administrator for access."
+                )
+              }
+            >
+              Request access
+            </button>
           </div>
         </div>
       </div>
