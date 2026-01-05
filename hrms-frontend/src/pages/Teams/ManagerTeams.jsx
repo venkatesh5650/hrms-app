@@ -12,55 +12,50 @@ export default function ManagerTeams() {
     api.get("/teams").then((res) => setTeams(res.data.teams || []));
   }, []);
 
-  const myTeams = teams.filter((team) => team.manager?.user_id === user.id);
+  const myTeams = teams.filter(
+    (team) => Number(team.manager?.user_id) === Number(user.id)
+  );
 
   return (
     <div className="manager-teams">
       <header className="manager-header">
         <h1>My Teams</h1>
-        <p className="subtitle">Teams you manage and their members</p>
+        <p className="subtitle">Manage your teams and view assigned members</p>
       </header>
 
       {myTeams.length === 0 ? (
-        <p className="empty-state">
-          You are not assigned as a manager to any team yet.
-        </p>
+        <p className="empty-state">No teams assigned to you yet.</p>
       ) : (
-        <div className="team-grid">
-          {myTeams.map((team) => (
-            <div key={team.id} className="team-card-wrap">
-              <div className="team-card">
-                <div className="team-card-header">
-                  <div className="team-info">
+        <div className="teams-list">
+          {myTeams.map((team) => {
+            const isOpen = activeTeamId === team.id;
+
+            return (
+              <div key={team.id} className={`team-card ${isOpen ? "open" : ""}`}>
+                <div className="team-top">
+                  <div>
                     <h3>{team.name}</h3>
-                    <p className="team-desc">
-                      {team.description || "No description"}
-                    </p>
-                    <div className="meta-row">
-                      <span className="pill">
-                        {team.Employees?.length || 0} members
-                      </span>
-                      <span className="created">
-                        Created:{" "}
-                        {new Date(team.created_at).toLocaleDateString()}
-                      </span>
-                    </div>
+                    <p className="desc">{team.description || "No description"}</p>
+                    <span className="meta">
+                      {team.Employees?.length || 0} members • Created{" "}
+                      {new Date(team.created_at).toLocaleDateString()}
+                    </span>
                   </div>
 
                   <button
-                    className="btn secondary"
+                    className="toggle-btn"
                     onClick={() =>
-                      setActiveTeamId(activeTeamId === team.id ? null : team.id)
+                      setActiveTeamId(isOpen ? null : team.id)
                     }
                   >
-                    {activeTeamId === team.id ? "Hide Members" : "View Members"}
+                    {isOpen ? "Hide" : "View"}
                   </button>
                 </div>
 
-                {activeTeamId === team.id && (
-                  <div className="members-panel">
+                {isOpen && (
+                  <div className="team-members">
                     {team.Employees?.length ? (
-                      <table className="members-table">
+                      <table>
                         <thead>
                           <tr>
                             <th>Name</th>
@@ -88,8 +83,8 @@ export default function ManagerTeams() {
                   </div>
                 )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

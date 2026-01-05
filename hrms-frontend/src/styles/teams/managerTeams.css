@@ -1,198 +1,128 @@
 .manager-teams {
   padding: 48px;
-  background: radial-gradient(circle at top, #eef2ff, #f8fafc 60%);
   min-height: 100vh;
+  background: linear-gradient(to bottom right, #eef2ff, #f8fafc);
   font-family: system-ui, sans-serif;
 }
 
-.manager-teams .manager-header {
-  margin-bottom: 36px;
-}
-
-.manager-teams .manager-header h1 {
-  font-size: 2.05rem;
+.manager-header h1 {
+  font-size: 2rem;
   font-weight: 800;
   color: #0f172a;
 }
 
-.manager-teams .subtitle {
+.subtitle {
   font-size: 0.9rem;
   color: #64748b;
+  margin-bottom: 32px;
 }
 
-/* Grid */
-
-.manager-teams .team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 28px;
-}
-
-/* Card */
-
-.manager-teams .team-card {
-  width: 100%;
-  max-width: 420px;
-  height: 260px;
-  background: linear-gradient(180deg, #ffffff, #f8fafc);
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  position: relative;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  overflow: hidden;
-}
-
-/* Hover */
-
-.manager-teams .team-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 22px 56px rgba(0, 0, 0, 0.12);
-}
-
-/* Header */
-
-.manager-teams .team-card-header {
+.teams-list {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 20px;
 }
 
-/* Title */
+.team-card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.25s ease;
+}
 
-.manager-teams .team-info h3 {
+.team-card.open {
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.1);
+}
+
+.team-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.team-top h3 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #0f172a;
 }
 
-.manager-teams .team-desc {
-  font-size: 0.8rem;
-  color: #64748b;
-  margin-top: 4px;
-  line-height: 1.4;
-}
-
-/* Meta */
-
-.manager-teams .meta-row {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.manager-teams .created {
-  font-size: 0.68rem;
+.desc {
+  font-size: 0.85rem;
   color: #64748b;
 }
 
-.manager-teams .pill {
-  padding: 4px 12px;
-  border-radius: 999px;
+.meta {
   font-size: 0.7rem;
-  background: #eef2ff;
-  color: #4338ca;
-  font-weight: 600;
+  color: #64748b;
 }
 
-/* Buttons */
-
-.manager-teams .btn {
+.toggle-btn {
   border: none;
-  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
   padding: 6px 14px;
-  font-size: 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  white-space: nowrap;
 }
 
-.manager-teams .btn.secondary {
-  background: #e0e7ff;
-  color: #3730a3;
-}
-
-.manager-teams .btn.secondary:hover {
+.toggle-btn:hover {
   background: #c7d2fe;
-  transform: translateY(-1px);
 }
 
-/* Members */
-
-.manager-teams .members-panel {
-  margin-top: 14px;
-  border-top: 1px dashed #e5e7eb;
+.team-members {
+  margin-top: 16px;
   padding-top: 14px;
+  border-top: 1px dashed #e5e7eb;
+  overflow-x: auto;
 }
 
-.manager-teams .members-table {
+.team-members table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
 }
 
-.manager-teams .members-table th {
+.team-members th {
   text-align: left;
   padding-bottom: 6px;
   color: #64748b;
   font-weight: 700;
 }
 
-.manager-teams .members-table td {
+.team-members td {
   padding: 6px 0;
   color: #0f172a;
 }
 
-.manager-teams .empty-state {
-  margin-top: 60px;
-  font-size: 0.95rem;
-  color: #64748b;
+.empty-state {
   text-align: center;
+  color: #64748b;
+  margin-top: 60px;
 }
 
-/* Tablet */
-
-@media (max-width: 1024px) {
-  .manager-teams .team-grid {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
-
-  .manager-teams {
-    padding: 32px;
-  }
-
-  .manager-teams .team-card {
-    height: 250px;
-    max-width: 100%;
-  }
+.muted {
+  color: #94a3b8;
+  font-size: 0.8rem;
 }
 
-/* Mobile */
+/* Responsive */
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .manager-teams {
-    padding: 20px;
+    padding: 24px;
   }
 
-  .manager-teams .team-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .manager-teams .team-card {
-    height: auto;
-    max-width: 100%;
-  }
-
-  .manager-teams .team-card-header {
+  .team-top {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+  }
+
+  .toggle-btn {
+    align-self: flex-end;
   }
 }
