@@ -1,5 +1,5 @@
 # 🌟 Enterprise HRMS — Human Resource Management Platform
-## 🚀 Enterprise-grade, secure, role-based HR automation platform
+## 🚀 Enterprise-inspired, secure, role-based HR automation platform
 
 📌 Built using React.js | Node.js | Express | MySQL | Sequelize | JWT Authentication
 
@@ -7,7 +7,7 @@
 
 ### 📌 Project Overview
 
-Enterprise HRMS is a full-stack Human Resource Management Platform designed to model real-world corporate HR workflows with strong security, governance, and auditability.
+Enterprise HRMS is a full-stack Human Resource Management Platform designed to model realistic corporate HR workflows with strong security, governance, and auditability.
 The system follows a centralized, approval-based HR lifecycle:
 
 - HR initiates employee creation and updates
@@ -16,7 +16,7 @@ The system follows a centralized, approval-based HR lifecycle:
 - Employees have read-only access to their own data
 - Every action is logged for compliance and traceability
 
-This project demonstrates production-grade engineering practices, not just CRUD operations.
+This project demonstrates production-style engineering practices beyond basic CRUD operations.
 
 ### 🎯 Key Highlights
 
@@ -27,7 +27,8 @@ This project demonstrates production-grade engineering practices, not just CRUD 
 - Multi-tenant organization isolation
 - Audit logging for compliance
 - Interview-safe demo mode
-- Secure, scalable backend architecture
+- Security-focused and modular backend architecture
+
 
 
 ### 👥 Role-Based Access Control
@@ -63,6 +64,15 @@ This project demonstrates production-grade engineering practices, not just CRUD 
 | Team Management | Many-to-many employee-team mapping                 |
 | Demo Safety     | Read-only demo user                                |
 | Deployment      | Cloud hosted frontend & backend                    |
+
+## 🎨 Frontend Engineering Highlights
+- Context API used for authentication state and role propagation
+- Protected routes enforced based on user roles (RBAC-aware routing)
+- Centralized API layer using Axios with interceptors for JWT injection
+- Graceful UI handling for approval states (Pending, Approved, Rejected)
+- Responsive layout optimized for tablet and laptop screens
+- Meaningful error and empty states for better UX
+
 
 
 ### 🏛️ Architecture
@@ -129,9 +139,12 @@ npm install
 ### Create .env:
 ```
 PORT=5000
-DATABASE_URL=mysql://root:ncEDfaKGFqZegyfODtyhOSdPYlGOkMBk@yamabiko.proxy.rlwy.net:55745/hrms_db
-JWT_SECRET=836268781fb30f46e32339fb3a3eaeedac0fb48ccf8226db50d7b0e565c49d9e
+DATABASE_URL=your_database_url
+JWT_SECRET=your_jwt_secret
 BCRYPT_SALT_ROUNDS=10
+
+⚠️ Note: Secrets are not committed in this repository. Use your own credentials locally.
+
 ```
 
 ### Run database setup:
@@ -160,6 +173,12 @@ npm start
 http://localhost:3000
 ```
 
+## 🧪 Reliability & Validation
+- Manual test cases executed for each role flow (HR → Manager → Admin → Employee)
+- Edge cases handled for unauthorized access, duplicate approvals, and revoked tokens
+- API endpoints tested using Postman during development
+
+
 ### 📌 Database Schema (Core Tables)
 
 | Table          | Purpose            |
@@ -180,7 +199,8 @@ http://localhost:3000
 - Secure token handling
 - Audit-friendly architecture
 - Real business logic
-- Interview-safe public demo
+- Security-focused and modular backend architecture
+
 
 ### 🟢 Summary
 
