@@ -1,60 +1,83 @@
-# 🌟  HRMS – Human Resource Management System (Full Stack)
-## 🚀 Full Stack Automation for Employee & Team Management
+# 🌟 Enterprise HRMS — Human Resource Management Platform
+## 🚀 Enterprise-grade, secure, role-based HR automation platform
 
-📌 Built using React.js | Node.js | Express | MySQL | JWT Authentication
+📌 Built using React.js | Node.js | Express | MySQL | Sequelize | JWT Authentication
 
 
 
 ### 📌 Project Overview
 
- HRMS is a secure Human Resource Management System built to help small and mid-sized organisations:
+Enterprise HRMS is a full-stack Human Resource Management Platform designed to model real-world corporate HR workflows with strong security, governance, and auditability.
+The system follows a centralized, approval-based HR lifecycle:
 
-- ✔ Manage employees
-- ✔ Organise teams
-- ✔ Track employee/team assignments
-- ✔ Maintain an audit log of all actions (for compliance & transparency)
+- HR initiates employee creation and updates
+- Managers approve or reject requests with reasons
+- Admins control login access and system governance
+- Employees have read-only access to their own data
+- Every action is logged for compliance and traceability
 
-This project demonstrates production-grade skills in:
+This project demonstrates production-grade engineering practices, not just CRUD operations.
 
-Secure authentication (JWT + bcrypt)
+### 🎯 Key Highlights
 
-Many-to-many relationships in SQL
+- Role-based access control (Admin, HR, Manager, Employee, Demo)
+- Approval-based employee lifecycle
+- Centralized HR governance
+- JWT authentication + token revocation
+- Multi-tenant organization isolation
+- Audit logging for compliance
+- Interview-safe demo mode
+- Secure, scalable backend architecture
 
-Logging & audit-friendly backend architecture
 
-Multi-tenant data isolation
+### 👥 Role-Based Access Control
 
-Clean, modern UI with React
 
+| Role     | Capabilities                                             |
+| -------- | -------------------------------------------------------- |
+| Admin    | System administration, analytics, user & login approvals |
+| HR       | Initiates employee lifecycle, manages teams              |
+| Manager  | Approves/rejects employee creation                       |
+| Employee | View-only access to own profile and assignments          |
+| Demo     | Read-only system exploration                             |
+
+### 🔄 Application Workflow
+
+- 1.HR creates an employee request.
+- 2.Manager approves or rejects the request.
+- 3.Admin approves login access.
+- 4.Employee gains view access.
+- 5.All actions are logged.
 
 
 ### 🎯 Features
 
-
-| Category                   | Details                                                       |
-| -------------------------- | ------------------------------------------------------------- |
-| Authentication             | Organisation signup, secure login, JWT-based protected routes |
-| HR Operations              | Add, Update, Delete employees & teams                         |
-| Team Assignment            | Employees can belong to multiple teams (M:M relation)         |
-| Logs & Auditing            | Every critical operation is logged for compliance             |
-| Dashboard Overview         | Quick stats + recent activity logs                            |
-| Multi-Organisation Support | Each org sees only their own data                             |
-| Fully Deployed             | Frontend + Backend hosted live                                |
+| Category        | Details                                            |
+| --------------- | -------------------------------------------------- |
+| Authentication  | Secure login, JWT protected routes, bcrypt hashing |
+| Authorization   | Strict RBAC enforced via middleware                |
+| HR Operations   | HR-driven employee lifecycle                       |
+| Approval Flow   | Manager approval, Admin login approval             |
+| Audit Logging   | Every action stored for compliance                 |
+| Multi-Tenant    | Organization-level data isolation                  |
+| Team Management | Many-to-many employee-team mapping                 |
+| Demo Safety     | Read-only demo user                                |
+| Deployment      | Cloud hosted frontend & backend                    |
 
 
 ### 🏛️ Architecture
 
-Frontend:  React.js (Axios, Context API)  
-Backend:   Node.js + Express.js  
-Database:  MySQL + Sequelize ORM  
-Auth:      JWT + bcrypt  
-Hosting:   Vercel (Frontend), Render/MySQL Local (Backend)
+Frontend: React.js, Axios, Context API
+Backend: Node.js, Express.js
+Database: MySQL with Sequelize ORM
+Auth: JWT + bcrypt + token revocation
+Hosting: Vercel (Frontend), Render (Backend)
 
 
 ### 🔐 Tech Stack Diagram
 ```
-[ React UI ]  ←→  [ Express REST API ]  ←→  [ MySQL Database ]
-         JWT Authentication + CORS Security
+[ React UI ] ←→ [ Express REST API ] ←→ [ MySQL Database ]
+        JWT Auth + RBAC Middleware + Audit Logging
 ```
 
 ### 🌍 Live Demo Links
@@ -69,12 +92,12 @@ Hosting:   Vercel (Frontend), Render/MySQL Local (Backend)
 ### 🧑‍💼 Demo Flow (Suggested for Judges/Interviewers)
 
 1️⃣ Login using demo credentials
-2️⃣ Add employees → check logs
-3️⃣ Create a team → assign multiple employees
-4️⃣ Go to dashboard and logs → verify automatically updated tracking
-5️⃣ Logout → log entry created
+2️⃣ Browse employees, teams, and logs
+3️⃣ View approval flows and history
+4️⃣ Attempt restricted actions → observe alerts
+5️⃣ Logout → logout logged
 
-✔ Shows M2M relationship, CRUD, security, and audit logs in one flow
+
 
 
 ### 📸 UI Screenshots
@@ -108,17 +131,13 @@ npm install
 ### Create .env:
 ```
 PORT=5000
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASS=your_password
-DB_NAME=hrms_db
-JWT_SECRET=SOME_LONG_SECRET_KEY
+DATABASE_URL=mysql://root:ncEDfaKGFqZegyfODtyhOSdPYlGOkMBk@yamabiko.proxy.rlwy.net:55745/hrms_db
+JWT_SECRET=836268781fb30f46e32339fb3a3eaeedac0fb48ccf8226db50d7b0e565c49d9e
+BCRYPT_SALT_ROUNDS=10
 ```
 
 ### Run database setup:
 ```
-npm run seed
 npm run dev
 ```
 ### Backend runs at:
@@ -145,14 +164,31 @@ http://localhost:3000
 
 ### 📌 Database Schema (Core Tables)
 
-| Table          | Purpose                  |
-| -------------- | ------------------------ |
-| organisations  | Company-level separation |
-| users          | Logged-in admin users    |
-| employees      | Employee records         |
-| teams          | Organizational teams     |
-| employee_teams | Many-to-many join table  |
-| logs           | Audit tracking           |
+| Table          | Purpose            |
+| -------------- | ------------------ |
+| organisations  | Tenant separation  |
+| users          | Login identities   |
+| employees      | Employee records   |
+| teams          | Teams              |
+| employee_teams | M:M mapping        |
+| approvals      | Approval workflows |
+| logs           | Audit tracking     |
+| revoked_tokens | Token invalidation |
 
+### ⭐ Why This Project Stands Out
+
+- Enterprise-grade permission modeling
+- Approval workflows with governance
+- Secure token handling
+- Audit-friendly architecture
+- Real business logic
+- Interview-safe public demo
+
+### 🟢 Summary
+
+This project is not a simple CRUD application.
+It demonstrates enterprise architecture, security, governance, and compliance awareness.
+
+Built for learning, interviews, and real-world readiness.
 
 
