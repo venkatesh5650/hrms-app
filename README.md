@@ -104,15 +104,15 @@ Hosting: Vercel (Frontend), Render (Backend)
 ### Login Page
 ![Login](screenshots/hrms-login.png)
 ### Admin Dashboard Page
-![Admin Dashboard](screenshots/HRMS Admin Dashboard.png)
+![Admin Dashboard](screenshots/hrms-admin-dashboard.png)
 ### HR Approval Flow Page
-![HR Approval Flow](screenshots/dashboard.png)
+![HR Approval Flow](screenshots/hrms-hr-approval-flow.png)
 ### HR Employees View Page
-![employeesPage](screenshots/HR Employees View.png)
+![employeesPage](screenshots/hrms-hr-employees-view.png)
 ### HR Teams View
-![Teams](screenshots/HR Teams View.png)
+![Teams](screenshots/hrms-hr-teams-view.png)
 ### Logs View
-![Logs](screenshots/Logs View.png)
+![Logs](screenshots/hrms-logs-view.png)
 
 
 ## 🧩 Installation Guide (Local Development)
