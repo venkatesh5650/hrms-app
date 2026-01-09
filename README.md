@@ -102,7 +102,7 @@ Hosting: Vercel (Frontend), Render (Backend)
 ### 📸 UI Screenshots
 
 ### Login Page
-![Login](screenshots/HRMS Login.png)
+![Login](screenshots/hrms-login.png)
 ### Admin Dashboard Page
 ![Admin Dashboard](screenshots/HRMS Admin Dashboard.png)
 ### HR Approval Flow Page
