@@ -86,16 +86,15 @@ Hosting: Vercel (Frontend), Render (Backend)
 | ----------- | ------------------------------------------------------------------------------------------- |
 | Frontend    | 🔗 [https://hrms-app-five.vercel.app](https://hrms-app-five.vercel.app)                 |
 | Backend API | 🔗 [https://hrms-backend-dw0e.onrender.com/api](https://hrms-backend-dw0e.onrender.com/api) |
-| Demo Login  | 📧 [demo@gmail.com](mailto:demo@gmail.com) / 🔑 demo@5650                                   |
 
 
 ### 🧑‍💼 Demo Flow (Suggested for Judges/Interviewers)
 
-1️⃣ Login using demo credentials
-2️⃣ Browse employees, teams, and logs
-3️⃣ View approval flows and history
-4️⃣ Attempt restricted actions → observe alerts
-5️⃣ Logout → logout logged
+- 1️⃣ Login using demo credentials
+- 2️⃣ Browse employees, teams, and logs
+- 3️⃣ View approval flows and history
+- 4️⃣ Attempt restricted actions → observe alerts
+- 5️⃣ Logout → logout logged
 
 
 
