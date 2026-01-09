@@ -103,16 +103,17 @@ Hosting: Vercel (Frontend), Render (Backend)
 
 ### Login Page
 ![Login](screenshots/HRMS Login.png)
-### CreateOrganisationPage
-![CreateOrg](screenshots/createOrg.png)
-### Dashboard Page
-![Dashboard](screenshots/dashboard.png)
-### TeamsPage
-![Teams](screenshots/teams.png)
-### Logs Page
-![Logs](screenshots/logs.png)
-### Employee Page
-![employeesPage](screenshots/employeesPage.png)
+### Admin Dashboard Page
+![Admin Dashboard](screenshots/HRMS Admin Dashboard.png)
+### HR Approval Flow Page
+![HR Approval Flow](screenshots/dashboard.png)
+### HR Employees View Page
+![employeesPage](screenshots/HR Employees View.png)
+### HR Teams View
+![Teams](screenshots/HR Teams View.png)
+### Logs View
+![Logs](screenshots/Logs View.png)
+
 
 ## 🧩 Installation Guide (Local Development)
 ### 1️⃣ Clone the repository
