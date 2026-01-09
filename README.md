@@ -102,7 +102,7 @@ Hosting: Vercel (Frontend), Render (Backend)
 ### 📸 UI Screenshots
 
 ### Login Page
-![Login](screenshots/HRMS Login.png)
+![Login](screenshots\HRMS Login.png)
 ### CreateOrganisationPage
 ![CreateOrg](screenshots/createOrg.png)
 ### Dashboard Page
