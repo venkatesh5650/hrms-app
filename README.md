@@ -43,11 +43,11 @@ This project demonstrates production-grade engineering practices, not just CRUD 
 
 ### 🔄 Application Workflow
 
-- 1.HR creates an employee request.
-- 2.Manager approves or rejects the request.
-- 3.Admin approves login access.
-- 4.Employee gains view access.
-- 5.All actions are logged.
+- 1. HR creates an employee request.
+- 2. Manager approves or rejects the request.
+- 3. Admin approves login access.
+- 4. Employee gains view access.
+- 5. All actions are logged.
 
 
 ### 🎯 Features
@@ -101,10 +101,8 @@ Hosting: Vercel (Frontend), Render (Backend)
 
 ### 📸 UI Screenshots
 
-You can upload 4–6 images under /screenshots then reference them here:
-
 ### Login Page
-![Login](screenshots/login.png)
+![Login](screenshots/HRMS Login.png)
 ### CreateOrganisationPage
 ![CreateOrg](screenshots/createOrg.png)
 ### Dashboard Page
