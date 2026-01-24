@@ -12,4 +12,4 @@ async function getAnalytics(req, res, next) {
   }
 }
 
-module.exports = { getAnalytics };   // ✅ MUST be object
+module.exports = { getAnalytics };   

@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
+import HomeRedirect from "./components/routing/HomeRedirect";
+
 
 import Login from "./pages/login/Login";
 import OrganisationSignup from "./pages/signUp/OrganisationSignup";
@@ -14,7 +16,7 @@ import Users from "./pages/users/Users";
 import Exports from "./pages/exports/Exports";
 import MyProfile from "./pages/profile/MyProfile";
 
-// 🟢 ADD THESE:
+
 import { useGlobalLoader } from "./context/GlobalLoaderContext";
 import GlobalLoader from "./components/GlobalLoader";
 import RouteLoader from "./components/RouteLoader";
@@ -28,7 +30,7 @@ function App() {
       <RouteLoader />
 
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<HomeRedirect />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<OrganisationSignup />} />
 

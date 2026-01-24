@@ -2,15 +2,17 @@ const Employee = require("../models/employee");
 const Team = require("../models/team");
 const Log = require("../models/log");
 
+// Fetch all active employees of an organization with their assigned teams
 async function listEmployees(orgId) {
   return await Employee.findAll({
     where: { organisation_id: orgId, is_active: true },
+    // Include Team association but hide join-table fields for clean response
     include: [{ model: Team, through: { attributes: [] } }],
     order: [["created_at", "DESC"]],
   });
 }
 
-
+// Fetch single employee details with team information
 async function getEmployee(id, orgId) {
   return await Employee.findOne({
     where: { id, organisation_id: orgId, is_active: true },
@@ -18,8 +20,7 @@ async function getEmployee(id, orgId) {
   });
 }
 
-
-
+// Create new employee record and log the action for audit tracking
 async function createEmployee(data, user) {
   const employee = await Employee.create({
     ...data,
@@ -37,6 +38,7 @@ async function createEmployee(data, user) {
   return employee;
 }
 
+// Update existing employee only if active and belongs to same organization
 async function updateEmployee(id, data, user) {
   const employee = await Employee.findOne({
     where: { id, organisation_id: user.orgId, is_active: true },
@@ -57,6 +59,7 @@ async function updateEmployee(id, data, user) {
   return employee;
 }
 
+// Soft delete employee instead of hard delete to preserve historical data
 async function deleteEmployee(id, user) {
   const employee = await Employee.findOne({
     where: { id, organisation_id: user.orgId, is_active: true },
@@ -79,6 +82,7 @@ async function deleteEmployee(id, user) {
   return true;
 }
 
+// Restore previously soft-deleted employee (restricted via route middleware)
 async function restoreEmployee(id, user) {
   const employee = await Employee.findOne({
     where: { id, organisation_id: user.orgId, is_active: false },

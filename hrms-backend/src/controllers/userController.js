@@ -1,25 +1,28 @@
 const userService = require("../services/userService");
 
-// Controller layer — handles HTTP concerns and delegates business logic to services
-async function createUser(req, res,next) {
+async function getUsers(req, res, next) {
   try {
-    const user = await userService.createUser(req.body, req.user);
-    res.status(201).json({ message: "User created", user });
+    const users = await userService.getUsers(req.user.orgId);
+    res.json({ users });
   } catch (err) {
-    if (err.message.includes("cannot"))
-      return res.status(403).json({ message: err.message });
-    if (err.message.includes("exists"))
-      return res.status(400).json({ message: err.message });
-    if (err.message.includes("required"))
-      return res.status(400).json({ message: err.message });
-
     next(err);
   }
 }
 
-// Role update endpoint with centralized authorization in service layer
-async function updateUserRole(req, res,next) {
+async function createUser(req, res, next) {
   try {
+    // Business logic delegated to service layer to keep controller thin
+    const user = await userService.createUser(req.body, req.user);
+    res.status(201).json({ message: "User created", user });
+  } catch (err) {
+    // Errors forwarded to centralized error handler
+    next(err);
+  }
+}
+
+async function updateUserRole(req, res, next) {
+  try {
+    // Authorization and validation handled inside service layer
     const result = await userService.updateUserRole(
       req.params.id,
       req.body.role,
@@ -30,20 +33,13 @@ async function updateUserRole(req, res,next) {
 
     res.json({ message: "Role updated", user: result });
   } catch (err) {
-    if (err.message.includes("Invalid"))
-      return res.status(400).json({ message: err.message });
-    if (err.message.includes("cannot"))
-      return res.status(403).json({ message: err.message });
-
     next(err);
   }
 }
 
-/* ========================= */
-/* ✅ ADDED: updateUser */
-/* ========================= */
 async function updateUser(req, res, next) {
   try {
+    // Update logic centralized in service to maintain separation of concerns
     const result = await userService.updateUser(
       req.params.id,
       req.body,
@@ -54,13 +50,8 @@ async function updateUser(req, res, next) {
 
     res.json({ message: "User updated", user: result });
   } catch (err) {
-    if (err.message.includes("cannot"))
-      return res.status(403).json({ message: err.message });
-    if (err.message.includes("Invalid"))
-      return res.status(400).json({ message: err.message });
-
     next(err);
   }
 }
 
-module.exports = { createUser, updateUserRole, updateUser };
+module.exports = { getUsers,createUser, updateUserRole, updateUser };

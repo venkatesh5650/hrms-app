@@ -31,12 +31,7 @@ const profile = require("./routes/profile");
 const authMiddleware = require("./middlewares/authMiddleware");
 const blockDemoWrites = require("./middlewares/blockDemoWrites");
 
-
 const errorHandler = require("./middlewares/errorHandler");
-
-
-
-
 
 // Enable CORS
 app.use(
@@ -46,12 +41,9 @@ app.use(
   })
 );
 
-
-
 app.options("*", cors());
 
 // Routes
-
 
 // Public routes
 app.use("/api/auth", authRoutes);
@@ -73,10 +65,6 @@ app.use("/api/profile", profile);
 // Health checks
 app.get("/", (req, res) => {
   res.json({ message: "HRMS Backend running" });
-});
-
-app.get("/healthz", (req, res) => {
-  res.status(200).send("ok");
 });
 
 // Error handler

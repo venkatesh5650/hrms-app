@@ -9,11 +9,11 @@ const { isNonEmptyString } = require("../utils/validators");
 const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// Prevent application startup if critical security secret is missing
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined in environment variables");
 }
 
-// Register new organisation + admin
 async function register(data) {
   const { orgName, adminName, email, password } = data;
 
@@ -34,6 +34,8 @@ async function register(data) {
 
   const password_hash = await bcrypt.hash(password, SALT_ROUNDS);
 
+  // This register flow is specifically for onboarding a new organisation,
+  // so the first created user is intentionally assigned ADMIN role
   const user = await User.create({
     organisation_id: org.id,
     name: adminName || null,
@@ -42,12 +44,14 @@ async function register(data) {
     role: "ADMIN",
   });
 
+  // JWT contains user and organisation context for multi-tenant RBAC
   const token = jwt.sign(
     { userId: user.id, orgId: org.id, role: user.role },
     JWT_SECRET,
     { expiresIn: "8h" }
   );
 
+  // Audit logging to maintain system activity trail
   await Log.create({
     organisation_id: org.id,
     user_id: user.id,
@@ -68,8 +72,6 @@ async function register(data) {
   };
 }
 
-// Login existing user
-
 async function login(data) {
   const { email, password } = data;
 
@@ -77,14 +79,13 @@ async function login(data) {
     console.log("Login attempt for:", email);
 
     const user = await User.findOne({ where: { email } });
-    console.log("User found:", user?.id);
 
+    // Same generic message for both cases to avoid revealing valid emails
     if (!user) throw new Error("Invalid email or password");
 
     const match = await bcrypt.compare(password, user.password_hash);
     if (!match) throw new Error("Invalid email or password");
 
-    // 🔐 Create JWT token
     const token = jwt.sign(
       {
         userId: user.id,
@@ -95,7 +96,6 @@ async function login(data) {
       { expiresIn: "8h" }
     );
 
-    // ✅ Return exactly what frontend expects
     return {
       token,
       user: {
@@ -107,24 +107,23 @@ async function login(data) {
       },
     };
   } catch (err) {
-    console.error("LOGIN ERROR:");
-    console.error("name:", err.name);
-    console.error("message:", err.message);
-    console.error("parent:", err.parent);
-    console.error("original:", err.original);
+    // Detailed logging kept only on server side for debugging,
+    // while client receives a sanitized error response
+    console.error("LOGIN ERROR:", err.message);
     throw err;
   }
 }
-
-// Logout (audit only, JWT remains stateless)
 
 async function logout(token, user) {
   if (!isNonEmptyString(token) || !user) {
     throw new Error("Invalid logout request");
   }
 
+  // decode() is used instead of verify() because token was already validated
+  // earlier in authentication middleware; only expiry info is needed here
   const decoded = jwt.decode(token);
 
+  // JWT is stateless, so blacklist approach is used to invalidate token
   await RevokedToken.create({
     token,
     expires_at: new Date(decoded.exp * 1000),

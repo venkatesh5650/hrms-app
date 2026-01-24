@@ -3,15 +3,19 @@ const authService = require("../services/authService");
 async function register(req, res, next) {
   try {
     const { orgName, email, password } = req.body;
+
     if (!orgName || !email || !password) {
       return res
         .status(400)
         .json({ message: "orgName, email and password are required" });
     }
 
+    // Business logic delegated to service layer to keep controller thin and testable
     const result = await authService.register(req.body);
+
     res.status(201).json(result);
   } catch (err) {
+    // Forward errors to centralized error handler instead of handling here
     next(err);
   }
 }
@@ -23,8 +27,8 @@ async function login(req, res, next) {
     if (!email || !password)
       return res.status(400).json({ message: "email and password required" });
 
+    // Authentication logic handled in service for better separation of concerns
     const result = await authService.login(req.body);
-    console.log("LOGIN RESULT SENT:", result);
 
     if (!result)
       return res.status(401).json({ message: "Invalid credentials" });
@@ -40,6 +44,7 @@ async function logout(req, res, next) {
     const auth = req.headers.authorization || "";
     const token = auth.split(" ")[1];
 
+    // Token revocation handled in service to support blacklist-based logout
     await authService.logout(token, req.user);
 
     res.json({ message: "Logged out successfully" });
