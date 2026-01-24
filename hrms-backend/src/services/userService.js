@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { sequelize } = require("../models"); // Sequelize instance for transactions
+const { sequelize } = require("../models"); 
 const User = require("../models/user");
 const Employee = require("../models/employee");
 const Log = require("../models/log");

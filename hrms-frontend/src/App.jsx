@@ -1,8 +1,7 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import HomeRedirect from "./components/routing/HomeRedirect";
-
 
 import Login from "./pages/login/Login";
 import OrganisationSignup from "./pages/signUp/OrganisationSignup";
@@ -15,7 +14,6 @@ import Approvals from "./pages/approvals/Approvals";
 import Users from "./pages/users/Users";
 import Exports from "./pages/exports/Exports";
 import MyProfile from "./pages/profile/MyProfile";
-
 
 import { useGlobalLoader } from "./context/GlobalLoaderContext";
 import GlobalLoader from "./components/GlobalLoader";
