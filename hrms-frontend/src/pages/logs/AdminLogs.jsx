@@ -7,20 +7,26 @@ import "../../styles/logs/logsPage.css";
 export default function AdminLogs() {
   const [logs, setLogs] = useState([]);
   const [filters, setFilters] = useState({ action: "", user: "" });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
-      const res = await api.get("/logs");
+      setLoading(true);
+      try {
+        const res = await api.get("/logs");
 
-      console.log("Raw /logs API response:", res.data);
+        console.log("Raw /logs API response:", res.data);
 
-      const list = Array.isArray(res.data?.logs?.data)
-        ? res.data.logs.data
-        : [];
+        const list = Array.isArray(res.data?.logs?.data)
+          ? res.data.logs.data
+          : [];
 
-      console.log("Normalized logs list:", list);
+        console.log("Normalized logs list:", list);
 
-      setLogs(list);
+        setLogs(list);
+      } finally {
+        setLoading(false);
+      }
     }
 
     load();
@@ -51,12 +57,14 @@ export default function AdminLogs() {
               Monitor system activity and security-relevant events
             </p>
           </div>
-          <span className="logs-count">{filteredLogs.length} Records</span>
+          <span className="logs-count">
+            {loading ? "loading..." : `${filteredLogs.length} records`}
+          </span>
         </div>
 
         <LogFilters filters={filters} setFilters={setFilters} />
 
-        <LogTable logs={filteredLogs} />
+        <LogTable logs={filteredLogs} loading={loading} />
       </div>
     </div>
   );

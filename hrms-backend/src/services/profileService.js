@@ -4,10 +4,11 @@ const Team = require("../models/team");
 
 async function getMyProfile(userId) {
   const user = await User.findByPk(userId, {
-    attributes: ["id", "name", "email", "role", "organisation_id"],
+    attributes: ["id", "name", "email", "role", "organisation_id", "setup_token"],
     include: [
       {
         model: Employee,
+        as: "employee",
         attributes: ["id", "first_name", "last_name", "phone", "is_active", "created_at"],
         include: [
           {
@@ -22,7 +23,7 @@ async function getMyProfile(userId) {
 
   if (!user) return null;
 
-  const employee = user.Employee || null;
+  const employee = user.employee || null;
   const fullName = employee
     ? [employee.first_name, employee.last_name].filter(Boolean).join(" ")
     : user.name;
@@ -44,13 +45,14 @@ async function getMyProfile(userId) {
     email: user.email,
     role: user.role,
     organisation_id: user.organisation_id,
+    setupPending: !!user.setup_token,
     employee: employee
       ? {
-          id: employee.id,
-          phone: employee.phone,
-          is_active: employee.is_active,
-          joinedAt: employee.created_at,
-        }
+        id: employee.id,
+        phone: employee.phone,
+        is_active: employee.is_active,
+        joinedAt: employee.created_at,
+      }
       : null,
     teams: teams.map(t => ({
       id: t.id,

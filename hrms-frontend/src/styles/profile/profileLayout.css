@@ -1,3 +1,7 @@
+.profile-page {
+  padding: 2rem;
+}
+
 .profile-layout {
   display: grid;
   grid-template-areas:
@@ -6,7 +10,6 @@
     "teams stats";
   grid-template-columns: 2fr 1fr;
   gap: 1.75rem;
-  padding: 2rem;
   align-items: start;
 }
 
@@ -41,8 +44,11 @@
 
 /* Mobile */
 @media (max-width: 640px) {
-  .profile-layout {
+  .profile-page {
     padding: 1rem;
+  }
+
+  .profile-layout {
     gap: 1.25rem;
   }
 }

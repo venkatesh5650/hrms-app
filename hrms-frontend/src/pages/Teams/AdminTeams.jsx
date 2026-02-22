@@ -1,76 +1,447 @@
 import React, { useEffect, useState } from "react";
+import { Plus } from "lucide-react";
 import api from "../../services/api";
+import TeamCard from "../../components/teams/TeamCard";
+import TeamForm from "../../components/teams/TeamForm";
+import AppSpinner from "../../components/common/AppSpinner";
+import { useDemoGuard } from "../../hooks/useDemoGuard";
 import "../../styles/teams/adminTeams.css";
 
 export default function AdminTeams() {
+  const { guardWriteAction, DemoModal, isDemoUser } = useDemoGuard();
+
   const [teams, setTeams] = useState([]);
+  const [managers, setManagers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [expandedTeam, setExpandedTeam] = useState(null);
+  const [editingTeam, setEditingTeam] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+
+  const [assignTarget, setAssignTarget] = useState(null);
+  const [selectedManager, setSelectedManager] = useState("");
+
+  const [actionLoading, setActionLoading] = useState(false);
+  const [activeActionId, setActiveActionId] = useState(null);
+  const [actionLabel, setActionLabel] = useState("");
+  const [globalError, setGlobalError] = useState("");
+  const [successBanner, setSuccessBanner] = useState("");
+
+  const [successInfo, setSuccessInfo] = useState({ teamId: null, message: "" });
+
+  /* ==============================
+      EMPLOYEE ASSIGNMENT STATE
+  ============================== */
+  const [employeeTarget, setEmployeeTarget] = useState(null); // { teamId, mode: 'assign' | 'unassign' }
+  const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [allEmployees, setAllEmployees] = useState([]);
+
+  async function loadEmployees() {
+    try {
+      const res = await api.get("/employees");
+      setAllEmployees(res.data.employees || []);
+    } catch (err) {
+      console.error("Failed to load employees for assignment", err);
+    }
+  }
 
   useEffect(() => {
-    api.get("/teams").then((res) => setTeams(res.data.teams || []));
+    if (employeeTarget?.mode === 'assign') {
+      loadEmployees();
+    }
+  }, [employeeTarget]);
+
+  /* ==============================
+      LOAD DATA
+  ============================== */
+  async function loadData() {
+    try {
+      setLoading(true);
+
+      const [teamsRes, usersRes] = await Promise.all([
+        api.get("/teams"),
+        api.get("/users"),
+      ]);
+
+      setTeams(teamsRes.data.teams || []);
+
+      const loadedManagers = usersRes.data.users.filter(
+        (u) => u.role === "MANAGER"
+      );
+
+      setManagers(loadedManagers);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadData();
   }, []);
 
+  /* ==============================
+      CENTRALIZED ACTION DISPATCHER
+  ============================== */
+  const handleTeamAction = guardWriteAction(async (type, team, payload) => {
+    if (actionLoading) return;
+
+    const teamId = team?.id;
+    if (!teamId && type !== "CREATE_TEAM") return;
+
+    // 1. Setup metadata based on type
+    let endpoint = "";
+    let method = "post";
+    let body = null;
+    let label = "Updating team...";
+    let successMsg = "Action completed";
+
+    switch (type) {
+      case "CREATE_TEAM":
+        endpoint = "/teams";
+        method = "post";
+        body = payload;
+        label = "Creating team...";
+        successMsg = "Team created";
+        break;
+
+      case "EDIT_TEAM":
+        endpoint = `/teams/${teamId}`;
+        method = "put";
+        body = payload; // Assuming payload is the full team data from form
+        label = "Saving changes...";
+        successMsg = "Team updated";
+        break;
+
+      case "ASSIGN_MANAGER":
+        endpoint = `/teams/${teamId}/assign-manager`;
+        body = { employeeId: payload }; // payload is employeeId
+        label = "Assigning manager...";
+        successMsg = "Manager assigned";
+        // Block if payload is missing
+        if (!payload) {
+          setGlobalError("Please select a valid manager.");
+          return;
+        }
+        break;
+
+      case "UNASSIGN_MANAGER":
+        endpoint = `/teams/${teamId}/unassign-manager`;
+        label = "Removing manager...";
+        successMsg = "Manager removed";
+        break;
+
+      case "ASSIGN_EMPLOYEE":
+        endpoint = `/teams/${teamId}/assign`;
+        body = { employeeId: payload };
+        label = "Assigning employee...";
+        successMsg = "Employee added";
+        if (!payload) {
+          setGlobalError("Please select an employee.");
+          return;
+        }
+        break;
+
+      case "UNASSIGN_EMPLOYEE":
+        endpoint = `/teams/${teamId}/unassign`;
+        body = { employeeId: payload };
+        label = "Removing employee...";
+        successMsg = "Employee removed";
+        if (!payload) {
+          setGlobalError("Please select an employee to remove.");
+          return;
+        }
+        break;
+
+      default:
+        console.error("Unknown action type:", type);
+        return;
+    }
+
+    // 2. Clear previous states
+    setGlobalError("");
+    setActionLoading(true);
+    setActiveActionId(teamId);
+    setActionLabel(label);
+
+    try {
+      if (method === "put") {
+        await api.put(endpoint, body);
+      } else {
+        await api.post(endpoint, body);
+      }
+
+      setSuccessInfo({ teamId, message: successMsg });
+      setSuccessBanner(successMsg);
+
+      setTimeout(() => {
+        setSuccessInfo({ teamId: null, message: "" });
+        setSuccessBanner("");
+      }, 3000);
+
+      loadData();
+    } catch (err) {
+      console.error(`Action ${type} failed:`, err);
+      const msg = err.response?.data?.message || "Unable to complete action.";
+      setGlobalError(msg);
+    } finally {
+      setActionLoading(false);
+      setActionLabel("");
+      // Keep activeActionId for a moment so UI state persists during refresh
+      setTimeout(() => setActiveActionId(null), 4000);
+    }
+  });
+
+  /* ==============================
+      RENDER
+  ============================== */
   return (
-    <div className="page admin-teams">
-      <div className="teams-header">
+    <div className={`page admin-teams ${isDemoUser ? "demo-view" : ""}`}>
+      <DemoModal />
+
+      {/* HEADER */}
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 fade-in">
         <div>
-          <h1>Teams</h1>
-          <p className="subtitle">View organizational team structure</p>
+          <div className="flex items-center">
+            <h1 className="text-2xl font-semibold text-gray-900 leading-tight">
+              Teams
+            </h1>
+
+            {!loading && (
+              <span className="ml-3 px-3 py-1 text-xs rounded-full bg-indigo-50 text-indigo-600">
+                {teams.length} {teams.length === 1 ? "team" : "teams"}
+              </span>
+            )}
+
+            {isDemoUser && (
+              <span className="ml-3 px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-700">
+                Demo Mode
+              </span>
+            )}
+          </div>
+
+          <p className="text-sm text-gray-500 mt-1">
+            View organizational team structure
+          </p>
         </div>
+
+        {/* ⭐ ENTERPRISE ADD TEAM BUTTON */}
+        {!loading && (
+          <button
+            onClick={() => {
+              setEditingTeam(null);
+              setShowForm(true);
+            }}
+            className="
+              inline-flex items-center gap-2
+              px-4 py-2
+              rounded-lg
+              bg-gradient-to-r from-indigo-600 to-indigo-500
+              text-white text-sm font-semibold
+              shadow-sm hover:shadow-md
+              hover:scale-[1.02] active:scale-[0.98]
+              transition-all
+            "
+          >
+            <Plus className="w-4 h-4" />
+            Add Team
+          </button>
+        )}
       </div>
 
-      {teams.length === 0 ? (
+      {/* BACKGROUND ACTION BANNER */}
+      <div className="h-10 mb-4 transition-all duration-300">
+        {actionLoading && (
+          <div className="flex items-center gap-3 px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-md text-indigo-700 text-xs font-semibold">
+            <span className="animate-spin h-3.5 w-3.5 border-2 border-indigo-300 border-t-indigo-600 rounded-full" />
+            {actionLabel}
+          </div>
+        )}
+        {successBanner && (
+          <div className="flex items-center gap-3 px-4 py-2 bg-emerald-50 border border-emerald-100 rounded-md text-emerald-700 text-xs font-semibold animate-in fade-in slide-in-from-top-2">
+            <span className="flex-shrink-0">✅</span>
+            {successBanner}
+          </div>
+        )}
+      </div>
+
+      {/* ⭐ FLOATING ERROR NOTICE (TOP RIGHT) */}
+      {globalError && (
+        <div className="fixed top-6 right-6 z-[9999] animate-in slide-in-from-right-4 fade-in duration-300">
+          <div className="flex items-center gap-3 px-5 py-3 bg-red-50 border border-red-200 rounded-xl shadow-2xl text-red-600 font-medium">
+            <span className="text-lg">⚠️</span>
+            <div className="flex flex-col">
+              <span className="text-sm font-bold">Action Failed</span>
+              <span className="text-xs opacity-80">{globalError}</span>
+            </div>
+            <button
+              onClick={() => setGlobalError("")}
+              className="ml-2 p-1 hover:bg-red-100 rounded-lg transition-colors"
+            >
+              <Plus className="w-4 h-4 rotate-45" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* CONTENT */}
+      {loading ? (
+        <div className="flex justify-center items-center py-24">
+          <AppSpinner className="h-8 w-8 text-indigo-600" />
+        </div>
+      ) : teams.length === 0 ? (
         <p className="muted">No teams created yet.</p>
       ) : (
-        <div className="team-grid">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 mt-6">
           {teams.map((team) => (
-            <div key={team.id} className="team-card">
-              <div className="team-card-header">
-                <h3>{team.name}</h3>
-                <span className="team-count">
-                  {team.Employees?.length || 0} members
-                </span>
-              </div>
+            <TeamCard
+              key={team.id}
+              team={team}
+              isExpanded={expandedTeam === team.id}
+              onViewMembers={() =>
+                setExpandedTeam(expandedTeam === team.id ? null : team.id)
+              }
+              onAction={handleTeamAction}
+              statusBadge={successInfo.teamId === team.id ? successInfo.message : null}
+              disabled={actionLoading && activeActionId === team.id}
+              error={globalError && activeActionId === team.id ? globalError : null}
 
-              <p className="team-desc">
-                {team.description || "No description provided"}
-              </p>
-
-              <div className="team-manager">
-                <span className="label">Manager:</span>{" "}
-                {team.manager ? (
-                  <span className="manager-pill">
-                    {team.manager.first_name} {team.manager.last_name}
-                  </span>
-                ) : (
-                  <span className="not-assigned">Not assigned</span>
-                )}
-              </div>
-
-              <div className="team-members">
-                {team.Employees?.length ? (
-                  team.Employees.map((e) => {
-                    const isManager = team.manager?.id === e.id;
-
-                    return (
-                      <span
-                        key={e.id}
-                        className={`member-chip ${
-                          isManager ? "manager-member" : ""
-                        }`}
-                      >
-                        {e.first_name} {e.last_name}
-                        {isManager && (
-                          <span className="manager-badge">M</span>
-                        )}
-                      </span>
-                    );
-                  })
-                ) : (
-                  <span className="muted">No members</span>
-                )}
-              </div>
-            </div>
+              // Helper props for modals
+              openEdit={() => setEditingTeam(team)}
+              openAssignManager={() => setAssignTarget(team.id)}
+              openAssignEmployee={() => {
+                setGlobalError("");
+                setEmployeeTarget({ teamId: team.id, mode: 'assign', members: team.Employees || [] });
+              }}
+              openUnassignEmployee={() => {
+                setGlobalError("");
+                setEmployeeTarget({ teamId: team.id, mode: 'unassign', members: team.Employees || [] });
+              }}
+            />
           ))}
+        </div>
+      )}
+
+      {/* EDIT FORM */}
+      {showForm && (
+        <TeamForm
+          initialData={editingTeam}
+          onSubmit={(data) => {
+            const isCreation = !editingTeam;
+            const targetType = isCreation ? "CREATE_TEAM" : "EDIT_TEAM";
+            const targetTeam = editingTeam || { id: "NEW" }; // "NEW" is a placeholder for dispatcher's id check if needed, though handleTeamAction handles CREATE_TEAM specially
+
+            setShowForm(false);
+            setEditingTeam(null);
+            handleTeamAction(targetType, targetTeam, data);
+          }}
+          onCancel={() => {
+            setShowForm(false);
+            setEditingTeam(null);
+          }}
+        />
+      )}
+
+      {/* ASSIGN MANAGER MODAL */}
+      {assignTarget && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Assign Manager</h3>
+
+            <select
+              value={selectedManager}
+              onChange={(e) => setSelectedManager(e.target.value)}
+              className="w-full p-2 border rounded-md mb-4 bg-white"
+            >
+              <option value="">Select manager profile</option>
+              {managers.map((m) => {
+                // Support both alias forms for safety
+                const empId = m.employee?.id || m.Employee?.id;
+                return (
+                  <option key={m.id} value={empId || ""}>
+                    {m.name} {!empId ? "(No Profile)" : ""}
+                  </option>
+                );
+              })}
+            </select>
+
+            <div className="modal-actions">
+              <button
+                className="btn ghost"
+                onClick={() => setAssignTarget(null)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="btn primary"
+                onClick={() => {
+                  const target = assignTarget;
+                  const manager = selectedManager;
+                  setAssignTarget(null);
+                  handleTeamAction("ASSIGN_MANAGER", { id: target }, manager);
+                }}
+                disabled={!selectedManager}
+              >
+                Assign
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ASSIGN/UNASSIGN EMPLOYEE MODAL */}
+      {employeeTarget && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>{employeeTarget.mode === 'assign' ? 'Assign Employee' : 'Unassign Employee'}</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              {employeeTarget.mode === 'assign'
+                ? 'Select an employee to add to this team.'
+                : 'Select an employee to remove from this team.'}
+            </p>
+
+            <select
+              value={selectedEmployee}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+              className="w-full p-2 border rounded-md mb-4 bg-white"
+            >
+              <option value="">Select employee</option>
+              {(employeeTarget.mode === 'assign'
+                ? allEmployees.filter(emp => !employeeTarget.members?.some(m => m.id === emp.id))
+                : (employeeTarget.members || [])
+              ).map((emp) => (
+                <option key={emp.id} value={emp.id}>
+                  {emp.first_name} {emp.last_name} ({emp.employee_id})
+                </option>
+              ))}
+            </select>
+
+            <div className="modal-actions">
+              <button
+                className="btn ghost"
+                onClick={() => {
+                  setEmployeeTarget(null);
+                  setSelectedEmployee("");
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="btn primary"
+                onClick={() => {
+                  const type = employeeTarget.mode === 'assign' ? "ASSIGN_EMPLOYEE" : "UNASSIGN_EMPLOYEE";
+                  const teamId = employeeTarget.teamId;
+                  const empId = selectedEmployee;
+                  setEmployeeTarget(null);
+                  setSelectedEmployee("");
+                  handleTeamAction(type, { id: teamId }, empId);
+                }}
+                disabled={!selectedEmployee || actionLoading}
+              >
+                {employeeTarget.mode === 'assign' ? 'Assign' : 'Unassign'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

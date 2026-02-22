@@ -12,14 +12,14 @@ export default function ApprovalOutcomePie({ pending, approved, rejected }) {
   return (
     <div className="workflow-pie">
       <h4>Outcome Distribution</h4>
-      <ResponsiveContainer width="100%" height={180}>
+      <ResponsiveContainer width="100%" height={220}>
         <PieChart>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
-            innerRadius={45}
-            outerRadius={70}
+            innerRadius={55}
+            outerRadius={85}
             paddingAngle={3}
             dataKey="value"
           >
@@ -30,7 +30,7 @@ export default function ApprovalOutcomePie({ pending, approved, rejected }) {
           <Tooltip />
         </PieChart>
       </ResponsiveContainer>
-      <p className="workflow-caption">Share of approval outcomes</p>
+      <p className="workflow-caption" style={{ fontSize: "0.75rem", color: "#9ca3af", textAlign: "center", marginTop: "8px" }}>Share of approval outcomes</p>
     </div>
   );
 }

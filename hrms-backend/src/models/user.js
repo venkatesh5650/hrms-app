@@ -33,8 +33,18 @@ const User = sequelize.define(
 
     password_hash: {
       type: DataTypes.STRING(255),
-      allowNull: false,
-    }, // Stored as bcrypt hash
+      allowNull: true,
+    }, // Stored as bcrypt hash, null if setup pending
+
+    setup_token: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+
+    setup_token_expires: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     is_demo: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

@@ -11,6 +11,7 @@ import {
   FileText,
   Download,
   User,
+  Loader2,
 } from "lucide-react";
 import "../../styles/layout/navbar.css";
 
@@ -26,12 +27,13 @@ const ICONS = {
 };
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, handleLogout, isLoggingOut } = useAuth();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogout = async () => {
-    await logout();
+  const onLogout = async () => {
+    setIsOpen(false);
+    await handleLogout();
     navigate("/login");
   };
 
@@ -56,8 +58,20 @@ const Navbar = () => {
           {user && (
             <div className="navbar-user">
               <span className="navbar-user-name">{user.name || user.role}</span>
-              <button className="btn btn-secondary" onClick={handleLogout}>
-                Logout
+              <button
+                className="btn btn-secondary"
+                onClick={onLogout}
+                disabled={isLoggingOut}
+                style={{ opacity: isLoggingOut ? 0.6 : 1, cursor: isLoggingOut ? "not-allowed" : "pointer" }}
+              >
+                {isLoggingOut ? (
+                  <span className="flex items-center gap-1.5">
+                    <Loader2 size={12} className="animate-spin" />
+                    Logging out…
+                  </span>
+                ) : (
+                  "Logout"
+                )}
               </button>
             </div>
           )}
@@ -79,8 +93,13 @@ const Navbar = () => {
         {user && (
           <div className="mobile-user">
             <span className="userName">{user.name || user.role}</span>
-            <button className="btn btn-secondary" onClick={handleLogout}>
-              Logout
+            <button
+              className="btn btn-secondary"
+              onClick={onLogout}
+              disabled={isLoggingOut}
+              style={{ opacity: isLoggingOut ? 0.6 : 1, cursor: isLoggingOut ? "not-allowed" : "pointer" }}
+            >
+              {isLoggingOut ? "Logging out…" : "Logout"}
             </button>
           </div>
         )}

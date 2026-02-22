@@ -1,13 +1,17 @@
 const Employee = require("../models/employee");
 const Team = require("../models/team");
 const Log = require("../models/log");
+const User = require("../models/user");
 
-// Fetch all active employees of an organization with their assigned teams
+// Fetch all employees of an organization with their assigned teams
 async function listEmployees(orgId) {
   return await Employee.findAll({
-    where: { organisation_id: orgId, is_active: true },
+    where: { organisation_id: orgId },
     // Include Team association but hide join-table fields for clean response
-    include: [{ model: Team, through: { attributes: [] } }],
+    include: [
+      { model: Team, through: { attributes: [] } },
+      { model: User, as: "user", attributes: ["role"] }
+    ],
     order: [["created_at", "DESC"]],
   });
 }
@@ -30,6 +34,7 @@ async function createEmployee(data, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "employee_created",
     meta: { employeeId: employee.id },
     timestamp: new Date(),
@@ -51,6 +56,7 @@ async function updateEmployee(id, data, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "employee_updated",
     meta: { employeeId: employee.id },
     timestamp: new Date(),
@@ -74,6 +80,7 @@ async function deleteEmployee(id, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "employee_soft_deleted",
     meta: { employeeId: employee.id },
     timestamp: new Date(),
@@ -95,6 +102,7 @@ async function restoreEmployee(id, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "employee_restored",
     meta: { employeeId: id },
     timestamp: new Date(),

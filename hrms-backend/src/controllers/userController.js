@@ -2,7 +2,7 @@ const userService = require("../services/userService");
 
 async function getUsers(req, res, next) {
   try {
-    const users = await userService.getUsers(req.user.orgId);
+    const users = await userService.getUsers(req.user);
     res.json({ users });
   } catch (err) {
     next(err);
@@ -54,4 +54,4 @@ async function updateUser(req, res, next) {
   }
 }
 
-module.exports = { getUsers,createUser, updateUserRole, updateUser };
+module.exports = { getUsers, createUser, updateUserRole, updateUser };

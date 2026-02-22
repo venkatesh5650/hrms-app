@@ -3,10 +3,12 @@ import { useAuth } from "../../context/AuthContext";
 import EmployeeTable from "../../components/employees/EmployeeTable";
 import "../../styles/employees/managerEmployees.css";
 
+
+
 const API = process.env.REACT_APP_API_BASE_URL;
 
 export default function ManagerEmployees() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [employees, setEmployees] = useState([]);
   const [error, setError] = useState(null);
 
@@ -29,10 +31,15 @@ export default function ManagerEmployees() {
         const all = Array.isArray(data.employees)
           ? data.employees
           : Array.isArray(data)
-          ? data
-          : [];
+            ? data
+            : [];
 
-        setEmployees(all);
+        const mappedList = all.map(e => ({
+          ...e,
+          role: e.User?.role || "EMPLOYEE"
+        }));
+
+        setEmployees(mappedList);
       } catch (err) {
         console.error("ManagerEmployees load error:", err);
         setError("Unexpected error loading employees");
@@ -44,20 +51,22 @@ export default function ManagerEmployees() {
 
   if (error) return <p className="error">{error}</p>;
 
-return (
-  <div className="employees-page manager-employees">
-    <div className="manager-card">
-      <div className="manager-header">
-        <div>
-          <h1>All Employees</h1>
-          <p>Company-wide visibility</p>
+  const employeesOnly = employees.filter(e => e.role === "EMPLOYEE");
+
+  return (
+    <div className="employees-page manager-employees">
+      <div className="manager-card">
+        <div className="manager-header">
+          <div>
+            <h1>All Employees</h1>
+            <p>Company-wide visibility</p>
+          </div>
+        </div>
+
+        <div className="manager-table-wrapper">
+          <EmployeeTable employees={employeesOnly} role="MANAGER" />
         </div>
       </div>
-
-      <div className="manager-table-wrapper">
-        <EmployeeTable employees={employees} role="MANAGER" />
-      </div>
     </div>
-  </div>
-);
+  );
 }

@@ -34,12 +34,14 @@
 }
 
 .logs-count {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(79, 70, 229, 0.9));
   color: #ffffff;
-  padding: 6px 14px;
+  padding: 4px 12px;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 500;
+  vertical-align: middle;
+  margin-left: 12px;
 }
 
 /* Mobile */

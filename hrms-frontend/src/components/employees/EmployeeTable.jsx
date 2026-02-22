@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useDemoGuard } from "../../hooks/useDemoGuard";
 import "../../styles/employees/employeeTable.css";
 
 const API = process.env.REACT_APP_API_BASE_URL;
 
 export default function EmployeeTable({ employees, role }) {
   const { token } = useAuth();
+  const { guardWriteAction, DemoModal } = useDemoGuard();
 
   const [list, setList] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({ first_name: "", last_name: "", email: "" });
+  const [statusLoadingId, setStatusLoadingId] = useState(null);
 
   const canEdit = role === "HR";
 
@@ -38,7 +41,7 @@ export default function EmployeeTable({ employees, role }) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  async function saveEdit(id) {
+  const saveEdit = guardWriteAction(async (id) => {
     try {
       console.log("Saving employee:", id, form);
 
@@ -69,106 +72,136 @@ export default function EmployeeTable({ employees, role }) {
     } catch (err) {
       console.error("Save error:", err);
     }
-  }
+  });
 
-  async function toggleStatus(id, isActive) {
-    try {
-      const res = await fetch(`${API}/employees/${id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ is_active: !isActive }),
-      });
+  const toggleStatus = async (id, isActive) => {
+    guardWriteAction(async () => {
+      try {
+        setStatusLoadingId(id); // ⭐ NOW UI updates immediately
 
-      if (!res.ok) return;
+        const res = await fetch(`${API}/employees/${id}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ is_active: !isActive }),
+        });
 
-      setList(prev =>
-        prev.map(e => (e.id === id ? { ...e, is_active: !isActive } : e))
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  }
+        if (!res.ok) throw new Error("Status update failed");
+
+        setList(prev =>
+          prev.map(e => (e.id === id ? { ...e, is_active: !isActive } : e))
+        );
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setStatusLoadingId(null);
+      }
+    })();
+  };
 
   if (list.length === 0) return <p className="empty">No employees found</p>;
 
   return (
-    <table className="employee-table">
-      <thead>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-          <th>Teams</th>
-          <th>Status</th>
-          {canEdit && <th>Actions</th>}
-        </tr>
-      </thead>
-      <tbody>
-        {list.map(e => (
-          <tr key={e.id} className={editingId === e.id ? "editing-row" : ""}>
-            <td>
-              {editingId === e.id ? (
-                <input name="first_name" value={form.first_name} onChange={onChange} />
-              ) : (
-                e.first_name
-              )}
-            </td>
-
-            <td>
-              {editingId === e.id ? (
-                <input name="last_name" value={form.last_name} onChange={onChange} />
-              ) : (
-                e.last_name
-              )}
-            </td>
-
-            <td>
-              {editingId === e.id ? (
-                <input name="email" value={form.email} onChange={onChange} />
-              ) : (
-                e.email
-              )}
-            </td>
-
-            <td>
-              <div className="team-chip-container">
-                {e.Teams?.length
-                  ? e.Teams.map(t => (
-                      <span key={t.id} className="team-chip">{t.name}</span>
-                    ))
-                  : <span className="team-chip muted">None</span>}
-              </div>
-            </td>
-
-            <td>
-              <span className={e.is_active ? "active" : "inactive"}>
-                {e.is_active ? "Active" : "Inactive"}
-              </span>
-            </td>
-
-            {canEdit && (
-              <td className="actions">
+    <>
+      <DemoModal />
+      <table className="employee-table">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Teams</th>
+            <th>Status</th>
+            {canEdit && <th>Actions</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {list.map(e => (
+            <tr key={e.id} className={editingId === e.id ? "editing-row" : ""}>
+              <td>
                 {editingId === e.id ? (
-                  <>
-                    <button className="btn btn-save" onClick={() => saveEdit(e.id)}>Save</button>
-                    <button className="btn btn-cancel" onClick={cancelEdit}>Cancel</button>
-                  </>
+                  <input name="first_name" value={form.first_name} onChange={onChange} />
                 ) : (
-                  <>
-                    <button className="btn btn-edit" onClick={() => startEdit(e)}>Edit</button>
-                    <button className="btn btn-toggle" onClick={() => toggleStatus(e.id, e.is_active)}>
-                      {e.is_active ? "Deactivate" : "Activate"}
-                    </button>
-                  </>
+                  e.first_name
                 )}
               </td>
-            )}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+
+              <td>
+                {editingId === e.id ? (
+                  <input name="last_name" value={form.last_name} onChange={onChange} />
+                ) : (
+                  e.last_name
+                )}
+              </td>
+
+              <td>
+                {editingId === e.id ? (
+                  <input name="email" value={form.email} onChange={onChange} />
+                ) : (
+                  e.email
+                )}
+              </td>
+
+              <td>
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${(e.role || "EMPLOYEE") === "ADMIN" ? "bg-purple-100 text-purple-700"
+                  : (e.role || "EMPLOYEE") === "HR" ? "bg-indigo-100 text-indigo-700"
+                    : (e.role || "EMPLOYEE") === "MANAGER" ? "bg-emerald-100 text-emerald-700"
+                      : "bg-gray-100 text-gray-700"
+                  }`}>
+                  {e.role || "EMPLOYEE"}
+                </span>
+              </td>
+
+              <td>
+                <div className="team-chip-container">
+                  {e.Teams?.length
+                    ? e.Teams.map(t => (
+                      <span key={t.id} className="team-chip">{t.name}</span>
+                    ))
+                    : <span className="team-chip muted">No Team</span>}
+                </div>
+              </td>
+
+              <td>
+                <span className={e.is_active ? "active" : "inactive"}>
+                  {e.is_active ? "● Active" : "● Inactive"}
+                </span>
+              </td>
+
+              {canEdit && (
+                <td className="actions">
+                  {editingId === e.id ? (
+                    <>
+                      <button className="btn btn-save" onClick={() => saveEdit(e.id)}>Save</button>
+                      <button className="btn btn-cancel" onClick={cancelEdit}>Cancel</button>
+                    </>
+                  ) : (
+                    <>
+                      <button className="btn btn-edit" onClick={() => startEdit(e)}>Edit</button>
+                      <button
+                        className="btn btn-toggle"
+                        disabled={statusLoadingId === e.id}
+                        onClick={() => toggleStatus(e.id, e.is_active)}
+                      >
+                        {statusLoadingId === e.id
+                          ? e.is_active
+                            ? "Deactivating..."
+                            : "Activating..."
+                          : e.is_active
+                            ? "Deactivate"
+                            : "Activate"}
+                      </button>
+                    </>
+                  )}
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 }

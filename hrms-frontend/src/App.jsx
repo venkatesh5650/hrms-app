@@ -15,17 +15,15 @@ import Users from "./pages/users/Users";
 import Exports from "./pages/exports/Exports";
 import MyProfile from "./pages/profile/MyProfile";
 
-import { useGlobalLoader } from "./context/GlobalLoaderContext";
+import { useAuth } from "./context/AuthContext";
 import GlobalLoader from "./components/GlobalLoader";
-import RouteLoader from "./components/RouteLoader";
 
 function App() {
-  const { loading } = useGlobalLoader();
+  const { loading: isAppBootLoading } = useAuth();
 
   return (
     <div className="app-root">
-      {loading && <GlobalLoader />}
-      <RouteLoader />
+      {isAppBootLoading && <GlobalLoader />}
 
       <Routes>
         <Route path="/" element={<HomeRedirect />} />

@@ -1,5 +1,7 @@
 import "../../styles/dashboard/teamDistribution.css";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { PieChart as PieChartIcon } from "lucide-react";
+import AppSpinner from "../common/AppSpinner";
 
 const COLORS = [
   "#6366f1",
@@ -10,7 +12,7 @@ const COLORS = [
   "#a855f7",
 ];
 
-export default function TeamDistribution({ employees = [] }) {
+export default function TeamDistribution({ employees = [], loading = false }) {
   // Build team counts from employees[].Teams[]
   const teamMap = {};
 
@@ -25,24 +27,41 @@ export default function TeamDistribution({ employees = [] }) {
     value,
   }));
 
+  if (loading) {
+    return (
+      <div className="card team-card p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Team Distribution</h3>
+        <div className="flex justify-center items-center py-12">
+          <AppSpinner />
+        </div>
+      </div>
+    );
+  }
+
   if (!data.length) {
     return (
-      <div className="card team-card">
-        <h3>Team Distribution</h3>
-        <p className="empty">No teams with members yet</p>
+      <div className="card team-card p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Team Distribution</h3>
+        <div className="bg-gray-50 border border-dashed border-gray-200 rounded-lg text-center px-6 py-10 min-h-[180px] flex flex-col justify-center items-center transition-all duration-300 opacity-80 hover:opacity-100">
+          <PieChartIcon className="w-8 h-8 text-gray-400 mb-3" />
+          <h4 className="text-sm font-semibold text-gray-900 mb-1">No Team Distribution</h4>
+          <p className="text-xs text-gray-500 max-w-[200px] leading-relaxed">
+            Assign employees to teams to visualize distribution.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="card team-card">
-      <div className="card-header">
-        <h3>Team Distribution</h3>
-        <span className="subtitle">Employees per team</span>
+    <div className="card team-card p-6">
+      <div className="card-header mb-4">
+        <h3 className="text-lg font-semibold text-gray-900">Team Distribution</h3>
+        <span className="text-sm text-gray-500">Employees per team</span>
       </div>
 
-      <div className="team-chart-wrapper">
-        <div className="chart-container">
+      <div className="flex items-center justify-center gap-8 mt-4">
+        <div className="w-1/2 flex justify-end">
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie
@@ -64,15 +83,15 @@ export default function TeamDistribution({ employees = [] }) {
           </ResponsiveContainer>
         </div>
 
-        <ul className="team-legend">
+        <ul className="flex flex-col gap-3 text-sm font-medium w-1/2">
           {data.map((d, i) => (
-            <li key={d.name}>
+            <li key={d.name} className="flex items-center gap-3">
               <span
-                className="legend-color"
+                className="w-3 h-3 rounded-full shrink-0"
                 style={{ backgroundColor: COLORS[i % COLORS.length] }}
               />
-              <span className="legend-name">{d.name}</span>
-              <span className="legend-count">{d.value}</span>
+              <span className="text-gray-700 truncate w-24">{d.name}</span>
+              <span className="text-gray-400 ml-auto font-bold">{d.value}</span>
             </li>
           ))}
         </ul>

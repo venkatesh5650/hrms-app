@@ -2,9 +2,12 @@ import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import LogoutProcessingOverlay from "../common/LogoutProcessingOverlay";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Layout() {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+  const { isLoggingOut } = useAuth();
 
   useEffect(() => {
     const onResize = () => setIsDesktop(window.innerWidth >= 1024);
@@ -18,6 +21,9 @@ export default function Layout() {
       <main className="app-content">
         <Outlet />
       </main>
+
+      {/* Global logout overlay — renders over all dashboard content */}
+      {isLoggingOut && <LogoutProcessingOverlay />}
     </div>
   );
 }

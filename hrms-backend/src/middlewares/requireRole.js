@@ -30,6 +30,7 @@ module.exports = function requireRole(...allowedRoles) {
         await Log.create({
           organisation_id: req.user.orgId,
           user_id: req.user.id,
+          user_role: userRole || req.user.accountType || "UNKNOWN",
           action: "access_denied",
           meta: {
             requiredRoles: normalizedAllowed,

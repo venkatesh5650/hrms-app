@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { sequelize } = require("../models"); 
+const { sequelize } = require("../models");
 const User = require("../models/user");
 const Employee = require("../models/employee");
 const Log = require("../models/log");
@@ -13,6 +13,7 @@ async function createAuditLog(user, action, meta, transaction) {
     {
       organisation_id: user.orgId,
       user_id: user.id,
+      user_role: user.role,
       action,
       meta,
       timestamp: new Date(),
@@ -89,6 +90,23 @@ async function createManagerEmployee(newUser, currentUser, transaction) {
   );
 }
 
+// ======================== Get USER ========================
+
+async function getUsers(currentUser) {
+  const users = await User.findAll({
+    where: { organisation_id: currentUser.orgId },
+    attributes: ["id", "name", "email", "role"],
+    include: [
+      {
+        model: Employee,
+        as: "employee",
+        attributes: ["id"],
+      },
+    ],
+  });
+
+  return users;
+}
 // ======================== CREATE USER =========================
 async function createUser(data, currentUser) {
   const { name, email, password, role, employeeId } = data;
@@ -255,4 +273,4 @@ async function updateUserRole(id, role, user) {
   });
 }
 
-module.exports = { createUser, updateUserRole, updateUser };
+module.exports = { getUsers, createUser, updateUserRole, updateUser };

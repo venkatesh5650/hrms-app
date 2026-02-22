@@ -1,5 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useDemoGuard } from "../hooks/useDemoGuard";
+import { fetchHrActivity } from "../services/dashboardApi";
 import KpiGrid from "../components/dashboard/KpiGrid";
 import ActivityFeed from "../components/dashboard/ActivityFeed";
 import ApprovalStatusSummary from "../components/dashboard/ApprovalStatusSummary";
@@ -7,12 +9,14 @@ import WorkforceTrends from "../components/dashboard/WorkforceTrends";
 import TeamDistribution from "../components/dashboard/TeamDistribution";
 import OrphanEmployees from "../components/dashboard/OrphanEmployees";
 import ApprovalAging from "../components/dashboard/ApprovalAging";
+import AppSpinner from "../components/common/AppSpinner";
 import "../styles/dashboardLoader.css";
 
 const API = process.env.REACT_APP_API_BASE_URL;
 
 export default function HrDashboard() {
   const { token, user } = useAuth();
+  const { DemoModal } = useDemoGuard();
 
   const [employees, setEmployees] = useState([]);
   const [approvals, setApprovals] = useState([]);
@@ -27,25 +31,27 @@ export default function HrDashboard() {
         const [empRes, appRes, logRes] = await Promise.all([
           fetch(`${API}/employees`, { headers }),
           fetch(`${API}/approvals/history`, { headers }),
-          fetch(`${API}/logs`, { headers }),
+          fetchHrActivity(),
         ]);
 
         const empData = await empRes.json();
         const appData = await appRes.json();
-        const logData = await logRes.json();
+        const logData = logRes.data;
 
-        const parsedLogs = Array.isArray(logData.logs?.data)
-          ? logData.logs.data
-          : Array.isArray(logData.logs)
-          ? logData.logs
-          : Array.isArray(logData.data)
-          ? logData.data
-          : Array.isArray(logData)
-          ? logData
+        const parsedLogs = Array.isArray(logData.feed)
+          ? logData.feed
           : [];
 
-        setEmployees(empData.employees || empData || []);
-        setApprovals(appData.approvals || appData || []);
+        setEmployees(
+          Array.isArray(empData.employees) ? empData.employees
+            : Array.isArray(empData.data) ? empData.data
+              : Array.isArray(empData) ? empData : []
+        );
+        setApprovals(
+          Array.isArray(appData.approvals) ? appData.approvals
+            : Array.isArray(appData.data) ? appData.data
+              : Array.isArray(appData) ? appData : []
+        );
         setLogs(parsedLogs);
       } catch (err) {
         console.error("HR Dashboard load failed:", err);
@@ -61,8 +67,13 @@ export default function HrDashboard() {
 
   const myCreateApprovals = useMemo(
     () =>
-      approvals.filter((a) => a.type === "CREATE" && a.user_id === user?.id),
-    [approvals, user]
+      approvals.filter((a) => {
+        // HR usually oversees ALL creates, or creates specifically routed to them.
+        // If we strictly check `a.user_id === user?.id`, they only see their OWN requests.
+        // Let's reveal all pending CREATE approvals for HR.
+        return a.type === "CREATE";
+      }),
+    [approvals]
   );
 
   const reviewed = useMemo(
@@ -94,73 +105,72 @@ export default function HrDashboard() {
     return Math.round(diffs.reduce((a, b) => a + b, 0) / diffs.length);
   }, [reviewed]);
 
-  // HR logs: where meta.role === "HR"
-  const hrLogs = useMemo(
-    () => logs.filter((l) => l.meta?.role === "HR"),
-    [logs]
-  );
-
   // Top actor across system
   const topActors = useMemo(() => {
     const counts = {};
 
     logs.forEach((l) => {
-      const actorId = l.meta?.userId || l.meta?.createdUserId;
+      const actorId = l.user_id || l.meta?.userId || l.meta?.createdUserId;
       if (!actorId) return;
-      counts[actorId] = (counts[actorId] || 0) + 1;
+
+      // Grab role from new log schema or fallback to meta/unknown
+      const role = l.role || l.user_role || l.meta?.role || "USER";
+
+      if (!counts[actorId]) {
+        counts[actorId] = { user_id: Number(actorId), role, actions: 0 };
+      }
+      counts[actorId].actions += 1;
     });
 
-    return Object.entries(counts)
-      .map(([user_id, actions]) => ({ user_id: Number(user_id), actions }))
+    return Object.values(counts)
       .sort((a, b) => b.actions - a.actions)
-      .slice(0, 1);
   }, [logs]);
-
-   if (loading) {
-    return (
-      <div className="dashboard-loader">
-        <div className="loader-card">
-          <div className="pulse-ring"></div>
-          <h2>HRMS</h2>
-          <p>Preparing your HR dashboard…</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="dashboard">
-      <h1>HR Overview</h1>
-
-      <KpiGrid
-        data={{
-          approvals: [
-            { status: "APPROVED", count: approved },
-            { status: "REJECTED", count: rejected },
-          ],
-          avgDecisionTimeSeconds,
-          topActors,
-        }}
-      />
-
-      <div className="dashboard-row">
-        <WorkforceTrends employees={employees} />
-        <TeamDistribution employees={employees} />
+      <div className="dashboard-header">
+        <h1>HR Overview</h1>
+        <p>Human resources management</p>
       </div>
 
-      <div className="dashboard-row">
-        <OrphanEmployees employees={employees} />
-        <ApprovalAging approvals={myCreateApprovals} />
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center py-24">
+          <AppSpinner />
+        </div>
+      ) : (
+        <div className="space-y-6 mt-6">
+          <KpiGrid
+            loading={loading}
+            data={{
+              approvals: [
+                { status: "APPROVED", count: approved },
+                { status: "REJECTED", count: rejected },
+              ],
+              avgDecisionTimeSeconds,
+              topActors,
+            }}
+          />
 
-      <div className="dashboard-row">
-        <ApprovalStatusSummary
-          pending={pending}
-          approved={approved}
-          rejected={rejected}
-        />
-        <ActivityFeed logs={hrLogs.slice(0, 5)} />
-      </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <WorkforceTrends employees={employees} />
+            <TeamDistribution employees={employees} />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <OrphanEmployees employees={employees} />
+            <ApprovalAging approvals={myCreateApprovals} />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ApprovalStatusSummary
+              pending={pending}
+              approved={approved}
+              rejected={rejected}
+            />
+            <ActivityFeed logs={logs} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

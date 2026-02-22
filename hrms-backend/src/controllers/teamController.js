@@ -100,6 +100,21 @@ async function assignEmployee(req, res, next) {
   }
 }
 
+async function unassignManager(req, res, next) {
+  try {
+    const result = await teamService.unassignManager(
+      parseInt(req.params.teamId, 10),
+      req.user
+    );
+
+    if (result?.error) return res.status(400).json({ message: result.error });
+
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function unassignEmployee(req, res, next) {
   try {
     if (!req.body.employeeId)
@@ -127,5 +142,6 @@ module.exports = {
   deleteTeam,
   assignEmployee,
   assignManager,
+  unassignManager,
   unassignEmployee,
 };

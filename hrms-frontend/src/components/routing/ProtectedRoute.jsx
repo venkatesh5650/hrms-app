@@ -1,11 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import Loader from "../common/Loader";
+import GlobalLoaderOverlay from "../common/GlobalLoaderOverlay";
 
 const ProtectedRoute = () => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) return <Loader />;
+  if (loading) return <GlobalLoaderOverlay />;
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };

@@ -3,11 +3,12 @@ import { useAuth } from "../../context/AuthContext";
 import EmployeeTable from "../../components/employees/EmployeeTable";
 import "../../styles/employees/hrEmployees.css";
 
+
 const API = process.env.REACT_APP_API_BASE_URL;
 
 export default function HrEmployees() {
   const [employees, setEmployees] = useState([]);
-  const { token } = useAuth();
+  const { token, user } = useAuth();
 
   useEffect(() => {
     async function fetchEmployees() {
@@ -19,7 +20,14 @@ export default function HrEmployees() {
         if (!res.ok) return;
 
         const data = await res.json();
-        setEmployees(data.employees || data);
+        const listData = data.employees || data || [];
+
+        const mappedList = listData.map(e => ({
+          ...e,
+          role: e.User?.role || "EMPLOYEE"
+        }));
+
+        setEmployees(mappedList);
       } catch (err) {
         console.error("Error fetching employees:", err);
       }
@@ -27,6 +35,7 @@ export default function HrEmployees() {
 
     fetchEmployees();
   }, [token]);
+
 
   return (
     <div className="employees-page hr-employees">

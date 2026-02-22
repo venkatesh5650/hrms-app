@@ -18,20 +18,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Global response handler for demo + errors
+// Global response handler
 api.interceptors.response.use(
   (res) => res,
   (error) => {
     const data = error?.response?.data;
 
-    if (data?.code === "DEMO_READ_ONLY") {
-      alert(
-        "🔒 Demo Mode\n\nThis account is read-only.\nSign up or contact admin for full access."
-      );
-    } else if (data?.message) {
-      alert(data.message);
-    } else {
-      alert("Something went wrong. Please try again.");
+    // For 403, we let the component handle it locally via openPermissionModal
+    // For general errors, we dispatch a global toast event instead of native alert
+    if (error?.response?.status !== 403 && data?.code !== "DEMO_ACCOUNT_READ_ONLY") {
+      const msg = data?.message || "Something went wrong. Please try again.";
+      // Optional: Dispatch to a global toast if one exists, but strictly no alerts.
+      window.dispatchEvent(new CustomEvent("show-toast", { detail: msg }));
     }
 
     return Promise.reject(error);

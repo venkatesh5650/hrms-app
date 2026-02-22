@@ -6,7 +6,7 @@ import "../../styles/pages/login.css";
 const DEMO_USERS = {
   ADMIN: { email: "demo.admin@hrms.com", password: "Demo@123" },
   HR: { email: "demo.hr@hrms.com", password: "Demo@123" },
-  MANAGER: { email: "demo.manager@hrms.com", password: "Demo@123" },
+  MANAGER: { email: "rohit@nxtGen.com", password: "Rohit@5650" },
   EMPLOYEE: { email: "demo.employee@hrms.com", password: "Demo@123" },
 };
 
@@ -17,7 +17,7 @@ const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,19 +25,19 @@ const Login = () => {
   };
 
   const isValid =
-    form.email.includes("@") && form.password.length >= 6 && !loading;
+    form.email.includes("@") && form.password.length >= 6 && !authLoading;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
+    setAuthLoading(true);
     try {
       await login(form);
       navigate("/dashboard");
     } catch {
       setError("Invalid credentials. Please try again.");
     } finally {
-      setLoading(false);
+      setAuthLoading(false);
     }
   };
 
@@ -47,7 +47,7 @@ const Login = () => {
 
     setForm(creds);
     setError("");
-    setLoading(true);
+    setAuthLoading(true);
 
     try {
       await login(creds);
@@ -55,7 +55,7 @@ const Login = () => {
     } catch {
       setError("Demo login failed.");
     } finally {
-      setLoading(false);
+      setAuthLoading(false);
     }
   };
 
@@ -120,9 +120,9 @@ const Login = () => {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={!isValid}
+              disabled={!isValid || authLoading}
             >
-              {loading ? "Authenticating..." : "Enter System"}
+              {authLoading ? "Authenticating..." : "Enter System"}
             </button>
           </form>
           <div className="demo-section">

@@ -6,7 +6,7 @@ const Log = require("../models/log");
 
 async function generateAnalyticsCSVs(orgId) {
   const [employees, teams, approvals, logs] = await Promise.all([
-    Employee.findAll({ where: { organisation_id: orgId }, include: [Team] }),
+    Employee.findAll({ where: { organisation_id: orgId }, include: [{ model: Team, through: { attributes: [] } }] }),
     Team.findAll({ where: { organisation_id: orgId } }),
     Approval.findAll({ where: { organisation_id: orgId } }),
     Log.findAll({ where: { organisation_id: orgId } }),
@@ -39,7 +39,7 @@ async function generateAnalyticsCSVs(orgId) {
   // ---- Team distribution
   const teamMap = {};
   employees.forEach(e => {
-    const teamName = e.Team?.name || "Unassigned";
+    const teamName = (e.Teams && e.Teams.length > 0) ? e.Teams[0].name : "Unassigned";
     teamMap[teamName] = (teamMap[teamName] || 0) + 1;
   });
 

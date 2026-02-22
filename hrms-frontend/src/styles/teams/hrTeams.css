@@ -156,7 +156,33 @@
   .hr-teams {
     padding: 20px;
   }
+
   .team-card-header {
     flex-direction: column;
   }
+}
+
+
+/* Demo Mode visual difference - Enterprise UX */
+.demo-view {
+  opacity: 0.96;
+}
+
+.demo-view .teams-header {
+  background: linear-gradient(to right,
+      rgba(255, 243, 205, 0.4),
+      rgba(255, 255, 255, 0));
+}
+
+.demo-view .btn.primary {
+  filter: grayscale(0.35);
+  cursor: not-allowed;
+}
+
+/* Demo card visual difference */
+.demo-card {
+  border-color: #fde68a !important;
+  background: linear-gradient(to bottom,
+      rgba(255, 251, 235, 0.6),
+      rgba(255, 255, 255, 1));
 }

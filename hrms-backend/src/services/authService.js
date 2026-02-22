@@ -55,6 +55,7 @@ async function register(data) {
   await Log.create({
     organisation_id: org.id,
     user_id: user.id,
+    user_role: user.role,
     action: "organisation_created",
     meta: { orgId: org.id, userId: user.id, role: user.role },
     timestamp: new Date(),
@@ -68,6 +69,7 @@ async function register(data) {
       email: user.email,
       organisation_id: org.id,
       role: user.role,
+      accountType: user.is_demo ? "DEMO" : "STANDARD",
     },
   };
 }
@@ -80,8 +82,12 @@ async function login(data) {
 
     const user = await User.findOne({ where: { email } });
 
-    // Same generic message for both cases to avoid revealing valid emails
-    if (!user) throw new Error("Invalid email or password");
+    if (!user || !user.password_hash) {
+      if (user && !user.password_hash) {
+        console.log(`Login blocked for ${email}: Account setup pending (null password_hash)`);
+      }
+      throw new Error("Invalid email or password");
+    }
 
     const match = await bcrypt.compare(password, user.password_hash);
     if (!match) throw new Error("Invalid email or password");
@@ -104,6 +110,7 @@ async function login(data) {
         email: user.email,
         organisation_id: user.organisation_id,
         role: user.role,
+        accountType: user.is_demo ? "DEMO" : "STANDARD",
       },
     };
   } catch (err) {
@@ -132,6 +139,7 @@ async function logout(token, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "user_logged_out",
     meta: { userId: user.id, role: user.role },
     timestamp: new Date(),

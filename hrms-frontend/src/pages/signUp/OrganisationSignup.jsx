@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import AppSpinner from "../../components/common/AppSpinner";
 import "../../styles/pages/organisationSignup.css";
 
 const RegisterOrg = () => {
@@ -39,7 +40,7 @@ const RegisterOrg = () => {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Registration failed. Please use a different email."
+        "Registration failed. Please use a different email."
       );
     } finally {
       setLoading(false);
@@ -106,7 +107,13 @@ const RegisterOrg = () => {
           </div>
 
           <button className="btn btn-primary" type="submit" disabled={!isValid}>
-            {loading ? "Creating..." : "Create Organisation"}
+            {loading ? (
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "24px" }}>
+                <AppSpinner className="h-5 w-5 border-2" />
+              </div>
+            ) : (
+              "Create Organisation"
+            )}
           </button>
         </form>
 

@@ -49,10 +49,17 @@ export default function TeamForm({ initialData, onSubmit, onCancel }) {
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn ghost" onClick={onCancel}>
+            <button
+              type="button"
+              className="btn ghost"
+              onClick={onCancel}
+            >
               Cancel
             </button>
-            <button type="submit" className="btn primary">
+            <button
+              type="submit"
+              className="btn primary"
+            >
               {initialData ? "Update Team" : "Create Team"}
             </button>
           </div>

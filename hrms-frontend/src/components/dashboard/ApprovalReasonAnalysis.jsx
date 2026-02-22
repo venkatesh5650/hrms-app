@@ -14,9 +14,9 @@ export default function ApprovalReasonAnalysis({ approvals }) {
 
   if (!rejected.length) {
     return (
-      <div className="card reason-card">
-        <h3>Rejection Reasons</h3>
-        <p className="empty">No rejected requests with reasons yet</p>
+      <div className="card reason-card p-6">
+        <h3 className="text-sm font-bold text-gray-900 mb-2">Rejection Analysis</h3>
+        <p className="text-xs text-gray-400 italic">No rejection data available to analyze at this time.</p>
       </div>
     );
   }

@@ -84,6 +84,7 @@ async function createTeam(data, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "team_created",
     meta: { teamId: team.id },
     timestamp: new Date(),
@@ -103,6 +104,7 @@ async function updateTeam(id, data, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "team_updated",
     meta: { teamId: team.id },
     timestamp: new Date(),
@@ -124,6 +126,7 @@ async function deleteTeam(id, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "team_deleted",
     meta: { teamId: id },
     timestamp: new Date(),
@@ -151,6 +154,7 @@ async function assignEmployee(teamId, employeeId, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "employee_assigned_to_team",
     meta: {
       teamId: team.id,
@@ -175,22 +179,22 @@ async function assignManager(teamId, employeeId, user) {
   });
   if (!employee) return { error: "Employee not found" };
 
-  const record = await EmployeeTeam.findOne({
+  let [record, created] = await EmployeeTeam.findOrCreate({
     where: { employee_id: employeeId, team_id: teamId },
+    defaults: {
+      role: "MANAGER",
+      assigned_at: new Date(),
+    },
   });
 
-  if (record) return { error: "Manager already assigned to this team" };
-
-  const newRecord = await EmployeeTeam.create({
-    employee_id: employeeId,
-    team_id: teamId,
-    role: "MANAGER",
-    assigned_at: new Date(),
-  });
+  if (!created && record.role !== "MANAGER") {
+    await record.update({ role: "MANAGER" });
+  }
 
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "manager_assigned_to_team",
     meta: {
       teamId: team.id,
@@ -212,9 +216,40 @@ async function assignManager(teamId, employeeId, user) {
         id: employee.id,
         name: `${employee.first_name} ${employee.last_name || ""}`.trim(),
       },
-      assigned_at: newRecord.assigned_at,
+      assigned_at: record.assigned_at,
     },
   };
+}
+
+async function unassignManager(teamId, user) {
+  const team = await Team.findOne({
+    where: { id: teamId, organisation_id: user.orgId, is_active: true },
+  });
+  if (!team) return { error: "Team not found" };
+
+  const record = await EmployeeTeam.findOne({
+    where: { team_id: teamId, role: "MANAGER" },
+  });
+
+  if (!record) return { error: "No manager assigned to this team" };
+
+  const managerId = record.employee_id;
+  await record.destroy();
+
+  await Log.create({
+    organisation_id: user.orgId,
+    user_id: user.id,
+    user_role: user.role,
+    action: "manager_unassigned_from_team",
+    meta: {
+      teamId: team.id,
+      teamName: team.name,
+      managerId: managerId,
+    },
+    timestamp: new Date(),
+  });
+
+  return { unassigned: true };
 }
 
 async function unassignEmployee(teamId, employeeId, user) {
@@ -238,6 +273,7 @@ async function unassignEmployee(teamId, employeeId, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "employee_unassigned_from_team",
     meta: {
       teamId: team.id,
@@ -259,5 +295,6 @@ module.exports = {
   deleteTeam,
   assignEmployee,
   assignManager,
+  unassignManager,
   unassignEmployee,
 };

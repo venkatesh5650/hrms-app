@@ -8,8 +8,10 @@ import "../../styles/logs/logsPage.css";
 export default function HrLogs() {
   const [logs, setLogs] = useState([]);
   const [filters, setFilters] = useState({ action: "", user: "" });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     api
       .get("/logs")
       .then((res) => {
@@ -17,9 +19,9 @@ export default function HrLogs() {
 
         const list =
           Array.isArray(res.data) ? res.data :
-          Array.isArray(res.data.logs) ? res.data.logs :
-          Array.isArray(res.data.logs?.data) ? res.data.logs.data :
-          [];
+            Array.isArray(res.data.logs) ? res.data.logs :
+              Array.isArray(res.data.logs?.data) ? res.data.logs.data :
+                [];
 
         console.log("✅ Normalized logs:", list);
         setLogs(list);
@@ -27,7 +29,8 @@ export default function HrLogs() {
       .catch((err) => {
         console.error("❌ Failed to fetch logs:", err);
         setLogs([]);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const safeLogs = Array.isArray(logs) ? logs : [];
@@ -47,11 +50,18 @@ export default function HrLogs() {
 
   return (
     <div className="logs-page">
-      <h1>Activity Logs</h1>
-      <p className="subtitle">Track operational events</p>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1>Audit Logs</h1>
+          <p className="subtitle">Monitor system activity and security-relevant events</p>
+        </div>
+        <div className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-600 text-sm font-medium whitespace-nowrap" aria-label="Total audit records displayed">
+          {filteredLogs.length} record{filteredLogs.length !== 1 ? 's' : ''}
+        </div>
+      </div>
 
       <LogFilters filters={filters} setFilters={setFilters} />
-      <LogTable logs={filteredLogs} />
+      <LogTable logs={filteredLogs} loading={loading} />
     </div>
   );
 }

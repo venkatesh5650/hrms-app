@@ -4,6 +4,7 @@ const User = require("../models/user");
 const Log = require("../models/log");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const onboardingService = require("./onboardingService");
 const { isNonEmptyString } = require("../utils/validators");
 
 const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
@@ -36,9 +37,52 @@ async function listPending(orgId, role) {
   if (role === "MANAGER") where.type = "CREATE";
   if (role === "ADMIN") where.type = "LOGIN_ACCESS";
 
-  return await Approval.findAll({
+  const approvals = await Approval.findAll({
     where,
     order: [["created_at", "ASC"]],
+  });
+
+  return await enrichApprovalsWithEmployeeName(approvals, orgId);
+}
+
+/**
+ * Helper to enrich LOGIN_ACCESS payload with employee name
+ */
+async function enrichApprovalsWithEmployeeName(approvals, orgId) {
+  // Extract all employee IDs needed
+  const employeeIds = approvals
+    .filter((a) => a.type === "LOGIN_ACCESS")
+    .map((a) => {
+      const p = typeof a.payload === "string" ? JSON.parse(a.payload) : a.payload;
+      return p?.employeeId;
+    })
+    .filter(Boolean);
+
+  let employeesMap = {};
+  if (employeeIds.length > 0) {
+    const employees = await Employee.findAll({
+      where: { id: employeeIds, organisation_id: orgId },
+      attributes: ["id", "first_name", "last_name"],
+    });
+    employeesMap = employees.reduce((acc, emp) => {
+      acc[emp.id] = [emp.first_name, emp.last_name].filter(Boolean).join(" ");
+      return acc;
+    }, {});
+  }
+
+  return approvals.map((a) => {
+    const payload = typeof a.payload === "string" ? JSON.parse(a.payload) : a.payload;
+
+    if (a.type === "LOGIN_ACCESS" && payload?.employeeId) {
+      if (!employeesMap[payload.employeeId]) {
+        throw new Error(`Data Integrity Error: Employee ${payload.employeeId} not found for approval ${a.id}`);
+      }
+      payload.employeeName = employeesMap[payload.employeeId];
+    }
+
+    const plainApproval = a.get({ plain: true });
+    plainApproval.payload = payload;
+    return plainApproval;
   });
 }
 
@@ -99,8 +143,8 @@ async function approveApproval(id, user) {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) throw new Error("User already exists");
 
-    const tempPassword = crypto.randomBytes(6).toString("base64").slice(0, 8);
-    const password_hash = await bcrypt.hash(tempPassword, SALT_ROUNDS);
+    const setup_token = crypto.randomBytes(32).toString("hex");
+    const setup_token_expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     const fullName = [employee.first_name, employee.last_name]
       .filter(Boolean)
@@ -109,18 +153,29 @@ async function approveApproval(id, user) {
     const newUser = await User.create({
       organisation_id: user.orgId,
       email,
-      password_hash,
+      password_hash: null,
       role: "EMPLOYEE",
       name: fullName || null,
+      setup_token,
+      setup_token_expires,
+    });
+
+    // Decoupled side-effect trigger
+    await triggerAccessGrantedEvent({
+      email,
+      fullName,
+      organisation_id: user.orgId,
+      adminId: user.id,
+      adminRole: user.role,
     });
 
     employee.user_id = newUser.id;
     await employee.save();
 
     responseData = {
-      tempPassword,
       email,
       name: newUser.name,
+      setupPending: true,
     };
   }
 
@@ -131,6 +186,7 @@ async function approveApproval(id, user) {
   await Log.create({
     organisation_id: user.orgId,
     user_id: user.id,
+    user_role: user.role,
     action: "approval_approved",
     meta: { approvalId: approval.id, type: approval.type },
     timestamp: new Date(),
@@ -169,6 +225,7 @@ async function rejectApproval(id, reason, user) {
     await Log.create({
       organisation_id: user.orgId,
       user_id: user.id,
+      user_role: user.role,
       action: "approval_rejected",
       meta: { approvalId: approval.id, type: approval.type, reason },
       timestamp: new Date(),
@@ -184,10 +241,31 @@ async function rejectApproval(id, reason, user) {
  * Admin / HR history view
  */
 async function listHistory(orgId) {
-  return await Approval.findAll({
+  const approvals = await Approval.findAll({
     where: { organisation_id: orgId },
     order: [["created_at", "DESC"]],
   });
+
+  return await enrichApprovalsWithEmployeeName(approvals, orgId);
+}
+
+/**
+ * Event Handler: triggerAccessGrantedEvent
+ * 
+ * Decouples onboarding side-effects from core approval logic.
+ */
+async function triggerAccessGrantedEvent(data) {
+  const { email } = data;
+
+  try {
+    // 1. Dispatch onboarding notification
+    await onboardingService.sendAccessNotification(email);
+
+    // 2. Future: Trigger integrations like Slack, JIRA, etc.
+    // ...
+  } catch (err) {
+    console.error("Access Grant Event Handler Error:", err.message);
+  }
 }
 
 module.exports = {

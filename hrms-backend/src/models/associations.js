@@ -12,8 +12,8 @@ Team.belongsTo(Organisation, { foreignKey: "organisation_id" });
 Approval.belongsTo(Organisation, { foreignKey: "organisation_id" });
 
 // User ↔ Employee (optional 1:1)
-User.hasOne(Employee, { foreignKey: "user_id" });
-Employee.belongsTo(User, { foreignKey: "user_id" });
+User.hasOne(Employee, { foreignKey: "user_id", as: "employee" });
+Employee.belongsTo(User, { foreignKey: "user_id", as: "user" });
 
 // Employee ↔ Team (many-to-many)
 Employee.belongsToMany(Team, {
@@ -29,6 +29,11 @@ Team.belongsToMany(Employee, {
 
 // Approval relations
 Approval.belongsTo(User, { foreignKey: "user_id" });
+
+// Audit Logs relations
+const Log = require("./log");
+Log.belongsTo(User, { foreignKey: "user_id" });
+User.hasMany(Log, { foreignKey: "user_id" });
 
 module.exports = {};
 

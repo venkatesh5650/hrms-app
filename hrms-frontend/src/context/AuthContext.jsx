@@ -9,12 +9,13 @@ const RAW_BASE_URL =
 
 
 
-  
+
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("hrms_token");
@@ -66,11 +67,21 @@ export function AuthProvider({ children }) {
           { headers: { Authorization: `Bearer ${token}` } }
         );
       }
-    } catch {}
+    } catch { }
     setToken(null);
     setUser(null);
     localStorage.removeItem("hrms_token");
     localStorage.removeItem("hrms_user");
+  };
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    try {
+      await logout();
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   const value = {
@@ -78,9 +89,11 @@ export function AuthProvider({ children }) {
     token,
     loading,
     isAuthenticated: !!token,
+    isLoggingOut,
     login,
     registerOrg,
     logout,
+    handleLogout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -11,6 +11,7 @@ import {
   Download,
   User,
   LogOut,
+  Loader2,
 } from "lucide-react";
 import "../../styles/layout/sidebar.css";
 
@@ -26,11 +27,11 @@ const ICONS = {
 };
 
 export default function Sidebar() {
-  const { user, logout } = useAuth();
+  const { user, handleLogout, isLoggingOut } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await logout();
+  const onLogout = async () => {
+    await handleLogout();
     navigate("/login");
   };
 
@@ -58,9 +59,18 @@ export default function Sidebar() {
 
       <div className="sidebar-footer">
         <span className="sidebar-user">{user?.name || user?.role}</span>
-        <button className="sidebar-logout" onClick={handleLogout}>
-          <LogOut size={14} />
-          <span>Logout</span>
+        <button
+          className="sidebar-logout"
+          onClick={onLogout}
+          disabled={isLoggingOut}
+          style={{ opacity: isLoggingOut ? 0.6 : 1, cursor: isLoggingOut ? "not-allowed" : "pointer" }}
+        >
+          {isLoggingOut ? (
+            <Loader2 size={14} className="animate-spin" />
+          ) : (
+            <LogOut size={14} />
+          )}
+          <span>{isLoggingOut ? "Logging out…" : "Logout"}</span>
         </button>
       </div>
     </aside>

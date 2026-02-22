@@ -1,6 +1,8 @@
+import { TrendingUp } from "lucide-react";
 import "../../styles/dashboard/workforceTrends.css";
+import AppSpinner from "../common/AppSpinner";
 
-export default function WorkforceTrends({ employees }) {
+export default function WorkforceTrends({ employees, loading = false }) {
   const byMonth = (date) => {
     const d = new Date(date);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
@@ -26,14 +28,24 @@ export default function WorkforceTrends({ employees }) {
   ).sort();
 
   return (
-    <div className="card workforce-card">
-      <div className="card-header">
-        <h3>Workforce Trends</h3>
-        <span className="subtitle">Hiring & exits per month</span>
+    <div className="card workforce-card p-6">
+      <div className="card-header mb-4">
+        <h3 className="text-lg font-semibold text-gray-900">Workforce Trends</h3>
+        <span className="text-sm text-gray-500">Hiring & exits per month</span>
       </div>
 
-      {months.length === 0 ? (
-        <p className="empty">No workforce data yet</p>
+      {loading ? (
+        <div className="flex justify-center items-center py-12">
+          <AppSpinner />
+        </div>
+      ) : months.length === 0 ? (
+        <div className="bg-gray-50 border border-dashed border-gray-200 rounded-lg text-center px-6 py-10 min-h-[180px] flex flex-col justify-center items-center transition-all duration-300 opacity-80 hover:opacity-100">
+          <TrendingUp className="w-8 h-8 text-gray-400 mb-3" />
+          <h4 className="text-sm font-semibold text-gray-900 mb-1">No Workforce Activity Yet</h4>
+          <p className="text-xs text-gray-500 max-w-[200px] leading-relaxed">
+            Hiring and exit trends will appear once employee lifecycle events are recorded.
+          </p>
+        </div>
       ) : (
         <div className="trend-container">
           {months.map((m) => {
@@ -42,7 +54,7 @@ export default function WorkforceTrends({ employees }) {
             const net = h - x;
 
             return (
-              <div key={m} className="trend-row">
+              <div key={m} className="trend-row hover:bg-gray-50 px-2 py-1 rounded-lg transition-colors duration-150">
                 <div className="trend-cell month">{m}</div>
                 <div className="trend-cell">
                   <span>Hired</span>
@@ -52,13 +64,16 @@ export default function WorkforceTrends({ employees }) {
                   <span>Exited</span>
                   <strong>{x}</strong>
                 </div>
-                <div
-                  className={`trend-cell net ${
-                    net < 0 ? "negative" : "positive"
-                  }`}
-                >
+                <div className="trend-cell net flex items-center gap-1.5">
                   <span>Net</span>
-                  <strong>{net > 0 ? `+${net}` : net}</strong>
+                  <strong className={net >= 0 ? "text-green-600" : "text-rose-600"}>
+                    {net > 0 ? `+${net}` : net}
+                  </strong>
+                  {net !== 0 && (
+                    <span className={`text-[10px] ${net > 0 ? "text-green-500" : "text-rose-500"}`}>
+                      {net > 0 ? "▲" : "▼"}
+                    </span>
+                  )}
                 </div>
               </div>
             );

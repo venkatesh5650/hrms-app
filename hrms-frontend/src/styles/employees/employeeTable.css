@@ -24,8 +24,12 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
+.employee-table tr {
+  transition: background-color 0.15s ease;
+}
+
 .employee-table tr:hover {
-  background: #f9fafb;
+  background-color: #f8fafc;
 }
 
 /* Teams */

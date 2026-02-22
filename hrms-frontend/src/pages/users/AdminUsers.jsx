@@ -11,17 +11,37 @@ const ROLE_ORDER = {
   EMPLOYEE: 4,
 };
 
+function filterUsersByDashboardRole(users, role) {
+  if (role === "ADMIN") return users;
+  if (role === "HR") {
+    return users.filter(u =>
+      ["HR", "MANAGER", "EMPLOYEE"].includes(u.role)
+    );
+  }
+  if (role === "MANAGER") {
+    return users.filter(u => u.role === "EMPLOYEE");
+  }
+  return users;
+}
+
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [activeUser, setActiveUser] = useState(null);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const loadUsers = async () => {
-    const res = await api.get("/users");
-    const sorted = [...res.data.users].sort(
-      (a, b) => ROLE_ORDER[a.role] - ROLE_ORDER[b.role]
-    );
-    setUsers(sorted);
+    setLoading(true);
+    try {
+      const res = await api.get("/users");
+      const filtered = filterUsersByDashboardRole(res.data.users || [], "ADMIN");
+      const sorted = [...filtered].sort(
+        (a, b) => ROLE_ORDER[a.role] - ROLE_ORDER[b.role]
+      );
+      setUsers(sorted);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -36,15 +56,26 @@ export default function AdminUsers() {
 
   return (
     <div className="users-page admin">
-      <div className="header">
+      <div className="mb-6 fade-in flex justify-between items-start">
         <div>
-          <h1>Users</h1>
-          <p className="subtitle">
-            Manage platform users, update profile details, and control access
-            levels.
+          <div className="flex items-center">
+            <h1 className="text-2xl font-semibold text-gray-900 leading-tight">Users</h1>
+            {!loading && (
+              <span className="ml-3 px-3 py-1 text-xs rounded-full bg-indigo-50 text-indigo-600">
+                {filteredUsers.length} {filteredUsers.length === 1 ? 'user' : 'users'}
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-gray-500 mt-1">
+            Manage platform users, update profile details, and control access levels.
           </p>
         </div>
-        <button onClick={() => setActiveUser({})}>+ Create User</button>
+        <button
+          className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition-colors shadow-sm whitespace-nowrap"
+          onClick={() => setActiveUser({})}
+        >
+          + Create User
+        </button>
       </div>
 
       <div className="users-toolbar">
@@ -56,7 +87,7 @@ export default function AdminUsers() {
         />
       </div>
 
-      <UserTable users={filteredUsers} onEdit={setActiveUser} />
+      <UserTable users={filteredUsers} onEdit={setActiveUser} loading={loading} />
 
       {activeUser && (
         <UserForm
