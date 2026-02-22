@@ -16,7 +16,6 @@ export default function ApprovalProcessingOverlay({ isVisible, type, action }) {
 
     const getActionText = () => {
         const isApprove = action === "APPROVE";
-        const typeLabel = type === "CREATE" ? "employee creation" : "login access";
 
         if (isApprove) {
             return type === "CREATE"

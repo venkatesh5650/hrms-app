@@ -5,7 +5,7 @@ import AppSpinner from "../common/AppSpinner";
 import { useDemoGuard } from "../../hooks/useDemoGuard";
 
 export default function OrphanEmployees({ employees = [], loading = false }) {
-  const { guardWriteAction, isDemoUser, DemoModal } = useDemoGuard();
+  const { DemoModal } = useDemoGuard();
 
   const orphans = employees.filter(
     (e) => !Array.isArray(e.Teams) || e.Teams.length === 0

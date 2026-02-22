@@ -15,8 +15,8 @@ import "../styles/dashboardLoader.css";
 const API = process.env.REACT_APP_API_BASE_URL;
 
 export default function HrDashboard() {
-  const { token, user } = useAuth();
-  const { DemoModal } = useDemoGuard();
+  const { token } = useAuth();
+  useDemoGuard();
 
   const [employees, setEmployees] = useState([]);
   const [approvals, setApprovals] = useState([]);

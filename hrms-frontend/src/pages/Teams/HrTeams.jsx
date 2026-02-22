@@ -13,8 +13,6 @@ export default function HrTeams() {
   const [teams, setTeams] = useState([]);
   const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const [expandedTeam, setExpandedTeam] = useState(null);
   const [assignTarget, setAssignTarget] = useState(null);
@@ -76,7 +74,7 @@ export default function HrTeams() {
       setManagers(loadedManagers);
     } catch (e) {
       console.error("❌ Failed loading:", e);
-      setError("Failed to load teams or managers");
+      setGlobalError("Failed to load teams or managers");
     } finally {
       setLoading(false);
     }

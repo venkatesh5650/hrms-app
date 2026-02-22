@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
 import "../../styles/pages/approvals.css";
 
 export default function Approvals() {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const role = user?.role;
   const { guardWriteAction, DemoModal } = useDemoGuard();
 
@@ -64,7 +64,7 @@ export default function Approvals() {
     } finally {
       setLoading(false);
     }
-  }, [token, role]);
+  }, [role]);
 
   useEffect(() => {
     fetchApprovals();

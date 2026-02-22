@@ -6,21 +6,6 @@ export default function ActivityFeed({ logs = [], loading = false }) {
   const [expandedRow, setExpandedRow] = useState(null);
   const { user } = useAuth();
 
-  // 🟢 Enterprise-safe time formatter
-  const formatTime = (log) => {
-    const rawTime = log.timestamp || log.created_at || log.time;
-    if (!rawTime) return "-";
-
-    const date = new Date(rawTime);
-    if (isNaN(date.getTime())) return "-";
-
-    return date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
   // 🟢 Role resolver
   const resolveRole = (log) => {
     return log.role || log.meta?.role || "System";
