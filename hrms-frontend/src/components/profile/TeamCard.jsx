@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../../styles/dashboard/teamCard.css";
 import { useAuth } from "../../context/AuthContext";
 import AppSpinner from "../../components/common/AppSpinner";
-import { Users2, Crown } from "lucide-react";
+import { Users2 } from "lucide-react";
 
 const API = process.env.REACT_APP_API_BASE_URL;
 
@@ -47,20 +47,6 @@ export default function TeamCard({ teams: propTeams = [] }) {
   } else if (!isOverview && !isManager) {
     visibleTeams = propTeams;
   }
-
-  // Industry-standard defensive member count resolver
-  // Handles all known backend response shapes without touching the API
-  const getMemberCount = (team) => {
-    if (!team) return 0;
-    if (Array.isArray(team.members)) return team.members.length;
-    if (Array.isArray(team.employees)) return team.employees.length;
-    if (Array.isArray(team.Users)) return team.Users.length;
-    if (Array.isArray(team.team_members)) return team.team_members.length;
-    if (Array.isArray(team.Employees)) return team.Employees.length;
-    if (typeof team.member_count === "number") return team.member_count;
-    if (typeof team.membersCount === "number") return team.membersCount;
-    return 0;
-  };
 
   // Defensive safe teams list — prevents undefined map errors
   const safeTeams = Array.isArray(visibleTeams) ? visibleTeams : [];

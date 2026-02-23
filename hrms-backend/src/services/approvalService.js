@@ -112,6 +112,19 @@ async function approveApproval(id, user) {
 
   // CREATE → create employee and enqueue LOGIN_ACCESS
   if (approval.type === "CREATE") {
+    const { email } = payload;
+
+    // Check if email already exists in Employee or User
+    const existingEmployee = await Employee.findOne({ where: { email, organisation_id: user.orgId } });
+    if (existingEmployee) {
+      throw new Error(`Email ${email} is already present in Employee records.`);
+    }
+
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      throw new Error(`Email ${email} is already present in User accounts.`);
+    }
+
     const employee = await Employee.create({
       ...payload,
       organisation_id: user.orgId,
