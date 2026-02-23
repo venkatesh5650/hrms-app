@@ -4,12 +4,16 @@ const Organisation = require("./organisation");
 const Team = require("./team");
 const EmployeeTeam = require("./employeeTeam");
 const Approval = require("./approval");
+const SupportRequest = require("./support_request");
 
 // Organisation relations
 User.belongsTo(Organisation, { foreignKey: "organisation_id" });
 Employee.belongsTo(Organisation, { foreignKey: "organisation_id" });
 Team.belongsTo(Organisation, { foreignKey: "organisation_id" });
 Approval.belongsTo(Organisation, { foreignKey: "organisation_id" });
+SupportRequest.belongsTo(Organisation, { foreignKey: "organisation_id" });
+SupportRequest.belongsTo(Employee, { foreignKey: "employee_id", as: "employee" });
+Employee.hasMany(SupportRequest, { foreignKey: "employee_id" });
 
 // User ↔ Employee (optional 1:1)
 User.hasOne(Employee, { foreignKey: "user_id", as: "employee" });

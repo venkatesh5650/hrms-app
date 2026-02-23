@@ -94,6 +94,7 @@ export function AuthProvider({ children }) {
     registerOrg,
     logout,
     handleLogout,
+    handleAuthSuccess,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

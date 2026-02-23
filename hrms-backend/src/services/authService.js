@@ -148,4 +148,77 @@ async function logout(token, user) {
   return true;
 }
 
-module.exports = { register, login, logout };
+/**
+ * Validates a one-time setup token from the onboarding email.
+ * Returns basic user info so the frontend can personalise the page.
+ */
+async function verifySetupToken(token) {
+  if (!isNonEmptyString(token)) throw new Error("Token is required");
+
+  const user = await User.findOne({ where: { setup_token: token } });
+
+  if (!user) throw new Error("Invalid or already used setup link");
+
+  if (user.setup_token_expires && new Date() > new Date(user.setup_token_expires)) {
+    throw new Error("This setup link has expired. Please contact HR for a new one.");
+  }
+
+  return { email: user.email, name: user.name };
+}
+
+/**
+ * Sets the employee's password for the first time.
+ * Clears the setup token so the link can only be used once.
+ * Returns a JWT so the employee is immediately logged in.
+ */
+async function setupPassword(token, password) {
+  if (!isNonEmptyString(token)) throw new Error("Token is required");
+  if (!isNonEmptyString(password) || password.length < 8) {
+    throw new Error("Password must be at least 8 characters");
+  }
+
+  const user = await User.findOne({ where: { setup_token: token } });
+
+  if (!user) throw new Error("Invalid or already used setup link");
+
+  if (user.setup_token_expires && new Date() > new Date(user.setup_token_expires)) {
+    throw new Error("This setup link has expired. Please contact HR for a new one.");
+  }
+
+  const password_hash = await bcrypt.hash(password, SALT_ROUNDS);
+
+  // Atomically set password and clear setup token
+  user.password_hash = password_hash;
+  user.setup_token = null;
+  user.setup_token_expires = null;
+  await user.save();
+
+  await Log.create({
+    organisation_id: user.organisation_id,
+    user_id: user.id,
+    user_role: user.role,
+    action: "account_setup_completed",
+    meta: { userId: user.id },
+    timestamp: new Date(),
+  });
+
+  const jwtToken = jwt.sign(
+    { userId: user.id, orgId: user.organisation_id, role: user.role },
+    JWT_SECRET,
+    { expiresIn: "8h" }
+  );
+
+  return {
+    token: jwtToken,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      organisation_id: user.organisation_id,
+      role: user.role,
+      accountType: user.is_demo ? "DEMO" : "STANDARD",
+    },
+  };
+}
+
+module.exports = { register, login, logout, verifySetupToken, setupPassword };

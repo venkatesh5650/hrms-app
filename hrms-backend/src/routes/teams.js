@@ -6,8 +6,8 @@ const requireRole = require("../middlewares/requireRole");
 // All team actions require authentication (tenant scope enforced in controllers)
 router.use(auth);
 
-// Read access
-router.get("/", requireRole("ADMIN", "HR", "MANAGER"), ctrl.listTeams);
+// Read access — employees see only their own teams (filtered in teamService)
+router.get("/", requireRole("ADMIN", "HR", "MANAGER", "EMPLOYEE"), ctrl.listTeams);
 router.get("/:id", requireRole("ADMIN", "HR", "MANAGER"), ctrl.getTeam);
 
 // Write access — HR only

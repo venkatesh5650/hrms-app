@@ -5,10 +5,12 @@ import {
   fetchAdminActivity,
   fetchAdminOverview
 } from "../services/dashboardApi";
+import { fetchRoleSupportRequests } from "../services/supportApi";
 
 import KpiGrid from "../components/dashboard/KpiGrid";
 import ApprovalPipelineChart from "../components/dashboard/ApprovalPipelineChart";
 import ActivityFeed from "../components/dashboard/ActivityFeed";
+import SupportRequestsCard from "../components/dashboard/SupportRequestsCard";
 import AppSpinner from "../components/common/AppSpinner";
 
 import "../styles/dashboardLoader.css";
@@ -18,6 +20,8 @@ export default function AdminDashboard() {
   const [logs, setLogs] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [supportRequests, setSupportRequests] = useState([]);
+  const [supportLoading, setSupportLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -46,6 +50,19 @@ export default function AdminDashboard() {
     }
 
     load();
+
+    async function loadSupport() {
+      try {
+        const res = await fetchRoleSupportRequests();
+        setSupportRequests(Array.isArray(res.data?.requests) ? res.data.requests : []);
+      } catch (err) {
+        console.error("Admin support requests load failed:", err);
+        setSupportRequests([]);
+      } finally {
+        setSupportLoading(false);
+      }
+    }
+    loadSupport();
   }, []);
 
   return (
@@ -77,6 +94,16 @@ export default function AdminDashboard() {
             <ApprovalPipelineChart pending={pending} history={history} />
             <ActivityFeed logs={logs} />
           </div>
+
+          <SupportRequestsCard
+            requests={supportRequests}
+            loading={supportLoading}
+            onResolve={(id) =>
+              setSupportRequests((prev) =>
+                prev.map((r) => (r.id === id ? { ...r, status: "RESOLVED" } : r))
+              )
+            }
+          />
         </>
       )}
     </div>

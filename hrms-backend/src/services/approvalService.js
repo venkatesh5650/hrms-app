@@ -164,6 +164,7 @@ async function approveApproval(id, user) {
     await triggerAccessGrantedEvent({
       email,
       fullName,
+      setupToken: setup_token,
       organisation_id: user.orgId,
       adminId: user.id,
       adminRole: user.role,
@@ -255,13 +256,13 @@ async function listHistory(orgId) {
  * Decouples onboarding side-effects from core approval logic.
  */
 async function triggerAccessGrantedEvent(data) {
-  const { email } = data;
+  const { email, fullName, setupToken } = data;
 
   try {
-    // 1. Dispatch onboarding notification
-    await onboardingService.sendAccessNotification(email);
+    // Send onboarding email with secure setup link
+    await onboardingService.sendAccessNotification({ email, fullName, setupToken });
 
-    // 2. Future: Trigger integrations like Slack, JIRA, etc.
+    // Future: Trigger integrations like Slack, JIRA, etc.
     // ...
   } catch (err) {
     console.error("Access Grant Event Handler Error:", err.message);

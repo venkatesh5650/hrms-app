@@ -5,6 +5,7 @@ import HomeRedirect from "./components/routing/HomeRedirect";
 
 import Login from "./pages/login/Login";
 import OrganisationSignup from "./pages/signUp/OrganisationSignup";
+import SetupPassword from "./pages/signUp/SetupPassword";
 import Dashboard from "./pages/DashboardRouter/Dashboard";
 import Employees from "./pages/DashboardRouter/Employees";
 import Teams from "./pages/Teams/Teams";
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<HomeRedirect />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<OrganisationSignup />} />
+        <Route path="/setup-password" element={<SetupPassword />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>

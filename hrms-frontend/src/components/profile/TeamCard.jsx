@@ -17,12 +17,9 @@ export default function TeamCard({ teams: propTeams = [] }) {
   useEffect(() => {
     if (!token) return;
 
-    if (!isOverview && !isManager && propTeams.length > 0) {
-      setTeams(propTeams);
-      setLoading(false);
-      return;
-    }
-
+    // Always fetch from /api/teams — the profile API strips member arrays,
+    // so propTeams only has { id, name, description } with no count data.
+    // The /api/teams endpoint returns full Employees[] arrays needed for counts.
     async function loadTeams() {
       try {
         setLoading(true);
@@ -33,7 +30,9 @@ export default function TeamCard({ teams: propTeams = [] }) {
         const data = await res.json();
         setTeams(data.teams || data);
       } catch {
-        console.error("Failed to load teams");
+        // Fallback to propTeams (no member counts, but at least shows team names)
+        console.error("Failed to load teams, falling back to profile data");
+        setTeams(propTeams);
       } finally {
         setLoading(false);
       }
@@ -48,6 +47,23 @@ export default function TeamCard({ teams: propTeams = [] }) {
   } else if (!isOverview && !isManager) {
     visibleTeams = propTeams;
   }
+
+  // Industry-standard defensive member count resolver
+  // Handles all known backend response shapes without touching the API
+  const getMemberCount = (team) => {
+    if (!team) return 0;
+    if (Array.isArray(team.members)) return team.members.length;
+    if (Array.isArray(team.employees)) return team.employees.length;
+    if (Array.isArray(team.Users)) return team.Users.length;
+    if (Array.isArray(team.team_members)) return team.team_members.length;
+    if (Array.isArray(team.Employees)) return team.Employees.length;
+    if (typeof team.member_count === "number") return team.member_count;
+    if (typeof team.membersCount === "number") return team.membersCount;
+    return 0;
+  };
+
+  // Defensive safe teams list — prevents undefined map errors
+  const safeTeams = Array.isArray(visibleTeams) ? visibleTeams : [];
 
   const title = isOverview ? "Team Overview" : isManager ? "Teams Managed" : "Work Teams";
 
@@ -64,9 +80,9 @@ export default function TeamCard({ teams: propTeams = [] }) {
             <p className="text-[11px] text-gray-400 mt-0.5">Collaboration units</p>
           </div>
         </div>
-        {!loading && visibleTeams.length > 0 && (
+        {!loading && safeTeams.length > 0 && (
           <span className="text-[11px] font-bold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-full border border-violet-100">
-            {visibleTeams.length} Active
+            {safeTeams.length} Active
           </span>
         )}
       </div>
@@ -77,7 +93,7 @@ export default function TeamCard({ teams: propTeams = [] }) {
           <div className="flex justify-center items-center py-10">
             <AppSpinner className="h-5 w-5 text-gray-400" />
           </div>
-        ) : visibleTeams.length === 0 ? (
+        ) : safeTeams.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
             <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center mb-3 border border-gray-100">
               <Users2 size={20} className="text-gray-300" />
@@ -89,47 +105,19 @@ export default function TeamCard({ teams: propTeams = [] }) {
           </div>
         ) : (
           <div className="flex flex-col gap-3">
-            {visibleTeams.map((t, idx) => {
-              const count = t.membersCount ?? (Array.isArray(t.Employees) ? t.Employees.length : 0);
-              const fill = Math.min(count * 10, 100);
-
-              return (
-                <div
-                  key={t.id}
-                  className="p-3.5 rounded-xl border border-gray-100 hover:border-indigo-100 hover:bg-indigo-50/30 transition-all duration-200 group"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[14px] font-semibold text-gray-800 group-hover:text-indigo-700 transition-colors truncate">
-                        {t.name}
-                      </p>
-                      {t.description && (
-                        <p className="text-[12px] text-gray-400 mt-0.5 line-clamp-1">{t.description}</p>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1.5 ml-3 flex-shrink-0">
-                      {isManager && (
-                        <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-amber-50 text-amber-600 border border-amber-100">
-                          <Crown size={9} />
-                          Lead
-                        </span>
-                      )}
-                      <span className="px-2 py-0.5 rounded-full text-[11px] font-bold text-gray-500 bg-gray-50 border border-gray-100">
-                        {count} {count === 1 ? "mbr" : "mbrs"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Progress bar */}
-                  <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                    <div
-                      className="h-1.5 rounded-full bg-indigo-400 transition-all duration-500"
-                      style={{ width: `${fill}%` }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
+            {safeTeams.map((t, idx) => (
+              <div
+                key={t.id ?? idx}
+                className="p-3.5 rounded-xl border border-gray-100 hover:border-indigo-100 hover:bg-indigo-50/30 transition-all duration-200 group"
+              >
+                <p className="text-[14px] font-semibold text-gray-800 group-hover:text-indigo-700 transition-colors truncate">
+                  {t.name}
+                </p>
+                {t.description && (
+                  <p className="text-[12px] text-gray-400 mt-0.5 line-clamp-1">{t.description}</p>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>

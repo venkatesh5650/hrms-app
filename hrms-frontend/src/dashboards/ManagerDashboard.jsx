@@ -4,11 +4,13 @@ import {
   fetchApprovalHistory,
   fetchDashboardStats,
 } from "../services/dashboardApi";
+import { fetchRoleSupportRequests } from "../services/supportApi";
 
 import KpiGrid from "../components/dashboard/KpiGrid";
 import ApprovalPipelineChart from "../components/dashboard/ApprovalPipelineChart";
 import ApprovalAging from "../components/dashboard/ApprovalAging";
 import ApprovalReasonAnalysis from "../components/dashboard/ApprovalReasonAnalysis";
+import SupportRequestsCard from "../components/dashboard/SupportRequestsCard";
 import AppSpinner from "../components/common/AppSpinner";
 
 import "../styles/dashboardLoader.css";
@@ -18,6 +20,8 @@ export default function ManagerDashboard() {
   const [history, setHistory] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [supportRequests, setSupportRequests] = useState([]);
+  const [supportLoading, setSupportLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -57,6 +61,19 @@ export default function ManagerDashboard() {
     }
 
     load();
+
+    async function loadSupport() {
+      try {
+        const res = await fetchRoleSupportRequests();
+        setSupportRequests(Array.isArray(res.data?.requests) ? res.data.requests : []);
+      } catch (err) {
+        console.error("Manager support requests load failed:", err);
+        setSupportRequests([]);
+      } finally {
+        setSupportLoading(false);
+      }
+    }
+    loadSupport();
   }, []);
 
   // ---- Derived metrics ----
@@ -120,6 +137,16 @@ export default function ManagerDashboard() {
               <ApprovalReasonAnalysis approvals={history} />
             </div>
           </div>
+
+          <SupportRequestsCard
+            requests={supportRequests}
+            loading={supportLoading}
+            onResolve={(id) =>
+              setSupportRequests((prev) =>
+                prev.map((r) => (r.id === id ? { ...r, status: "RESOLVED" } : r))
+              )
+            }
+          />
         </>
       )}
     </div>

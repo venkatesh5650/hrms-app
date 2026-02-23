@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useDemoGuard } from "../hooks/useDemoGuard";
 import { fetchHrActivity } from "../services/dashboardApi";
+import { fetchRoleSupportRequests } from "../services/supportApi";
 import KpiGrid from "../components/dashboard/KpiGrid";
 import ActivityFeed from "../components/dashboard/ActivityFeed";
 import ApprovalStatusSummary from "../components/dashboard/ApprovalStatusSummary";
@@ -9,6 +10,7 @@ import WorkforceTrends from "../components/dashboard/WorkforceTrends";
 import TeamDistribution from "../components/dashboard/TeamDistribution";
 import OrphanEmployees from "../components/dashboard/OrphanEmployees";
 import ApprovalAging from "../components/dashboard/ApprovalAging";
+import SupportRequestsCard from "../components/dashboard/SupportRequestsCard";
 import AppSpinner from "../components/common/AppSpinner";
 import "../styles/dashboardLoader.css";
 
@@ -22,6 +24,8 @@ export default function HrDashboard() {
   const [approvals, setApprovals] = useState([]);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [supportRequests, setSupportRequests] = useState([]);
+  const [supportLoading, setSupportLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -61,6 +65,20 @@ export default function HrDashboard() {
     }
 
     load();
+
+    // Support requests fetched independently — failure is safe
+    async function loadSupport() {
+      try {
+        const res = await fetchRoleSupportRequests();
+        setSupportRequests(Array.isArray(res.data?.requests) ? res.data.requests : []);
+      } catch (err) {
+        console.error("Support requests load failed:", err);
+        setSupportRequests([]);
+      } finally {
+        setSupportLoading(false);
+      }
+    }
+    loadSupport();
   }, [token]);
 
   // ---- Derived Data ----
@@ -169,6 +187,16 @@ export default function HrDashboard() {
             />
             <ActivityFeed logs={logs} />
           </div>
+
+          <SupportRequestsCard
+            requests={supportRequests}
+            loading={supportLoading}
+            onResolve={(id) =>
+              setSupportRequests((prev) =>
+                prev.map((r) => (r.id === id ? { ...r, status: "RESOLVED" } : r))
+              )
+            }
+          />
         </div>
       )}
     </div>

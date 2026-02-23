@@ -14,6 +14,7 @@ require("./models/team");
 require("./models/employeeTeam");
 require("./models/log");
 require("./models/approval");
+require("./models/support_request");
 require("./models/associations");
 
 const app = express();
@@ -61,6 +62,7 @@ app.use("/api/analytics", require("./routes/analytics"));
 app.use("/api/export", exportRoutes);
 app.use("/api/org", orgStats);
 app.use("/api/profile", profile);
+app.use("/api/support", require("./routes/support"));
 
 // Health checks
 app.get("/", (req, res) => {

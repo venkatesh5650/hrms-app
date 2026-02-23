@@ -53,4 +53,27 @@ async function logout(req, res, next) {
   }
 }
 
-module.exports = { register, login, logout };
+async function verifySetupToken(req, res, next) {
+  try {
+    const { token } = req.query;
+    if (!token) return res.status(400).json({ message: "Token is required" });
+    const result = await authService.verifySetupToken(token);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function setupPassword(req, res, next) {
+  try {
+    const { token, password } = req.body;
+    if (!token || !password)
+      return res.status(400).json({ message: "token and password are required" });
+    const result = await authService.setupPassword(token, password);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { register, login, logout, verifySetupToken, setupPassword };
